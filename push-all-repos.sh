@@ -4,8 +4,6 @@
 # Script para subir todos los repositorios de FuturaTickets a GitHub
 # ============================================
 
-set -e  # Exit on error
-
 # Colores para output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -31,9 +29,11 @@ REPOS=(
   "futura-tickets"
 )
 
-BASE_DIR="/Users/alejandrogarciacestero/Downloads/FuturaTickets_Full_Repo"
-ORG="futuratickets"
-DRY_RUN=true  # Cambiar a false para push real
+# Auto-detect BASE_DIR from script location
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BASE_DIR="$SCRIPT_DIR"
+ORG="Futura-Tickets"
+DRY_RUN=false  # Cambiado a false para push real
 
 echo -e "${GREEN}╔════════════════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║  FuturaTickets - GitHub Repository Setup Script       ║${NC}"
@@ -128,11 +128,14 @@ See: https://github.com/futuratickets/FuturaTickets_Docs for full documentation"
   REMOTE_URL="https://github.com/$ORG/$repo.git"
   echo "🔗 Configurando remote: $REMOTE_URL"
 
-  # Remover remote anterior si existe
-  git remote remove origin 2>/dev/null || true
-
-  # Agregar nuevo remote
-  git remote add origin "$REMOTE_URL"
+  # Verificar si origin existe y actualizar o crear
+  if git remote get-url origin &>/dev/null; then
+    echo "🔄 Actualizando remote existente..."
+    git remote set-url origin "$REMOTE_URL"
+  else
+    echo "➕ Agregando nuevo remote..."
+    git remote add origin "$REMOTE_URL"
+  fi
 
   # 6. Configurar branch main
   CURRENT_BRANCH=$(git branch --show-current)
