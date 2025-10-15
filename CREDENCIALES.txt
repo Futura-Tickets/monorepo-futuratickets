@@ -1,0 +1,61 @@
+╔══════════════════════════════════════════════════════════════════╗
+║           🎫 FUTURA TICKETS - CREDENCIALES DE ACCESO            ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📍 IMPORTANTE: Copia y pega EXACTAMENTE (sin espacios extra)
+
+═══════════════════════════════════════════════════════════════════
+
+1️⃣  ADMIN PANEL & ACCESS APP
+   URL Admin Panel: http://localhost:3003
+   URL Access App:  http://localhost:3007
+
+   📧 Email:    admin.local@futuratickets.com
+   🔐 Password: AdminLocal2025
+
+═══════════════════════════════════════════════════════════════════
+
+2️⃣  MARKETPLACE (Usuario Cliente)
+   URL: http://localhost:3000
+
+   📧 Email:    usuario.demo@futuratickets.com
+   🔐 Password: UsuarioDemo2025
+
+═══════════════════════════════════════════════════════════════════
+
+🧪 VERIFICACIÓN RÁPIDA (Pega esto en tu terminal):
+
+# Test ADMIN
+curl -X POST http://localhost:3001/accounts/login -H "Content-Type: application/json" -d '{"email":"admin.local@futuratickets.com","password":"AdminLocal2025"}' | jq .
+
+# Test USER
+curl -X POST http://localhost:3001/accounts/login -H "Content-Type: application/json" -d '{"email":"usuario.demo@futuratickets.com","password":"UsuarioDemo2025"}' | jq .
+
+═══════════════════════════════════════════════════════════════════
+
+🔗 ENLACES ÚTILES:
+
+- API Backend:        http://localhost:3001
+- API Health:         http://localhost:3001/health
+- Swagger Docs:       http://localhost:3001/api/docs
+- Admin Panel:        http://localhost:3003
+- Marketplace:        http://localhost:3000
+- Access App:         http://localhost:3007
+
+═══════════════════════════════════════════════════════════════════
+
+⚡ SI LAS APPS FRONTEND NO FUNCIONAN:
+
+Usa Swagger para testear directamente:
+1. Ve a: http://localhost:3001/api/docs
+2. Busca: POST /accounts/login
+3. Click: "Try it out"
+4. Pega las credenciales arriba
+5. Click: "Execute"
+
+O usa Postman/Thunder Client con:
+   POST http://localhost:3001/accounts/login
+   Headers: Content-Type: application/json
+   Body: {"email":"admin.local@futuratickets.com","password":"AdminLocal2025"}
+
+═══════════════════════════════════════════════════════════════════
