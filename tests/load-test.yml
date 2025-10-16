@@ -1,0 +1,352 @@
+config:
+  target: "{{ $processEnvironment.API_URL }}"
+  phases:
+    # Warm-up phase: 10 users over 1 minute
+    - duration: 60
+      arrivalRate: 10
+      name: "Warm-up"
+
+    # Ramp-up phase: gradually increase to 50 users/sec over 5 minutes
+    - duration: 300
+      arrivalRate: 10
+      rampTo: 50
+      name: "Ramp-up load"
+
+    # Sustained load: 50 users/sec for 10 minutes
+    - duration: 600
+      arrivalRate: 50
+      name: "Sustained load"
+
+    # Peak load: 100 users/sec for 2 minutes
+    - duration: 120
+      arrivalRate: 100
+      name: "Peak load"
+
+    # Cool-down: reduce to 10 users/sec for 1 minute
+    - duration: 60
+      arrivalRate: 10
+      name: "Cool-down"
+
+  # Environment variables (override with: artillery run -e production load-test.yml)
+  environments:
+    local:
+      target: "http://localhost:3000"
+      variables:
+        apiUrl: "http://localhost:3000"
+    staging:
+      target: "https://api-staging.futuratickets.com"
+      variables:
+        apiUrl: "https://api-staging.futuratickets.com"
+    production:
+      target: "https://api.futuratickets.com"
+      variables:
+        apiUrl: "https://api.futuratickets.com"
+
+  # Performance thresholds
+  ensure:
+    maxErrorRate: 1              # Max 1% error rate
+    p95: 800                     # 95th percentile response time < 800ms
+    p99: 1500                    # 99th percentile response time < 1.5s
+
+  # HTTP defaults
+  http:
+    timeout: 10
+    pool: 50                     # Max concurrent connections
+
+  # Plugins for enhanced metrics
+  plugins:
+    expect: {}
+    metrics-by-endpoint: {}
+
+# Variables for reusable data
+variables:
+  # Test event data
+  testEventName:
+    - "Artillery Load Test Event"
+
+  # Test user credentials (create these accounts first)
+  testUserEmail:
+    - "loadtest+{{ $randomNumber() }}@futuratickets.com"
+
+scenarios:
+  # Scenario 1: Health Check (baseline)
+  - name: "Health Check"
+    weight: 10
+    flow:
+      - get:
+          url: "/health"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: status
+
+      - get:
+          url: "/health/ready"
+          expect:
+            - statusCode: 200
+
+      - get:
+          url: "/health/info"
+          expect:
+            - statusCode: 200
+
+  # Scenario 2: Browse Events (anonymous user)
+  - name: "Browse Events - Anonymous"
+    weight: 30
+    flow:
+      # List all events
+      - get:
+          url: "/api/events"
+          expect:
+            - statusCode:
+                - 200
+                - 401  # May require auth
+          capture:
+            - json: "$[0]._id"
+              as: "eventId"
+
+      # View event details (if we got an eventId)
+      - get:
+          url: "/api/events/{{ eventId }}"
+          ifTrue: "eventId"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 404
+
+  # Scenario 3: Authenticated User Flow
+  - name: "Authenticated User Journey"
+    weight: 20
+    flow:
+      # Login (or use pre-generated token)
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ testUserEmail }}"
+            password: "TestPassword123!"
+          capture:
+            - json: "$.token"
+              as: "authToken"
+          expect:
+            - statusCode:
+                - 200
+                - 401  # May fail if account doesn't exist
+
+      # Get user profile
+      - get:
+          url: "/api/account"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          ifTrue: "authToken"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+
+      # Get user orders
+      - get:
+          url: "/api/orders"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          ifTrue: "authToken"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+
+  # Scenario 4: Event Creation (Promoter)
+  - name: "Promoter - Create Event"
+    weight: 5
+    flow:
+      # Login as promoter
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "promoter.loadtest@futuratickets.com"
+            password: "PromoterPassword123!"
+          capture:
+            - json: "$.token"
+              as: "promoterToken"
+
+      # Create event
+      - post:
+          url: "/api/events"
+          headers:
+            Authorization: "Bearer {{ promoterToken }}"
+          ifTrue: "promoterToken"
+          json:
+            name: "{{ testEventName }} - {{ $randomString() }}"
+            description: "Load test event created by Artillery"
+            capacity: 1000
+            maxQuantity: 10
+            commission: 5
+            location:
+              venue: "Test Venue"
+              address: "123 Test Street"
+              city: "Test City"
+              country: "Spain"
+            dateTime:
+              launchDate: "2025-11-01T00:00:00.000Z"
+              startDate: "2025-11-15T20:00:00.000Z"
+              endDate: "2025-11-16T02:00:00.000Z"
+            tickets:
+              - type: "General Admission"
+                price: 25
+                availableTickets: 500
+          capture:
+            - json: "$._id"
+              as: "newEventId"
+          expect:
+            - statusCode:
+                - 201
+                - 401
+                - 400
+
+      # Get created event
+      - get:
+          url: "/api/events/{{ newEventId }}"
+          headers:
+            Authorization: "Bearer {{ promoterToken }}"
+          ifTrue: "newEventId"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 404
+
+  # Scenario 5: Purchase Flow (most critical)
+  - name: "Purchase Tickets Flow"
+    weight: 15
+    flow:
+      # Get available events
+      - get:
+          url: "/api/events?status=LAUNCHED"
+          capture:
+            - json: "$[0]._id"
+              as: "eventId"
+            - json: "$[0].tickets[0].type"
+              as: "ticketType"
+            - json: "$[0].tickets[0].price"
+              as: "ticketPrice"
+
+      # Create order
+      - post:
+          url: "/api/orders"
+          json:
+            event: "{{ eventId }}"
+            items:
+              - type: "{{ ticketType }}"
+                amount: 2
+                price: "{{ ticketPrice }}"
+            contact:
+              name: "Load Test User"
+              email: "loadtest@futuratickets.com"
+              phone: "+34600000000"
+          ifTrue: "eventId"
+          capture:
+            - json: "$.paymentId"
+              as: "paymentId"
+            - json: "$._id"
+              as: "orderId"
+          expect:
+            - statusCode:
+                - 201
+                - 400
+                - 401
+
+      # Get order details
+      - get:
+          url: "/api/orders/{{ orderId }}"
+          ifTrue: "orderId"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 404
+
+  # Scenario 6: Swagger Documentation
+  - name: "API Documentation Access"
+    weight: 5
+    flow:
+      - get:
+          url: "/api/docs"
+          expect:
+            - statusCode: 200
+
+  # Scenario 7: Sales & Resale
+  - name: "Sales Management"
+    weight: 10
+    flow:
+      # Login as user
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "user.loadtest@futuratickets.com"
+            password: "UserPassword123!"
+          capture:
+            - json: "$.token"
+              as: "userToken"
+
+      # Get user's sales/tickets
+      - get:
+          url: "/api/sales/account"
+          headers:
+            Authorization: "Bearer {{ userToken }}"
+          ifTrue: "userToken"
+          capture:
+            - json: "$[0]._id"
+              as: "saleId"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+
+      # View sale details
+      - get:
+          url: "/api/sales/{{ saleId }}"
+          headers:
+            Authorization: "Bearer {{ userToken }}"
+          ifTrue: "saleId"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 404
+
+  # Scenario 8: Analytics (Promoter)
+  - name: "Promoter Analytics"
+    weight: 5
+    flow:
+      # Login as promoter
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "promoter.loadtest@futuratickets.com"
+            password: "PromoterPassword123!"
+          capture:
+            - json: "$.token"
+              as: "promoterToken"
+
+      # Get promoter analytics
+      - get:
+          url: "/api/analytics/promoter"
+          headers:
+            Authorization: "Bearer {{ promoterToken }}"
+          ifTrue: "promoterToken"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+
+      # Get event analytics
+      - get:
+          url: "/api/analytics/event/{{ eventId }}"
+          headers:
+            Authorization: "Bearer {{ promoterToken }}"
+          ifTrue: "promoterToken"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 404

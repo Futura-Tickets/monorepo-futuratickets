@@ -1,0 +1,117 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: futuratickets
+  labels:
+    app: alertmanager
+data:
+  alertmanager.yml: |
+    global:
+      # Slack webhook URL (replace with your own)
+      slack_api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+
+    # Route tree
+    route:
+      # Root route
+      receiver: 'default'
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 12h
+
+      # Child routes
+      routes:
+        # Critical alerts to PagerDuty
+        - match:
+            severity: critical
+          receiver: 'pagerduty'
+          continue: true
+
+        # Warning alerts to Slack
+        - match:
+            severity: warning
+          receiver: 'slack'
+
+        # Database alerts
+        - match:
+            component: database
+          receiver: 'database-team'
+          group_wait: 5s
+
+        # API alerts
+        - match:
+            component: api
+          receiver: 'api-team'
+
+    # Receivers
+    receivers:
+      # Default receiver (Slack)
+      - name: 'default'
+        slack_configs:
+          - channel: '#alerts'
+            title: 'FuturaTickets Alert'
+            text: |
+              {{ range .Alerts }}
+              *Alert:* {{ .Labels.alertname }}
+              *Severity:* {{ .Labels.severity }}
+              *Description:* {{ .Annotations.description }}
+              *Details:*
+              {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+              {{ end }}
+              {{ end }}
+
+      # PagerDuty for critical alerts
+      - name: 'pagerduty'
+        pagerduty_configs:
+          - service_key: 'YOUR_PAGERDUTY_KEY'
+            description: '{{ .CommonAnnotations.summary }}'
+            details:
+              firing: '{{ .Alerts.Firing | len }}'
+              resolved: '{{ .Alerts.Resolved | len }}'
+
+      # Slack for warnings
+      - name: 'slack'
+        slack_configs:
+          - channel: '#warnings'
+            title: 'Warning: {{ .CommonLabels.alertname }}'
+            text: '{{ .CommonAnnotations.description }}'
+            color: 'warning'
+
+      # Database team
+      - name: 'database-team'
+        slack_configs:
+          - channel: '#database-alerts'
+            title: 'Database Alert: {{ .CommonLabels.alertname }}'
+            text: '{{ .CommonAnnotations.description }}'
+        email_configs:
+          - to: 'database-team@futuratickets.com'
+            from: 'alertmanager@futuratickets.com'
+            smarthost: 'smtp.gmail.com:587'
+            auth_username: 'alertmanager@futuratickets.com'
+            auth_password: 'YOUR_EMAIL_PASSWORD'
+            headers:
+              Subject: 'Database Alert: {{ .CommonLabels.alertname }}'
+
+      # API team
+      - name: 'api-team'
+        slack_configs:
+          - channel: '#api-alerts'
+            title: 'API Alert: {{ .CommonLabels.alertname }}'
+            text: '{{ .CommonAnnotations.description }}'
+
+    # Inhibition rules (silence alerts based on other alerts)
+    inhibit_rules:
+      # Inhibit warning if critical is firing for same alert
+      - source_match:
+          severity: 'critical'
+        target_match:
+          severity: 'warning'
+        equal: ['alertname', 'cluster', 'service']
+
+      # Inhibit pod alerts if node is down
+      - source_match:
+          alertname: 'NodeDown'
+        target_match_re:
+          alertname: 'Pod.*'
+        equal: ['node']

@@ -1,0 +1,41 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    # Production Let's Encrypt server
+    server: https://acme-v02.api.letsencrypt.org/directory
+
+    # Email for ACME registration
+    email: admin@futuratickets.com
+
+    # Private key secret
+    privateKeySecretRef:
+      name: letsencrypt-prod-key
+
+    # ACME HTTP-01 challenge
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
+
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    # Staging Let's Encrypt server (for testing)
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+
+    email: admin@futuratickets.com
+
+    privateKeySecretRef:
+      name: letsencrypt-staging-key
+
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
