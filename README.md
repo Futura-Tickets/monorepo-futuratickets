@@ -16,6 +16,8 @@
 |-----------|-------------|
 | **[ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)** | Arquitectura completa del ecosistema (16 repositorios) |
 | **[PLAN_DE_SPRINTS.md](./PLAN_DE_SPRINTS.md)** | Plan de desarrollo (14 sprints, 28 semanas) |
+| **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** | Guía completa de configuración y deployment |
+| **[DEPLOYMENT_COMPLETE.md](./DEPLOYMENT_COMPLETE.md)** | Documentación operacional y troubleshooting |
 
 ---
 
@@ -98,48 +100,95 @@ Personal ACCESS ───────► access-app ─────────�
 
 ## 🚀 Quick Start
 
-### Prerrequisitos
+### Git Workflow & Branching
 
-- Node.js 18+ / 20+
-- npm / yarn / pnpm
-- Docker (opcional)
-- MongoDB (local o Atlas)
-- Redis (para Bull queues)
-
-### Instalación
+Este proyecto usa una estrategia de branching profesional con soporte para Git Worktrees:
 
 ```bash
-# Clonar repositorio
+# Ver estado completo del repositorio
+./scripts/git-status.sh
+
+# Crear nueva feature con worktree (desarrollo paralelo)
+./scripts/worktree-create.sh feature/my-feature
+
+# Sincronizar todas las branches
+./scripts/sync-branches.sh
+
+# Limpiar worktrees mergeados
+./scripts/worktree-cleanup.sh --force
+```
+
+**Branches principales:**
+- `main` - Producción (100% estable)
+- `staging` - Pre-producción / QA
+- `dev` - Desarrollo activo
+
+**Ver documentación completa:**
+- [Git Branching Strategy](./docs/GIT_BRANCHING_STRATEGY.md)
+- [Git Worktrees Guide](./docs/GIT_WORKTREES_GUIDE.md)
+- [Git Setup Summary](./docs/GIT_SETUP_SUMMARY.md)
+
+### Desarrollo Local
+
+```bash
+# 1. Clonar repositorio
 git clone https://github.com/futuratickets/FuturaTickets_Full_Repo.git
 cd FuturaTickets_Full_Repo
 
-# Instalar dependencias de un proyecto específico
+# 2. Instalar dependencias de un proyecto específico
 cd futura-market-place-v2
 npm install
 
-# Configurar variables de entorno
+# 3. Configurar variables de entorno
 cp .env.example .env
 # Editar .env con tus credenciales
 
-# Desarrollo
+# 4. Desarrollo
 npm run dev
 
-# Build para producción
+# 5. Build para producción
 npm run build
 npm start
 ```
 
-### Docker Compose (Desarrollo Local)
+### Deployment a Kubernetes
 
 ```bash
-# Levantar todos los servicios
-docker-compose up -d
+# 1. Validar configuración
+./scripts/validate-deployment.sh production
 
-# Ver logs
-docker-compose logs -f
+# 2. Configurar secrets
+./scripts/setup-secrets.sh production
 
-# Detener servicios
-docker-compose down
+# 3. Deploy completo
+./scripts/deploy.sh production all
+
+# 4. Verificar health
+./scripts/health-check.sh
+```
+
+Ver [SETUP_GUIDE.md](./SETUP_GUIDE.md) para instrucciones detalladas de configuración y deployment.
+
+### Scripts de Operación
+
+```bash
+# Deploy selectivo
+./scripts/deploy.sh production apps         # Solo aplicaciones
+./scripts/deploy.sh production monitoring   # Solo monitoring
+./scripts/deploy.sh production api          # Solo API
+
+# Actualizar imagen
+./scripts/update-image.sh api v1.2.3
+
+# Rollback
+./scripts/rollback.sh api                   # Rollback a versión anterior
+./scripts/rollback.sh api 3                 # Rollback a revisión específica
+
+# Backup de MongoDB
+./scripts/backup-mongodb.sh ./backups
+
+# Health check
+./scripts/health-check.sh
 ```
 
 ---
@@ -168,8 +217,14 @@ docker-compose down
 - **OpenZeppelin** - Contract libraries (ERC-721)
 - **ethers.js / viem** - Ethereum libraries
 
-### DevOps
+### DevOps & Monitoring
 - **Docker** - Containerización
+- **Kubernetes** - Orchestration (K8s 1.28+)
+- **GitHub Actions** - CI/CD automation
+- **Prometheus** - Metrics collection
+- **Grafana** - Metrics visualization
+- **AlertManager** - Alert routing
+- **Sentry** - Error tracking
 - **MongoDB Atlas** - Base de datos en cloud
 - **Azure Blob Storage** - Almacenamiento de imágenes
 - **Azure Web PubSub** - WebSocket escalable
@@ -246,9 +301,10 @@ docker-compose down
 | **Backend APIs** | ✅ Funcional | Operativas en producción |
 | **Frontend Apps** | ✅ Funcional | Operativas en producción |
 | **Blockchain** | ⚠️ Parcial | Contratos desarrollados, NO integrados |
-| **Testing** | ❌ Pendiente | 0% coverage - PRIORITARIO |
-| **CI/CD** | ❌ Pendiente | No configurado |
-| **Documentación** | ✅ Completa | CLAUDE.md + ARCHITECTURE_OVERVIEW.md |
+| **Testing** | ⚠️ Básico | Smoke tests + Load tests configurados |
+| **CI/CD** | ✅ Completo | GitHub Actions + automated deployment |
+| **Monitoring** | ✅ Completo | Prometheus + Grafana + AlertManager + Sentry |
+| **Documentación** | ✅ Completa | Setup Guide + Deployment + Architecture |
 | **Seguridad** | ⚠️ Mejoras | CORS abierto, tokens en localStorage |
 
 ---
@@ -265,13 +321,15 @@ docker-compose down
 - [ ] CronJob de expiración de eventos deshabilitado
 - [ ] Integración blockchain NO activa (ethers/viem instalados pero no usados)
 - [ ] Archivos enormes (+35k líneas en admin-event.service.ts)
-- [ ] 0% test coverage en todos los repositorios
+- [ ] Unit tests pendientes (solo smoke/load tests implementados)
 
 ### 🟢 Medios (Mejoras)
 - [ ] Swagger no configurado en APIs
-- [ ] Health checks no implementados
 - [ ] Logging estructurado no implementado
 - [ ] Caching con Redis no implementado
+- [x] Health checks implementados (Kubernetes probes)
+- [x] Error tracking configurado (Sentry)
+- [x] Metrics collection configurada (Prometheus)
 
 Ver [Recomendaciones Técnicas](./ARCHITECTURE_OVERVIEW.md#8-recomendaciones-técnicas) completas.
 
@@ -279,14 +337,15 @@ Ver [Recomendaciones Técnicas](./ARCHITECTURE_OVERVIEW.md#8-recomendaciones-té
 
 ## 🗓️ Roadmap
 
-| Fase | Duración | Objetivos |
-|------|----------|-----------|
-| **Fase 1: Seguridad** | 2-3 semanas | CORS, httpOnly cookies, secrets en env |
-| **Fase 2: Blockchain** | 3-4 semanas | Integración activa de contratos NFT |
-| **Fase 3: Refactoring** | 3-4 semanas | Dividir archivos grandes, optimizar código |
-| **Fase 4: DevOps** | 2 semanas | CI/CD, monitoreo, health checks |
+| Fase | Estado | Duración | Objetivos |
+|------|--------|----------|-----------|
+| **Fase 0: DevOps** | ✅ Completa | 2 semanas | CI/CD, monitoring, error tracking, deployment automation |
+| **Fase 1: Seguridad** | 🚧 Pendiente | 2-3 semanas | CORS, httpOnly cookies, secrets en env |
+| **Fase 2: Blockchain** | 🚧 Pendiente | 3-4 semanas | Integración activa de contratos NFT |
+| **Fase 3: Refactoring** | 🚧 Pendiente | 3-4 semanas | Dividir archivos grandes, optimizar código |
+| **Fase 4: Testing** | 🚧 Pendiente | 2-3 semanas | Unit tests, integration tests, E2E tests |
 
-**Total estimado:** 10-13 semanas con 2-3 developers
+**Progreso:** 1/5 fases completadas
 
 Ver [PLAN_DE_SPRINTS.md](./PLAN_DE_SPRINTS.md) completo.
 
@@ -334,7 +393,22 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ## 📞 Soporte
 
-- **Documentación:** [ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)
+### Documentación
+
+**Arquitectura & Setup:**
+- **[ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)** - Arquitectura completa del sistema
+- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Guía de configuración paso a paso
+- **[DEPLOYMENT_COMPLETE.md](./DEPLOYMENT_COMPLETE.md)** - Guía operacional y troubleshooting
+- **[PLAN_DE_SPRINTS.md](./PLAN_DE_SPRINTS.md)** - Plan de desarrollo detallado
+
+**Git & Desarrollo:**
+- **[docs/GIT_BRANCHING_STRATEGY.md](./docs/GIT_BRANCHING_STRATEGY.md)** - Estrategia de branching y workflows
+- **[docs/GIT_WORKTREES_GUIDE.md](./docs/GIT_WORKTREES_GUIDE.md)** - Guía de Git Worktrees
+- **[docs/GIT_SETUP_SUMMARY.md](./docs/GIT_SETUP_SUMMARY.md)** - Resumen de configuración Git
+- **[docs/GITHUB_SETUP.md](./docs/GITHUB_SETUP.md)** - Configuración de GitHub (branch protection, CI/CD)
+- **[scripts/README.md](./scripts/README.md)** - Documentación de scripts disponibles
+
+### Contacto
 - **Issues:** [GitHub Issues](https://github.com/futuratickets/FuturaTickets_Full_Repo/issues)
 - **Email:** support@futuratickets.com
 
@@ -350,6 +424,6 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ---
 
-**Última actualización:** 2025-10-13
+**Última actualización:** 2025-10-16
 
-**Versión:** 1.0.0
+**Versión:** 2.0.0 - Production Ready

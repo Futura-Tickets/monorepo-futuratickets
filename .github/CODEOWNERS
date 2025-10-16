@@ -1,0 +1,48 @@
+# CODEOWNERS file for FuturaTickets monorepo
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @Futura-Tickets/admins
+
+# Backend APIs
+/futura-tickets-admin-api/ @Futura-Tickets/backend-team @Futura-Tickets/admins
+/futura-market-place-api/ @Futura-Tickets/backend-team @Futura-Tickets/admins
+/futura-access-api/ @Futura-Tickets/backend-team @Futura-Tickets/admins
+
+# Frontend Applications
+/futura-tickets-admin/ @Futura-Tickets/frontend-team @Futura-Tickets/admins
+/futura-market-place-v2/ @Futura-Tickets/frontend-team @Futura-Tickets/admins
+/futura-tickets-event/ @Futura-Tickets/frontend-team @Futura-Tickets/admins
+/futura-paginator/ @Futura-Tickets/frontend-team @Futura-Tickets/admins
+
+# Mobile Applications
+/futura-access-app/ @Futura-Tickets/mobile-team @Futura-Tickets/admins
+/futura-tickets-access-app/ @Futura-Tickets/mobile-team @Futura-Tickets/admins
+
+# Smart Contracts & Blockchain
+/futura-tickets-contracts-v2/ @Futura-Tickets/blockchain-team @Futura-Tickets/admins
+/futura-tickets-smartcontracts/ @Futura-Tickets/blockchain-team @Futura-Tickets/admins
+
+# Infrastructure & DevOps
+/.github/ @Futura-Tickets/devops @Futura-Tickets/admins
+/k8s/ @Futura-Tickets/devops @Futura-Tickets/admins
+/scripts/ @Futura-Tickets/devops @Futura-Tickets/admins
+/docker-compose.yml @Futura-Tickets/devops @Futura-Tickets/admins
+
+# Documentation
+/docs/ @Futura-Tickets/admins
+*.md @Futura-Tickets/admins
+README.md @Futura-Tickets/admins
+
+# Configuration Files
+.editorconfig @Futura-Tickets/admins
+.prettierrc.json @Futura-Tickets/admins
+.eslintrc* @Futura-Tickets/admins
+tsconfig*.json @Futura-Tickets/admins
+
+# CI/CD Workflows
+/.github/workflows/ @Futura-Tickets/devops @Futura-Tickets/admins
+
+# Security & Secrets
+/.github/config/ @Futura-Tickets/devops @Futura-Tickets/admins
+/scripts/setup-secrets.sh @Futura-Tickets/devops @Futura-Tickets/admins
