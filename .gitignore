@@ -17,13 +17,20 @@ out/
 # Environment variables (NEVER commit real secrets!)
 .env
 .env.local
+.env.development
 .env.development.local
+.env.test
 .env.test.local
+.env.production
 .env.production.local
 .env.*.local
 CREDENCIALES*.txt
 **/credentials.json
 **/secrets.json
+
+# Backup files
+.env.backup.*
+*.backup.*
 
 # Logs
 logs/
@@ -161,3 +168,16 @@ test-results/
 
 # MongoDB
 dump/
+
+# Temporary setup scripts
+create-all-repos.sh
+push-all-repos.sh
+copy-workflows.sh
+get-pip.py
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
