@@ -39,8 +39,6 @@
   },
   "exclude": [
     "node_modules",
-    "dist",
-    "src/Abstraction/**/*",
-    "src/Blockchain/**/*"
+    "dist"
   ]
 }

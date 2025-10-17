@@ -72,11 +72,11 @@ jobs:
         run: |
           echo "🔍 Checking for committed .env files..."
 
-          # Allow .env.example files but not real .env files
-          if git ls-files | grep -E "\.env$" | grep -v "\.env\.example$"; then
+          # Allow .env.example files and React Native .xcode.env files, but not real .env files
+          if git ls-files | grep -E "\.env$" | grep -v -E "(\.env\.example$|\.xcode\.env$)"; then
             echo "❌ ERROR: .env files should not be committed!"
             echo "Please remove them and add to .gitignore"
             exit 1
           fi
 
-          echo "✅ No .env files committed (except .example files)"
+          echo "✅ No .env files committed (except .example and .xcode.env files)"
