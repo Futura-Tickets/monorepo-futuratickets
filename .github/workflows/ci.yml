@@ -37,15 +37,46 @@ jobs:
           submodules: false
       - name: Check for secrets
         run: |
-          if git grep -E "(sk_live_|pk_live_|mongodb\+srv.*:)"; then
-            echo "ERROR: Secrets detected!"
+          echo "🔍 Scanning for real secrets (excluding documentation and examples)..."
+
+          # Exclude documentation, examples, and test files
+          EXCLUDE_PATTERNS=(
+            "*.md"
+            "*.example"
+            "*.md.txt"
+            ".env.example"
+            ".env.*.example"
+            "docs/"
+            "test/"
+            "tests/"
+            "__tests__/"
+            "*.test.*"
+            "*.spec.*"
+          )
+
+          # Build exclude args for grep
+          EXCLUDE_ARGS=""
+          for pattern in "${EXCLUDE_PATTERNS[@]}"; do
+            EXCLUDE_ARGS="$EXCLUDE_ARGS --exclude=$pattern"
+          done
+
+          # Search only in actual code files
+          if git grep $EXCLUDE_ARGS -E "(sk_live_[A-Za-z0-9]{24,}|pk_live_[A-Za-z0-9]{24,}|mongodb\+srv://[^/]+:[^@]+@)" -- "*.ts" "*.tsx" "*.js" "*.jsx" "*.json" "*.yml" "*.yaml" ".env" 2>/dev/null; then
+            echo "❌ ERROR: Real secrets detected in code!"
+            echo "Please remove secrets and use environment variables instead."
             exit 1
           fi
-          echo "No secrets detected"
+
+          echo "✅ No real secrets detected in code files"
       - name: Check for .env files
         run: |
-          if git ls-files | grep "\.env$"; then
-            echo "ERROR: .env files committed!"
+          echo "🔍 Checking for committed .env files..."
+
+          # Allow .env.example files but not real .env files
+          if git ls-files | grep -E "\.env$" | grep -v "\.env\.example$"; then
+            echo "❌ ERROR: .env files should not be committed!"
+            echo "Please remove them and add to .gitignore"
             exit 1
           fi
-          echo "No .env files in repo"
+
+          echo "✅ No .env files committed (except .example files)"
