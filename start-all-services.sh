@@ -64,7 +64,7 @@ stop_services() {
     print_header "Deteniendo todos los servicios..."
 
     # Buscar procesos Node.js en los puertos específicos y detenerlos
-    for PORT in 3001 3004 3000 3003 3007; do
+    for PORT in 4101 4103 3000 3003 3007; do
         PID=$(lsof -ti:$PORT 2>/dev/null || true)
         if [ ! -z "$PID" ]; then
             kill -9 $PID 2>/dev/null || true
@@ -153,8 +153,8 @@ print_header "Verificando puertos disponibles..."
 echo ""
 
 PORTS_OK=true
-check_port 3001 "Admin API" || PORTS_OK=false
-check_port 3004 "Access API" || PORTS_OK=false
+check_port 4101 "Admin API" || PORTS_OK=false
+check_port 4103 "Access API" || PORTS_OK=false
 check_port 3000 "Marketplace" || PORTS_OK=false
 check_port 3003 "Admin Panel" || PORTS_OK=false
 check_port 3007 "Access App" || PORTS_OK=false
@@ -179,17 +179,17 @@ echo ""
 start_service \
     "Admin API" \
     "$MONOREPO_DIR/futura-tickets-admin-api" \
-    3001 \
+    4101 \
     "$LOG_DIR/admin-api.log" \
-    "npm run start:dev"
+    "PORT=4101 npm run start:dev"
 
 # 2. Access API (Backend NestJS - Puerto 3004)
 start_service \
     "Access API" \
     "$MONOREPO_DIR/futura-access-api" \
-    3004 \
+    4103 \
     "$LOG_DIR/access-api.log" \
-    "npm run start:dev"
+    "PORT=4103 npm run start:dev"
 
 # 3. Marketplace (Frontend Next.js - Puerto 3000)
 start_service \
@@ -226,8 +226,8 @@ echo ""
 echo "┌─────────────────────┬────────┬─────────────────────────────────┐"
 echo "│ Servicio            │ Puerto │ URL                             │"
 echo "├─────────────────────┼────────┼─────────────────────────────────┤"
-echo "│ Admin API           │  3001  │ http://localhost:3001           │"
-echo "│ Access API          │  3004  │ http://localhost:3004           │"
+echo "│ Admin API           │  4101  │ http://localhost:4101           │"
+echo "│ Access API          │  4103  │ http://localhost:4103           │"
 echo "│ Marketplace         │  3000  │ http://localhost:3000           │"
 echo "│ Admin Panel         │  3003  │ http://localhost:3003           │"
 echo "│ Access App          │  3007  │ http://localhost:3007           │"

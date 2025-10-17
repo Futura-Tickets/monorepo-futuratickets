@@ -181,3 +181,6 @@ get-pip.py
 *.swp
 *.swo
 *~
+
+# Development process IDs
+.dev-pids

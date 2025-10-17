@@ -67,6 +67,7 @@ Orquestación de la lógica de negocio y coordinación entre capas.
 - [Next Steps Roadmap](./02-application/workflows/NEXT_STEPS_ROADMAP.md)
 - [Priority Tasks](./02-application/workflows/TAREAS_PRIORITARIAS.md)
 - [Dashboard Development Tasks](./02-application/workflows/TAREAS_DESARROLLO_DASHBOARD.md)
+- [Blockchain Flow](./02-application/workflows/BLOCKCHAIN_FLOW.md)
 
 #### [Testing](./02-application/testing/)
 - [Docker Testing Guide](./02-application/testing/DOCKER_TESTING_GUIDE.md)
@@ -88,6 +89,7 @@ Implementaciones concretas de persistencia, servicios externos y herramientas.
 
 #### [Environment](./03-infrastructure/environment/)
 - [Environment Setup Summary](./03-infrastructure/environment/ENV_SETUP_SUMMARY.md)
+- [Development Port Map](./03-infrastructure/environment/DEV_PORT_MAP.md)
 - [Complete Services Access](./03-infrastructure/environment/ACCESO_COMPLETO_SERVICIOS.md)
 - [Unified Access Credentials](./03-infrastructure/environment/CREDENCIALES_ACCESO_UNIFICADO.md)
 
@@ -115,6 +117,7 @@ Adaptadores de entrada: APIs, UIs, y documentación para desarrolladores.
 - [Contributing Guide](./04-interfaces/development/CONTRIBUTING.md)
 - [Step by Step Guide](./04-interfaces/development/PASO_A_PASO.md)
 - [Create Repos Manual](./04-interfaces/development/create-repos-manual.md)
+- [Workspaces Guide](./04-interfaces/development/WORKSPACES_GUIDE.md)
 
 #### [API Docs](./04-interfaces/api-docs/)
 - Documentación de endpoints (pendiente de migrar)
@@ -133,6 +136,9 @@ Preocupaciones que afectan a todas las capas: logging, monitoring, auditoría.
 - [Completed Improvements](./05-cross-cutting/improvements/IMPROVEMENTS_COMPLETED_SUMMARY.md)
 - [Implemented Improvements](./05-cross-cutting/improvements/MEJORAS_IMPLEMENTADAS.md)
 - [Completed Work](./05-cross-cutting/improvements/TRABAJO_COMPLETADO.md)
+
+#### [Observability](./05-cross-cutting/observability/)
+- [Observability Plan](./05-cross-cutting/observability/OBSERVABILITY_PLAN.md)
 
 #### [Reports](./05-cross-cutting/reports/)
 - [Documentation Summary](./05-cross-cutting/reports/DOCUMENTATION_SUMMARY.md)

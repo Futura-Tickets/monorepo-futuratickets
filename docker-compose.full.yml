@@ -1,17 +1,15 @@
 # ========================================
-# FuturaTickets - Docker Compose Development Environment
+# FuturaTickets - Full Stack Docker Compose
 # ========================================
-# This docker-compose sets up the complete local development environment
-# including all microservices and dependencies
-
-version: '3.9'
+# Production-like environment with all services in Docker
+# Updated: 2025-10-17
+# ========================================
 
 services:
   # ========================================
-  # DATABASES & INFRASTRUCTURE
+  # INFRASTRUCTURE
   # ========================================
 
-  # MongoDB Database
   mongodb:
     image: mongo:7
     container_name: futura-mongodb
@@ -33,7 +31,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Redis Cache & Queue
   redis:
     image: redis:7-alpine
     container_name: futura-redis
@@ -51,170 +48,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # ========================================
-  # BACKEND APIs (NestJS)
-  # ========================================
-
-  # Admin API - Main backend for event management
-  admin-api:
-    build:
-      context: ./futura-tickets-admin-api
-      dockerfile: Dockerfile
-      target: builder
-    container_name: futura-admin-api
-    restart: unless-stopped
-    ports:
-      - "4101:4101"
-    environment:
-      NODE_ENV: development
-      PORT: 4101
-      MONGO_URL: mongodb://futuraadmin:futurapass123@mongodb:27017/futuratickets?authSource=admin
-      JWT_SECRET_KEY: dev-jwt-secret-key-change-in-production
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: futurapass123
-      CORS_ORIGINS: http://localhost:3000,http://localhost:3003
-      SOCKET_IO_ORIGINS: http://localhost:3000,http://localhost:3003
-    volumes:
-      - ./futura-tickets-admin-api:/app
-      - /app/node_modules
-      - /app/dist
-    depends_on:
-      mongodb:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - futura-network
-    command: npm run start:dev
-
-  # Marketplace API - Payments and orders
-  marketplace-api:
-    build:
-      context: ./futura-market-place-api
-      dockerfile: Dockerfile
-      target: builder
-    container_name: futura-marketplace-api
-    restart: unless-stopped
-    ports:
-      - "4102:4102"
-    environment:
-      NODE_ENV: development
-      PORT: 4102
-      MONGO_URL: mongodb://futuraadmin:futurapass123@mongodb:27017/futuratickets?authSource=admin
-      JWT_SECRET_KEY: dev-jwt-secret-key-change-in-production
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: futurapass123
-      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_your_key}
-      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY:-pk_test_your_key}
-      CORS_ORIGINS: http://localhost:3000,http://localhost:3003
-    volumes:
-      - ./futura-market-place-api:/app
-      - /app/node_modules
-      - /app/dist
-    depends_on:
-      mongodb:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - futura-network
-    command: npm run start:dev
-
-  # Access API - Ticket validation
-  access-api:
-    build:
-      context: ./futura-access-api
-      dockerfile: Dockerfile
-      target: builder
-    container_name: futura-access-api
-    restart: unless-stopped
-    ports:
-      - "4103:4103"
-    environment:
-      NODE_ENV: development
-      PORT: 4103
-      MONGO_URL: mongodb://futuraadmin:futurapass123@mongodb:27017/futuratickets?authSource=admin
-      JWT_SECRET_KEY: dev-jwt-secret-key-change-in-production
-      THROTTLE_TTL: 60000
-      THROTTLE_LIMIT: 100
-    volumes:
-      - ./futura-access-api:/app
-      - /app/node_modules
-      - /app/dist
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    networks:
-      - futura-network
-    command: npm run start:dev
-
-  # ========================================
-  # FRONTEND APPS (Next.js)
-  # ========================================
-
-  # Marketplace Frontend - Public marketplace
-  marketplace-web:
-    build:
-      context: ./futura-market-place-v2
-      dockerfile: Dockerfile
-      target: builder
-    container_name: futura-marketplace-web
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: development
-      NEXT_PUBLIC_FUTURA_API: http://localhost:4102
-      NEXT_PUBLIC_FUTURA: http://localhost:4102
-      NEXT_PUBLIC_REFACTOR_RESALE_API: http://localhost:4102
-      NEXT_PUBLIC_BLOB_URL: http://localhost:9000/images
-      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
-    volumes:
-      - ./futura-market-place-v2:/app
-      - /app/node_modules
-      - /app/.next
-    depends_on:
-      - admin-api
-      - marketplace-api
-    networks:
-      - futura-network
-    command: npm run dev
-
-  # Admin Frontend - Admin panel
-  admin-web:
-    build:
-      context: ./futura-tickets-admin
-      dockerfile: Dockerfile
-      target: builder
-    container_name: futura-admin-web
-    restart: unless-stopped
-    ports:
-      - "3003:3000"
-    environment:
-      NODE_ENV: development
-      NEXT_PUBLIC_FUTURA: http://localhost:4101
-      NEXT_PUBLIC_FUTURA_API: http://localhost:4101
-      NEXT_PUBLIC_REFACTOR_RESALE_API: http://localhost:4102
-      NEXT_PUBLIC_BLOB_URL: http://localhost:9000/images
-      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
-    volumes:
-      - ./futura-tickets-admin:/app
-      - /app/node_modules
-      - /app/.next
-    depends_on:
-      - admin-api
-      - marketplace-api
-    networks:
-      - futura-network
-    command: npm run dev
-
-  # ========================================
-  # UTILITIES & DEVELOPMENT TOOLS
-  # ========================================
-
-  # MinIO - Local S3-compatible storage (replaces Azure Blob)
   minio:
     image: minio/minio:latest
     container_name: futura-minio
@@ -236,7 +69,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Mongo Express - MongoDB Admin UI
   mongo-express:
     image: mongo-express:latest
     container_name: futura-mongo-express
@@ -255,12 +87,183 @@ services:
     networks:
       - futura-network
 
+  # ========================================
+  # BACKEND APIs (NestJS)
+  # ========================================
+
+  admin-api:
+    build:
+      context: ./futura-tickets-admin-api
+      dockerfile: Dockerfile
+    container_name: futura-admin-api
+    restart: unless-stopped
+    ports:
+      - "4101:4101"
+    environment:
+      NODE_ENV: production
+      PORT: 4101
+      MONGO_URL: mongodb://futuraadmin:futurapass123@mongodb:27017/futuratickets?authSource=admin
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dev-jwt-secret-key-change-in-production}
+      JWT_EXPIRES_IN: 7d
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: futurapass123
+      CORS_ORIGINS: http://localhost:3000,http://localhost:3003,http://marketplace-web:3000,http://admin-web:3003
+      SOCKET_IO_ORIGINS: http://localhost:3000,http://localhost:3003
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - futura-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4101/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  marketplace-api:
+    build:
+      context: ./futura-market-place-api
+      dockerfile: Dockerfile
+    container_name: futura-marketplace-api
+    restart: unless-stopped
+    ports:
+      - "4102:4102"
+    environment:
+      NODE_ENV: production
+      PORT: 4102
+      MONGO_URL: mongodb://futuraadmin:futurapass123@mongodb:27017/futuratickets?authSource=admin
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dev-jwt-secret-key-change-in-production}
+      JWT_EXPIRES_IN: 7d
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: futurapass123
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_your_key}
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY:-pk_test_your_key}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      CORS_ORIGINS: http://localhost:3000,http://localhost:3003
+      FRONTEND_URL: http://localhost:3000
+      EMAIL_HOST: ${EMAIL_HOST:-smtp.gmail.com}
+      EMAIL_PORT: ${EMAIL_PORT:-587}
+      EMAIL_USER: ${EMAIL_USER:-}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD:-}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - futura-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4102/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  access-api:
+    build:
+      context: ./futura-access-api
+      dockerfile: Dockerfile
+    container_name: futura-access-api
+    restart: unless-stopped
+    ports:
+      - "4103:4103"
+    environment:
+      NODE_ENV: production
+      PORT: 4103
+      MONGO_URL: mongodb://futuraadmin:futurapass123@mongodb:27017/futuratickets?authSource=admin
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-dev-jwt-secret-key-change-in-production}
+      THROTTLE_TTL: 60000
+      THROTTLE_LIMIT: 100
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - futura-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4103/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ========================================
+  # FRONTEND APPS (Next.js)
+  # ========================================
+
+  marketplace-web:
+    build:
+      context: ./futura-market-place-v2
+      dockerfile: Dockerfile
+    container_name: futura-marketplace-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      # Internal communication uses service names
+      NEXT_PUBLIC_FUTURA_API: http://localhost:4101
+      NEXT_PUBLIC_FUTURA: http://localhost:4102
+      NEXT_PUBLIC_REFACTOR_RESALE_API: http://localhost:4103
+      NEXT_PUBLIC_BLOB_URL: ${BLOB_URL:-https://futuratickets.blob.core.windows.net/images}
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+    depends_on:
+      admin-api:
+        condition: service_healthy
+      marketplace-api:
+        condition: service_healthy
+      access-api:
+        condition: service_healthy
+    networks:
+      - futura-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  admin-web:
+    build:
+      context: ./futura-tickets-admin
+      dockerfile: Dockerfile
+    container_name: futura-admin-web
+    restart: unless-stopped
+    ports:
+      - "3003:3003"
+    environment:
+      NODE_ENV: production
+      PORT: 3003
+      # Internal communication uses service names
+      NEXT_PUBLIC_FUTURA: http://localhost:4101
+      NEXT_PUBLIC_FUTURA_API: http://localhost:4101
+      NEXT_PUBLIC_SOCKET_URL: http://localhost:4101
+      NEXT_PUBLIC_SOCKET_ACCESS_URL: http://localhost:4103
+      NEXT_PUBLIC_SOCKET_MARKET_PLACE_URL: http://localhost:4102
+      NEXT_PUBLIC_BLOB_URL: ${BLOB_URL:-https://futuratickets.blob.core.windows.net/images}
+      NEXT_PUBLIC_MARKET_PLACE: http://localhost:3000
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+    depends_on:
+      admin-api:
+        condition: service_healthy
+      marketplace-api:
+        condition: service_healthy
+    networks:
+      - futura-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3003"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 # ========================================
 # NETWORKS
 # ========================================
 networks:
   futura-network:
     driver: bridge
+    name: futura-network
 
 # ========================================
 # VOLUMES

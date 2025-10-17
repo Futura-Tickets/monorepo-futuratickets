@@ -4,7 +4,7 @@
 # Usage: ./smoke-test.sh [API_URL]
 # Example: ./smoke-test.sh https://api.futuratickets.com
 
-API_URL="${1:-http://localhost:3001}"
+API_URL="${1:-http://localhost:4101}"
 FAILED=0
 
 echo "======================================"

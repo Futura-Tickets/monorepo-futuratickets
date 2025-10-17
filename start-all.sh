@@ -17,9 +17,9 @@ NC='\033[0m' # No Color
 mkdir -p logs
 
 # Start Admin API
-echo -e "${BLUE}[1/3] Starting Admin API (port 3001)...${NC}"
+echo -e "${BLUE}[1/3] Starting Admin API (port 4101)...${NC}"
 cd futura-tickets-admin-api
-npm run start:dev > ../logs/admin-api.log 2>&1 &
+PORT=4101 npm run start:dev > ../logs/admin-api.log 2>&1 &
 API_PID=$!
 echo "✅ Admin API started (PID: $API_PID)"
 echo ""
@@ -46,8 +46,8 @@ echo ""
 echo -e "${GREEN}🎉 All services started!${NC}"
 echo ""
 echo "📍 URLs:"
-echo "   Admin API:       http://localhost:3001"
-echo "   Admin API Docs:  http://localhost:3001/api/docs"
+echo "   Admin API:       http://localhost:4101"
+echo "   Admin API Docs:  http://localhost:4101/api/docs"
 echo "   Admin Panel:     http://localhost:3003"
 echo "   Marketplace:     http://localhost:3000"
 echo ""

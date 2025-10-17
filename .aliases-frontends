@@ -1,0 +1,77 @@
+#!/bin/bash
+# Aliases para TERMINAL 3: FRONTEND Apps
+#
+# Para usar estos aliases, agrega esta línea a tu ~/.bashrc o ~/.zshrc:
+#   source /Users/alejandrogarciacestero/Workspace/monorepo-futuratickets/.aliases-frontends
+#
+# O copia los aliases que te interesen directamente
+
+# Directorio base del proyecto
+export FUTURA_ROOT="/Users/alejandrogarciacestero/Workspace/monorepo-futuratickets"
+
+# Navegación rápida
+alias ft-root='cd $FUTURA_ROOT'
+alias ft-marketplace='cd $FUTURA_ROOT/futura-market-place-v2'
+alias ft-admin='cd $FUTURA_ROOT/futura-tickets-admin'
+alias ft-access='cd $FUTURA_ROOT/futura-tickets-web-access-app'
+
+# Gestión de servicios
+alias ft-start='cd $FUTURA_ROOT && ./start-all-frontends.sh'
+alias ft-stop='cd $FUTURA_ROOT && ./stop-all-frontends.sh'
+alias ft-restart='cd $FUTURA_ROOT && ./stop-all-frontends.sh && sleep 2 && ./start-all-frontends.sh'
+alias ft-health='cd $FUTURA_ROOT && ./check-frontends-health.sh'
+
+# Makefile shortcuts
+alias ft-help='cd $FUTURA_ROOT && make -f Makefile.frontends help'
+alias ft-logs='cd $FUTURA_ROOT && make -f Makefile.frontends logs'
+alias ft-deps='cd $FUTURA_ROOT && make -f Makefile.frontends check-deps'
+alias ft-install='cd $FUTURA_ROOT && make -f Makefile.frontends install-deps'
+alias ft-clean='cd $FUTURA_ROOT && make -f Makefile.frontends clean-install'
+
+# Abrir en navegador
+alias ft-open-marketplace='open http://localhost:3000'
+alias ft-open-admin='open http://localhost:3001'
+alias ft-open-access='open http://localhost:3007'
+alias ft-open-all='open http://localhost:3000 http://localhost:3001 http://localhost:3007'
+
+# Logs individuales (si quieres ver logs de un servicio específico)
+alias ft-logs-marketplace='ft-marketplace && npm run dev'
+alias ft-logs-admin='ft-admin && npm run dev'
+alias ft-logs-access='ft-access && npm run dev'
+
+# Git shortcuts para frontends
+alias ft-status='cd $FUTURA_ROOT && git status futura-market-place-v2/ futura-tickets-admin/ futura-tickets-web-access-app/'
+alias ft-pull='cd $FUTURA_ROOT && git pull origin dev'
+alias ft-push='cd $FUTURA_ROOT && git push origin dev'
+
+# Utilidades
+alias ft-ports='lsof -i :3000,:3001,:3007'
+alias ft-kill-ports='kill -9 $(lsof -ti:3000 2>/dev/null) $(lsof -ti:3001 2>/dev/null) $(lsof -ti:3007 2>/dev/null) 2>/dev/null || echo "Puertos libres"'
+
+# Función para hacer full reset
+ft-reset() {
+  echo "🔄 Full reset de TERMINAL 3..."
+  ft-stop
+  sleep 2
+  echo "🧹 Limpiando node_modules..."
+  cd "$FUTURA_ROOT"
+  rm -rf futura-market-place-v2/node_modules futura-market-place-v2/package-lock.json
+  rm -rf futura-tickets-admin/node_modules futura-tickets-admin/package-lock.json
+  rm -rf futura-tickets-web-access-app/node_modules futura-tickets-web-access-app/package-lock.json
+  echo "📦 Instalando dependencias..."
+  ft-install
+  echo "✅ Reset completo. Puedes hacer ft-start ahora"
+}
+
+# Función para quick check
+ft-check() {
+  echo "🔍 Quick Check de TERMINAL 3"
+  echo ""
+  ft-health
+  echo ""
+  echo "📦 Dependencias:"
+  ft-deps | grep -E "futura|next" || echo "Revisar manualmente"
+}
+
+echo "✅ Aliases de FUTURA TICKETS cargados"
+echo "💡 Escribe 'ft-help' para ver comandos disponibles"

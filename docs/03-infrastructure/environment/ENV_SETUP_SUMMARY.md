@@ -9,7 +9,7 @@ Created comprehensive `.env.example` files for 4 FuturaTickets repositories base
 
 ### 1. `/futura-market-place-api/.env.example`
 **Repository Type:** NestJS Backend API
-**Port:** 3000
+**Port:** 4102
 **Purpose:** Main marketplace API - payments, orders, email system
 
 #### Key Variables (24 total):
@@ -22,6 +22,7 @@ Created comprehensive `.env.example` files for 4 FuturaTickets repositories base
 - **Azure:** AZURE_STORAGE_CONNECTION_STRING, BLOB_URL, SOCKET_MARKET_PLACE
 - **Frontend URLs:** FUTURA_MARKET_PLACE
 - **Rate Limiting:** THROTTLE_TTL, THROTTLE_LIMIT
+- **Blockchain (opcional):** BLOCKCHAIN_RPC_URL, BLOCKCHAIN_WS_URL, BLOCKCHAIN_FACTORY_ADDRESS, BLOCKCHAIN_CHAIN_ID
 
 #### Special Features:
 - ✅ Comprehensive comments explaining each variable
@@ -35,7 +36,7 @@ Created comprehensive `.env.example` files for 4 FuturaTickets repositories base
 
 ### 2. `/futura-access-api/.env.example`
 **Repository Type:** NestJS Backend API
-**Port:** 3000
+**Port:** 4103
 **Purpose:** Ticket validation and access control with real-time WebSockets
 
 #### Key Variables (8 total):
@@ -44,6 +45,7 @@ Created comprehensive `.env.example` files for 4 FuturaTickets repositories base
 - **Authentication:** JWT_SECRET_KEY (MUST match marketplace API)
 - **WebSocket:** SOCKET_ACCESS (Azure Web PubSub)
 - **Rate Limiting:** THROTTLE_TTL, THROTTLE_LIMIT
+- **Blockchain (lectura opcional):** BLOCKCHAIN_RPC_URL, BLOCKCHAIN_WS_URL
 
 #### Special Features:
 - ✅ Detailed WebSocket configuration explanation
@@ -57,7 +59,7 @@ Created comprehensive `.env.example` files for 4 FuturaTickets repositories base
 
 ### 3. `/futura-market-place-v2/.env.example`
 **Repository Type:** Next.js 15 Frontend
-**Port:** 3003
+**Port:** 3000
 **Purpose:** Customer-facing ticket marketplace
 
 #### Key Variables (6 required + optional):
@@ -68,6 +70,7 @@ Created comprehensive `.env.example` files for 4 FuturaTickets repositories base
 - **Azure Storage:** NEXT_PUBLIC_BLOB_URL
 - **Google OAuth:** NEXT_PUBLIC_GOOGLE_CLIENT_ID
 - **Optional:** Analytics (GTM, Sentry, GA)
+- **Blockchain (lectura opcional):** BLOCKCHAIN_RPC_URL, BLOCKCHAIN_FACTORY_ADDRESS
 
 #### Special Features:
 - ✅ Environment-specific configurations (dev/staging/prod)
@@ -82,7 +85,7 @@ Created comprehensive `.env.example` files for 4 FuturaTickets repositories base
 
 ### 4. `/futura-tickets-admin/.env.example`
 **Repository Type:** Next.js 15 Frontend
-**Port:** 3001
+**Port:** 3003
 **Purpose:** Admin panel for event promoters
 
 #### Key Variables (9 required + optional):
@@ -133,12 +136,12 @@ These MUST be synchronized across repositories:
 
 ```
 Frontend (marketplace-v2) → Backend APIs
-├── NEXT_PUBLIC_FUTURA_API → futura-market-place-api (port 3000)
+├── NEXT_PUBLIC_FUTURA_API → futura-market-place-api (port 4102)
 ├── NEXT_PUBLIC_FUTURA → futura-market-place-api (same as above, should be unified)
 └── NEXT_PUBLIC_REFACTOR_RESALE_API → futura-market-place-api (same, needs unification)
 
 Frontend (admin) → Backend API
-└── NEXT_PUBLIC_FUTURA → futura-tickets-admin-api (port 3000)
+└── NEXT_PUBLIC_FUTURA → futura-tickets-admin-api (port 4101)
 ```
 
 ---

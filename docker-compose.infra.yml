@@ -1,0 +1,116 @@
+# ========================================
+# FuturaTickets - Infrastructure Only
+# ========================================
+# This docker-compose contains ONLY infrastructure services
+# For development, use: docker compose -f docker-compose.infra.yml up
+#
+# Services: MongoDB, Redis, MinIO, Mongo Express
+# ========================================
+
+services:
+  # ========================================
+  # MongoDB Database
+  # ========================================
+  mongodb:
+    image: mongo:7
+    container_name: futura-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: futuraadmin
+      MONGO_INITDB_ROOT_PASSWORD: futurapass123
+      MONGO_INITDB_DATABASE: futuratickets
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - futura-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ========================================
+  # Redis Cache & Queue
+  # ========================================
+  redis:
+    image: redis:7-alpine
+    container_name: futura-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass futurapass123
+    volumes:
+      - redis_data:/data
+    networks:
+      - futura-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ========================================
+  # MinIO - Local S3-compatible storage
+  # ========================================
+  minio:
+    image: minio/minio:latest
+    container_name: futura-minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"   # API
+      - "9001:9001"   # Console
+    environment:
+      MINIO_ROOT_USER: futuraadmin
+      MINIO_ROOT_PASSWORD: futurapass123
+    volumes:
+      - minio_data:/data
+    networks:
+      - futura-network
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ========================================
+  # Mongo Express - MongoDB Admin UI
+  # ========================================
+  mongo-express:
+    image: mongo-express:latest
+    container_name: futura-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: futuraadmin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: futurapass123
+      ME_CONFIG_MONGODB_URL: mongodb://futuraadmin:futurapass123@mongodb:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin123
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - futura-network
+
+# ========================================
+# NETWORKS
+# ========================================
+networks:
+  futura-network:
+    driver: bridge
+
+# ========================================
+# VOLUMES
+# ========================================
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+  minio_data:
+    driver: local

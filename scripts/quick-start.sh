@@ -98,43 +98,48 @@ echo ""
 echo -e "${BLUE}Step 2: Installing dependencies...${NC}"
 echo ""
 
-# Install dependencies for each project
-PROJECTS=(
-    "futura-tickets-admin-api:Backend API"
-    "futura-tickets-admin:Admin Frontend"
-    "futura-market-place-v2:Marketplace Frontend"
-)
+if npm run bootstrap; then
+    report_success "Workspace bootstrap completed"
+else
+    report_warning "npm workspaces bootstrap failed, falling back to per-project install"
 
-for project_info in "${PROJECTS[@]}"; do
-    IFS=':' read -r project_dir project_name <<< "$project_info"
+    PROJECTS=(
+        "futura-tickets-admin-api:Backend API"
+        "futura-tickets-admin:Admin Frontend"
+        "futura-market-place-v2:Marketplace Frontend"
+    )
 
-    if [ -d "$project_dir" ]; then
-        echo -e "${BLUE}Installing dependencies for ${project_name}...${NC}"
+    for project_info in "${PROJECTS[@]}"; do
+        IFS=':' read -r project_dir project_name <<< "$project_info"
 
-        cd "$project_dir"
+        if [ -d "$project_dir" ]; then
+            echo -e "${BLUE}Installing dependencies for ${project_name}...${NC}"
 
-        if [ -f "package.json" ]; then
-            if [ -d "node_modules" ]; then
-                report_info "Dependencies already installed in ${project_dir}/, skipping..."
-            else
-                npm install
-                if [ $? -eq 0 ]; then
-                    report_success "Dependencies installed for ${project_name}"
+            cd "$project_dir"
+
+            if [ -f "package.json" ]; then
+                if [ -d "node_modules" ]; then
+                    report_info "Dependencies already installed in ${project_dir}/, skipping..."
                 else
-                    report_error "Failed to install dependencies for ${project_name}"
+                    npm install
+                    if [ $? -eq 0 ]; then
+                        report_success "Dependencies installed for ${project_name}"
+                    else
+                        report_error "Failed to install dependencies for ${project_name}"
+                    fi
                 fi
+            else
+                report_warning "No package.json found in ${project_dir}/"
             fi
-        else
-            report_warning "No package.json found in ${project_dir}/"
-        fi
 
-        cd - > /dev/null
-        echo ""
-    else
-        report_warning "Directory ${project_dir}/ not found"
-        echo ""
-    fi
-done
+            cd - > /dev/null
+            echo ""
+        else
+            report_warning "Directory ${project_dir}/ not found"
+            echo ""
+        fi
+    done
+fi
 
 # Setup environment files
 echo -e "${BLUE}Step 3: Setting up environment files...${NC}"
@@ -203,7 +208,7 @@ echo -e "     Docker: docker run -d -p 6379:6379 --name redis redis:7"
 echo ""
 echo -e "  ${MAGENTA}3. Start Backend API:${NC}"
 echo -e "     cd futura-tickets-admin-api"
-echo -e "     npm run start:dev"
+echo -e "     PORT=4101 npm run start:dev"
 echo ""
 echo -e "  ${MAGENTA}4. Start Admin Frontend (in a new terminal):${NC}"
 echo -e "     cd futura-tickets-admin"
@@ -214,12 +219,13 @@ echo -e "     cd futura-market-place-v2"
 echo -e "     npm run dev"
 echo ""
 echo -e "  ${MAGENTA}6. Access the applications:${NC}"
-echo -e "     Backend API:        http://localhost:3001"
-echo -e "     Admin Frontend:     http://localhost:3000"
-echo -e "     Marketplace:        http://localhost:3002"
+echo -e "     Backend API:        http://localhost:4101"
+echo -e "     Admin Frontend:     http://localhost:3003"
+echo -e "     Marketplace:        http://localhost:3000"
 echo ""
 
 echo -e "${BLUE}Useful scripts:${NC}"
+echo -e "  npm run bootstrap  - Instala dependencias de todas las apps via workspaces"
 echo -e "  ./start-all.sh      - Start all services"
 echo -e "  ./stop-all.sh       - Stop all services"
 echo ""

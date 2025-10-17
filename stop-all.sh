@@ -14,7 +14,7 @@ if [ -f logs/pids.txt ]; then
   rm logs/pids.txt
 else
   echo "⚠️  No PIDs file found. Killing by port..."
-  lsof -ti:3000,3001,3003 | xargs kill -9 2>/dev/null || true
+  lsof -ti:3000,3003,3007,4101,4102,4103 | xargs kill -9 2>/dev/null || true
 fi
 
 echo "✅ All services stopped"

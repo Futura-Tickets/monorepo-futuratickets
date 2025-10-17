@@ -1,0 +1,54 @@
+.PHONY: help start stop restart health check-deps install-deps clean logs
+
+help: ## Mostrar esta ayuda
+	@echo "Comandos disponibles para FRONTEND Apps:"
+	@echo ""
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
+
+start: ## Iniciar todos los frontends
+	@./start-all-frontends.sh
+
+stop: ## Detener todos los frontends
+	@./stop-all-frontends.sh
+
+restart: ## Reiniciar todos los frontends
+	@./stop-all-frontends.sh && sleep 2 && ./start-all-frontends.sh
+
+health: ## Verificar estado de los servicios
+	@./check-frontends-health.sh
+
+check-deps: ## Verificar dependencias instaladas
+	@echo "Checking Marketplace..."
+	@cd futura-market-place-v2 && npm list next 2>/dev/null | head -5 || echo "❌ No instalado"
+	@echo ""
+	@echo "Checking Admin..."
+	@cd futura-tickets-admin && npm list next 2>/dev/null | head -5 || echo "❌ No instalado"
+	@echo ""
+	@echo "Checking Access Web..."
+	@cd futura-tickets-web-access-app && npm list next 2>/dev/null | head -5 || echo "❌ No instalado"
+
+install-deps: ## Instalar dependencias en todas las apps
+	@echo "Installing Marketplace dependencies..."
+	@cd futura-market-place-v2 && npm install
+	@echo ""
+	@echo "Installing Admin dependencies..."
+	@cd futura-tickets-admin && npm install
+	@echo ""
+	@echo "Installing Access Web dependencies..."
+	@cd futura-tickets-web-access-app && npm install
+	@echo ""
+	@echo "✅ All dependencies installed"
+
+clean: ## Limpiar node_modules y package-lock de todas las apps
+	@echo "Cleaning Marketplace..."
+	@cd futura-market-place-v2 && rm -rf node_modules package-lock.json
+	@echo "Cleaning Admin..."
+	@cd futura-tickets-admin && rm -rf node_modules package-lock.json
+	@echo "Cleaning Access Web..."
+	@cd futura-tickets-web-access-app && rm -rf node_modules package-lock.json
+	@echo "✅ Cleanup complete"
+
+clean-install: clean install-deps ## Limpiar e instalar dependencias
+
+logs: ## Ver logs de procesos Next.js activos
+	@ps aux | grep -E "next dev" | grep -v grep || echo "No hay procesos Next.js corriendo"
