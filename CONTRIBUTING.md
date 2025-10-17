@@ -1,496 +1,553 @@
-# 🚀 Futura Tickets - Developer Guide
+# Contributing to FuturaTickets
 
-Complete guide for local development and testing.
+¡Gracias por tu interés en contribuir! Esta guía te ayudará a empezar rápidamente.
 
 ---
 
-## 📋 Table of Contents
+## 📋 Tabla de Contenidos
 
 1. [Quick Start](#-quick-start)
-2. [Project Structure](#-project-structure)
-3. [Development Commands](#-development-commands)
-4. [Test Credentials](#-test-credentials)
-5. [Health Checks](#-health-checks)
-6. [Troubleshooting](#-troubleshooting)
-7. [Git Workflow](#-git-workflow)
-8. [Environment Setup](#-environment-setup)
+2. [Development Workflow](#-development-workflow)
+3. [Code Standards](#-code-standards)
+4. [Git Conventions](#-git-conventions)
+5. [Pull Request Process](#-pull-request-process)
+6. [Testing](#-testing)
+7. [Security](#-security)
 
 ---
 
-## ⚡ Quick Start
+## 🚀 Quick Start
 
-### Prerequisites
+### Prerrequisitos
 
-- Node.js 18+ and npm
-- MongoDB Atlas account (or local MongoDB)
-- Git
+- **Node.js 22.17.0** (usa nvm: `nvm use`)
+- **npm 10+**
+- **Git**
+- **MongoDB** (local o Atlas)
+- **Redis** (opcional, para Bull queues)
 
-### Initial Setup
+### Setup Inicial (Menos de 5 minutos)
 
 ```bash
-# Clone the repository
-git clone <repository-url>
+# 1. Clonar y entrar al proyecto
+git clone https://github.com/futuratickets/monorepo-futuratickets.git
 cd monorepo-futuratickets
 
-# Install dependencies in all projects
-cd futura-tickets-admin-api && npm install && cd ..
-cd futura-tickets-admin && npm install && cd ..
-cd futura-market-place-v2 && npm install && cd ..
+# 2. Usar la versión correcta de Node
+nvm use  # Lee .nvmrc automáticamente
 
-# Setup environment files (copy .env.example to .env in each project)
-cp futura-tickets-admin-api/.env.example futura-tickets-admin-api/.env
-cp futura-tickets-admin/.env.example futura-tickets-admin/.env
-cp futura-market-place-v2/.env.example futura-market-place-v2/.env
+# 3. Instalar dependencias
+make install  # Equivalente a: npm install --legacy-peer-deps
 
-# Edit .env files with your credentials
-# IMPORTANT: Update MongoDB URI, JWT secret, etc.
+# 4. (Opcional) Activar git hooks
+cp .git-hooks/pre-commit.template .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+
+# 5. Copiar archivos de entorno
+cp .env.example .env
+# Editar .env con tus credenciales
+
+# 6. Iniciar desarrollo
+make dev-all  # Inicia infra + backends + frontends
+
+# 7. Verificar que todo funciona
+make health-check
 ```
 
-### Start All Services
+### Comandos Esenciales
 
 ```bash
-# From monorepo root
-./start-all.sh
+make help          # Ver todos los comandos disponibles
+make dev-all       # Iniciar todo (infra + backends + frontends)
+make health-check  # Verificar estado de servicios
+make test          # Ejecutar tests
+make lint          # Ejecutar linting
+make lint-fix      # Auto-corregir errores de linting
 ```
 
-This will start:
-- **Admin API** on http://localhost:3001
-- **Admin Panel** on http://localhost:3003
-- **Marketplace** on http://localhost:3000
-
-### Stop All Services
-
-```bash
-./stop-all.sh
-```
+**Ver lista completa:** `make help`
 
 ---
 
-## 📁 Project Structure
+## 💻 Development Workflow
 
-```
-monorepo-futuratickets/
-├── futura-tickets-admin-api/    # Backend API (NestJS)
-│   ├── src/
-│   │   ├── accounts/            # User authentication
-│   │   ├── events/              # Event management
-│   │   ├── CronJobs/            # Scheduled tasks
-│   │   └── main.ts
-│   └── .env
-├── futura-tickets-admin/        # Admin Panel (Next.js)
-│   ├── app/
-│   ├── components/
-│   ├── shared/
-│   └── .env.local
-├── futura-market-place-v2/      # Public Marketplace (Next.js)
-│   ├── app/
-│   ├── components/
-│   └── .env.local
-├── start-all.sh                 # Start all services
-├── stop-all.sh                  # Stop all services
-└── logs/                        # Service logs
-```
-
----
-
-## 💻 Development Commands
-
-### Admin API (NestJS)
+### 1. Crear Feature Branch
 
 ```bash
-cd futura-tickets-admin-api
-
-# Development mode (hot reload)
-npm run start:dev
-
-# Production mode
-npm run start:prod
-
-# Build
-npm run build
-
-# Run tests
-npm run test
-
-# Test coverage
-npm run test:cov
-
-# Lint
-npm run lint
-```
-
-**API Documentation:** http://localhost:3001/api/docs
-
-### Admin Panel (Next.js)
-
-```bash
-cd futura-tickets-admin
-
-# Development mode
-npm run dev
-
-# Production build
-npm run build
-
-# Start production server
-npm start
-
-# Lint
-npm run lint
-```
-
-**Admin Panel:** http://localhost:3003
-
-### Marketplace (Next.js)
-
-```bash
-cd futura-market-place-v2
-
-# Development mode
-npm run dev
-
-# Production build
-npm run build
-
-# Start production server
-npm start
-
-# Lint
-npm run lint
-```
-
-**Marketplace:** http://localhost:3000
-
-### View Logs
-
-```bash
-# View all logs
-tail -f logs/*.log
-
-# View specific service
-tail -f logs/admin-api.log
-tail -f logs/admin-panel.log
-tail -f logs/marketplace.log
-```
-
----
-
-## 🔐 Test Credentials
-
-### Admin Panel Users
-
-#### Administrator (Full Access)
-- **Email:** admin@futuratickets.com
-- **Password:** admin2025
-- **Role:** ADMIN
-- **Permissions:** Full system access, user management, event creation, analytics
-
-#### Event Promoter
-- **Email:** promotor@futuratickets.com
-- **Password:** promoter2025
-- **Role:** PROMOTER
-- **Permissions:** Create/manage events, view ticket sales, access reports
-
-#### Test Customer
-- **Email:** cliente@futuratickets.com
-- **Password:** cliente2025
-- **Role:** USER
-- **Permissions:** Purchase tickets, view order history
-
-### Marketplace Users
-
-Use the same credentials above to test the marketplace frontend.
-
----
-
-## 🏥 Health Checks
-
-### Check if Services are Running
-
-```bash
-# Check running processes
-lsof -i :3000  # Marketplace
-lsof -i :3001  # Admin API
-lsof -i :3003  # Admin Panel
-
-# Check all at once
-lsof -i :3000,:3001,:3003
-```
-
-### API Health Check
-
-```bash
-# Admin API
-curl http://localhost:3001/health
-
-# Expected response: {"status":"ok"}
-```
-
-### Database Connection
-
-```bash
-# Test MongoDB connection (from Admin API directory)
-cd futura-tickets-admin-api
-npm run test:db  # If available
-
-# Or check logs
-tail -f ../logs/admin-api.log | grep "MongoDB"
-```
-
-### Frontend Health
-
-Open in browser:
-- Admin Panel: http://localhost:3003
-- Marketplace: http://localhost:3000
-
-Expected: Login page loads without errors
-
----
-
-## 🔧 Troubleshooting
-
-### Port Already in Use
-
-```bash
-# Find and kill process on specific port
-lsof -ti:3001 | xargs kill -9
-
-# Or use the stop script
-./stop-all.sh
-```
-
-### Login Fails / "Failed to fetch"
-
-**Problem:** CORS errors or API not responding
-
-**Solutions:**
-1. Check API is running: `curl http://localhost:3001/health`
-2. Check `.env` files have correct API URLs
-3. Clear browser localStorage: `localStorage.clear()` in console
-4. Check API logs: `tail -f logs/admin-api.log`
-
-### "Cannot find module" Errors
-
-```bash
-# Reinstall dependencies
-cd <project-directory>
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### MongoDB Connection Errors
-
-**Problem:** "MongooseError: Cannot connect to MongoDB"
-
-**Solutions:**
-1. Check MongoDB URI in `.env`
-2. Verify MongoDB Atlas IP whitelist (add 0.0.0.0/0 for development)
-3. Check MongoDB user credentials
-4. Test connection: `mongosh "your-mongodb-uri"`
-
-### Ant Design React 19 Warnings
-
-**Problem:** Console warning about React compatibility
-
-**Solution:** Already suppressed in `RootProvider.tsx` - safe to ignore.
-
-### Socket Connection Errors
-
-**Problem:** Socket.IO connection failures
-
-**Solution:**
-- Socket connections are non-blocking
-- Check if `SOCKET_URL` is set in `.env`
-- If Redis is not available, comment out socket code temporarily
-
-### Build Errors
-
-```bash
-# Clear Next.js cache
-cd futura-tickets-admin  # or futura-market-place-v2
-rm -rf .next
-npm run build
-
-# Clear NestJS cache
-cd futura-tickets-admin-api
-rm -rf dist
-npm run build
-```
-
-### Environment Variables Not Loading
-
-**Check:**
-1. File named exactly `.env` (Admin API) or `.env.local` (Next.js)
-2. No syntax errors in `.env` file
-3. Restart the service after changing `.env`
-4. Next.js variables must start with `NEXT_PUBLIC_` for client-side access
-
----
-
-## 🌿 Git Workflow
-
-### Branch Strategy
-
-```bash
-# Create feature branch
-git checkout -b feature/your-feature-name
-
-# Make changes and commit
-git add .
-git commit -m "feat: add new feature"
-
-# Push to remote
-git push origin feature/your-feature-name
-
-# Create Pull Request on GitHub
-```
-
-### Commit Message Convention
-
-```
-feat: add new feature
-fix: fix bug
-docs: update documentation
-style: formatting changes
-refactor: code refactoring
-test: add tests
-chore: maintenance tasks
-```
-
-### Sync with Main
-
-```bash
-# Update main branch
+# Desde main, crear nueva branch
 git checkout main
 git pull origin main
+git checkout -b feature/nombre-descriptivo
 
-# Rebase your feature branch
-git checkout feature/your-feature-name
-git rebase main
-
-# Resolve conflicts if any
-# Then push (may need --force if rebased)
-git push origin feature/your-feature-name --force-with-lease
+# O usar worktrees para desarrollo paralelo
+./scripts/worktree-create.sh feature/nombre-descriptivo
 ```
 
----
-
-## 🛠️ Environment Setup
-
-### Required Environment Variables
-
-#### Admin API (.env)
+### 2. Desarrollar Localmente
 
 ```bash
-# Database
-MONGO_URI=mongodb+srv://user:password@cluster.mongodb.net/dbname
+# Iniciar servicios necesarios
+make dev-backends  # Solo backend APIs
+make dev-frontends # Solo frontend apps
+make dev-all       # Todo
 
-# JWT
-JWT_SECRET=your-super-secret-jwt-key-change-in-production
-JWT_EXPIRES_IN=7d
-
-# Server
-PORT=3001
-NODE_ENV=development
-
-# CORS
-CORS_ORIGIN=http://localhost:3003,http://localhost:3000
-
-# Stripe (optional)
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-
-# Email (optional)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
+# Trabajar en workspace específico
+make admin-api        # Solo Admin API
+make marketplace-web  # Solo Marketplace Frontend
 ```
 
-#### Admin Panel (.env.local)
+### 3. Verificar Calidad
 
 ```bash
-# API
-NEXT_PUBLIC_API_URL=http://localhost:3001
+# Linting (auto-fix cuando sea posible)
+make lint-fix
 
-# Features (optional)
-NEXT_PUBLIC_ENABLE_ANALYTICS=false
+# Tests
+make test
+
+# Verificar servicios
+make health-check
+
+# Verificar seguridad
+make security-audit
 ```
 
-#### Marketplace (.env.local)
+### 4. Commit & Push
 
 ```bash
-# API
-NEXT_PUBLIC_API_URL=http://localhost:3001
+# Commits pequeños y descriptivos
+git add .
+git commit -m "feat: descripción clara del cambio"
 
-# Google OAuth (optional)
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=xxxxx.apps.googleusercontent.com
-
-# Stripe (optional)
-NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_test_xxxxx
-
-# Analytics (optional)
-NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+# Push a tu branch
+git push origin feature/nombre-descriptivo
 ```
 
-### MongoDB Setup
+**Nota:** Si activaste git hooks, se ejecutarán validaciones automáticas antes del commit.
 
-1. Create account at https://cloud.mongodb.com
-2. Create cluster (free tier available)
-3. Create database user
-4. Whitelist IP: 0.0.0.0/0 (for development)
-5. Get connection string and update `MONGO_URI`
+### 5. Crear Pull Request
 
-### Stripe Setup (Optional)
+```bash
+# Opción 1: Usar GitHub CLI
+gh pr create --title "feat: título del PR" --body "Descripción detallada"
 
-1. Create account at https://stripe.com
-2. Get test API keys from Dashboard
-3. Update `.env` files with keys
-4. Test with card: 4242 4242 4242 4242
+# Opción 2: Ir a GitHub y crear PR manualmente
+```
 
 ---
 
-## 📞 Getting Help
+## 📏 Code Standards
 
-### Logs Location
+### TypeScript
 
-All service logs are in `./logs/`:
-- `admin-api.log` - Backend API logs
-- `admin-panel.log` - Admin Panel logs
-- `marketplace.log` - Marketplace logs
+**Linting automático:**
+```bash
+make lint-fix  # Auto-corrige errores
+```
 
-### Common Issues
+**Convenciones:**
+- ✅ Usar `interface` para tipos públicos
+- ✅ Usar `type` para uniones y utilidades
+- ✅ Preferir `const` sobre `let`
+- ✅ Usar optional chaining (`?.`) y nullish coalescing (`??`)
+- ❌ No usar `any` (usar `unknown` si es necesario)
+- ❌ No dejar `console.log` (git hooks lo detectan)
 
-| Issue | Solution |
-|-------|----------|
-| Port in use | Run `./stop-all.sh` |
-| Login fails | Check API is running, clear localStorage |
-| MongoDB error | Verify connection string and IP whitelist |
-| Build fails | Clear cache: `rm -rf .next dist node_modules` |
-| Dependencies error | Run `npm install` again |
+### NestJS (Backend)
 
-### Documentation
+**Versión:** NestJS 10 (estandarizado en todo el monorepo)
 
-- **Architecture:** See `ARQUITECTURA_SISTEMA_COMPLETO.md`
-- **Deployment:** See `GUIA_DESPLIEGUE_COMPLETA.md`
-- **Roadmap:** See `SPRINTS_DETALLADOS.md`
-- **API Docs:** http://localhost:3001/api/docs (when API is running)
+**Estructura:**
+```typescript
+// ✅ Usar decorators de NestJS
+@Injectable()
+export class EventService {
+  constructor(
+    @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+  ) {}
+}
+
+// ✅ DTOs con class-validator
+export class CreateEventDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+}
+```
+
+### Next.js (Frontend)
+
+**App Router (Next.js 15):**
+```typescript
+// ✅ Server Components por defecto
+export default function Page() {
+  return <div>Content</div>
+}
+
+// ✅ Client Components solo cuando sea necesario
+'use client'
+export default function InteractiveComponent() {
+  const [state, setState] = useState()
+  // ...
+}
+```
+
+### CSS/Styling
+
+- **Admin Panel:** Ant Design
+- **Marketplace:** Tailwind CSS + Radix UI
+- Preferir componentes existentes antes de crear nuevos
 
 ---
 
-## ✅ Verification Checklist
+## 🌿 Git Conventions
 
-Before starting development:
+### Branch Naming
 
-- [ ] All dependencies installed (`npm install` in each project)
-- [ ] Environment files created and configured (`.env`, `.env.local`)
-- [ ] MongoDB connection working
-- [ ] All three services start successfully
-- [ ] Can login to Admin Panel with test credentials
-- [ ] Can access Marketplace
-- [ ] API documentation loads at http://localhost:3001/api/docs
+```bash
+feature/nombre-descriptivo   # Nueva funcionalidad
+fix/bug-description          # Corrección de bug
+chore/maintenance-task       # Tareas de mantenimiento
+docs/documentation-update    # Solo documentación
+refactor/code-improvement    # Refactorización
+test/add-tests               # Agregar tests
+```
+
+### Commit Messages
+
+**Formato:** [Conventional Commits](https://www.conventionalcommits.org/)
+
+```bash
+<type>: <description>
+
+[optional body]
+
+[optional footer]
+```
+
+**Types:**
+- `feat:` - Nueva funcionalidad
+- `fix:` - Corrección de bug
+- `docs:` - Cambios en documentación
+- `style:` - Formateo (sin cambios de código)
+- `refactor:` - Refactorización
+- `test:` - Agregar o modificar tests
+- `chore:` - Mantenimiento (deps, config, etc.)
+- `perf:` - Mejoras de performance
+- `ci:` - Cambios en CI/CD
+
+**Ejemplos:**
+
+```bash
+# ✅ Buenos commits
+feat: add ticket resale functionality
+fix: correct payment validation logic
+docs: update API endpoints in README
+chore: update dependencies to fix vulnerabilities
+
+# ❌ Malos commits
+updated stuff
+fix
+WIP
+asdf
+```
+
+**Scope (opcional):**
+```bash
+feat(admin-api): add new event endpoint
+fix(marketplace): correct checkout flow
+docs(security): update SECURITY.md
+```
 
 ---
 
-**Last Updated:** 2025-10-15
-**Version:** 1.0.0
+## 🔄 Pull Request Process
+
+### Antes de Crear el PR
+
+- [ ] Código cumple estándares (`make lint`)
+- [ ] Tests pasan (`make test`)
+- [ ] No hay secrets hardcodeados
+- [ ] Documentación actualizada (si aplica)
+- [ ] Branch actualizado con `main`
+
+### Template del PR
+
+```markdown
+## Descripción
+Describe el cambio de forma clara y concisa.
+
+## Tipo de Cambio
+- [ ] Bug fix
+- [ ] Nueva funcionalidad
+- [ ] Breaking change
+- [ ] Documentación
+
+## Checklist
+- [ ] Código sigue estándares del proyecto
+- [ ] Tests agregados/actualizados
+- [ ] Documentación actualizada
+- [ ] No hay console.log
+- [ ] Probado localmente
+
+## Screenshots (si aplica)
+[Adjuntar capturas de pantalla]
+
+## Issues Relacionados
+Fixes #123
+```
+
+### Code Review
+
+**Revisores buscarán:**
+- ✅ Código limpio y legible
+- ✅ Tests adecuados
+- ✅ Sin lógica duplicada
+- ✅ Manejo de errores
+- ✅ Seguridad (sin secrets, validación de inputs)
+- ✅ Performance (queries optimizadas, sin N+1)
+
+### CI Checks
+
+**Automáticos (GitHub Actions):**
+- ✅ Linting pasa
+- ✅ Tests pasan
+- ✅ Build exitoso
+- ✅ No vulnerabilidades críticas
+
+### Merge Requirements
+
+- ✅ Al menos 1 aprobación
+- ✅ CI checks pasan
+- ✅ Conflicts resueltos
+- ✅ Branch actualizado con `main`
+
+---
+
+## 🧪 Testing
+
+### Ejecutar Tests
+
+```bash
+# Todos los tests
+make test
+
+# Tests con coverage
+make test-coverage
+
+# Tests de un workspace específico
+cd futura-tickets-admin-api
+npm run test
+
+# Tests en watch mode
+npm run test:watch
+```
+
+### Escribir Tests
+
+**Unit Tests (Jest):**
+```typescript
+describe('EventService', () => {
+  it('should create a new event', async () => {
+    const event = await service.createEvent(createEventDto)
+    expect(event).toBeDefined()
+    expect(event.name).toBe(createEventDto.name)
+  })
+})
+```
+
+**Coverage Requirements:**
+- Nuevas funcionalidades: **>80% coverage**
+- Bug fixes: Agregar test que reproduzca el bug
+
+---
+
+## 🔒 Security
+
+### Git Hooks
+
+Si activaste pre-commit hooks, se validará automáticamente:
+- ❌ No secrets hardcodeados
+- ❌ No archivos > 5 MB
+- ❌ No errores de linting
+- ⚠️ Advertencia sobre `console.log`
+
+**Bypass (solo emergencias):**
+```bash
+git commit --no-verify -m "mensaje"
+```
+
+### Secrets Management
+
+**❌ NUNCA:**
+```typescript
+const apiKey = "sk_live_abc123..."  // ❌ Hardcoded
+const password = "mypassword123"     // ❌ En código
+```
+
+**✅ SIEMPRE:**
+```typescript
+const apiKey = process.env.STRIPE_SECRET_KEY  // ✅ Desde .env
+const dbUri = this.configService.get('MONGO_URI')  // ✅ ConfigService
+```
+
+### Vulnerabilities
+
+- Revisar `SECURITY.md` antes de contribuir
+- Reportar vulnerabilidades a: security@futuratickets.com
+- No abrir issues públicos para security bugs
+
+### Auditoría
+
+```bash
+# Revisar vulnerabilidades
+make security-audit
+
+# Aplicar fixes seguros
+make security-fix
+
+# Ver reporte completo
+make security-report
+```
+
+---
+
+## 📚 Recursos Adicionales
+
+### Documentación
+
+- **Arquitectura:** [ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)
+- **Seguridad:** [SECURITY.md](./SECURITY.md)
+- **Git Workflow:** [docs/GIT_BRANCHING_STRATEGY.md](./docs/GIT_BRANCHING_STRATEGY.md)
+- **Makefile Commands:** `make help`
+- **Git Hooks:** [.git-hooks/README.md](./.git-hooks/README.md)
+
+### Scripts Útiles
+
+| Script | Descripción |
+|--------|-------------|
+| `make dev-all` | Iniciar todo |
+| `make health-check` | Verificar servicios |
+| `make lint-fix` | Corregir linting |
+| `make test` | Ejecutar tests |
+| `make clean` | Limpiar node_modules |
+| `make security-audit` | Auditar seguridad |
+
+### Puertos por Defecto
+
+| Servicio | Puerto |
+|----------|--------|
+| Admin API | 3002 |
+| Marketplace API | 3004 |
+| Access API | 3005 |
+| Admin Dashboard | 3003 |
+| Marketplace Frontend | 3000 |
+| Event Page | 3006 |
+| MongoDB | 27017 |
+| Redis | 6379 |
+
+---
+
+## 🐛 Troubleshooting
+
+### "make: command not found"
+
+**Solución:**
+```bash
+# macOS
+brew install make
+
+# Ubuntu/Debian
+sudo apt-get install build-essential
+
+# Windows (WSL)
+sudo apt-get install make
+```
+
+### "Permission denied" en git hooks
+
+```bash
+chmod +x .git/hooks/pre-commit
+```
+
+### "Port already in use"
+
+```bash
+make ports      # Ver qué está usando los puertos
+lsof -ti:3002 | xargs kill -9  # Matar proceso en puerto específico
+```
+
+### Linting errors después de pull
+
+```bash
+make lint-fix  # Auto-corregir
+```
+
+---
+
+## 💬 Comunicación
+
+### Issues
+
+- **Bug reports:** Usar template de issue
+- **Feature requests:** Explicar el caso de uso
+- **Questions:** Usar Discussions, no Issues
+
+### Pull Requests
+
+- **Draft PRs:** Marcar como draft si está WIP
+- **Ready for review:** Pedir review a `@team`
+- **Updates:** Responder comentarios en 24-48h
+
+---
+
+## 🎯 Checklist para Primera Contribución
+
+- [ ] Fork del proyecto
+- [ ] Node 22.17.0 instalado (`nvm use`)
+- [ ] Dependencias instaladas (`make install`)
+- [ ] Git hooks activados (opcional)
+- [ ] `.env` configurado
+- [ ] Servicios inician correctamente (`make dev-all`)
+- [ ] Tests pasan (`make test`)
+- [ ] Linting pasa (`make lint`)
+- [ ] Health check OK (`make health-check`)
+- [ ] Branch creada siguiendo convenciones
+- [ ] Commit messages siguen Conventional Commits
+- [ ] PR creado con template
+
+---
+
+## ❓ Preguntas Frecuentes
+
+**Q: ¿Qué versión de Node uso?**
+A: Node 22.17.0 (especificado en `.nvmrc`)
+
+**Q: ¿Cómo pruebo cambios en producción?**
+A: Nunca directamente. Usar staging environment.
+
+**Q: ¿Puedo usar yarn/pnpm?**
+A: No, solo npm (legacy-peer-deps configurado).
+
+**Q: ¿Dónde están los logs?**
+A: Cada servicio loguea a stdout/stderr. Ver con `make dev-all`.
+
+**Q: ¿Cómo actualizo dependencias?**
+A: Crear issue primero. Actualizar de a una, con tests.
+
+---
+
+## 📄 Licencia
+
+Al contribuir, aceptas que tu código se licencie bajo MIT License.
+
+---
+
+## 🙏 Agradecimientos
+
+¡Gracias por contribuir a FuturaTickets! Cada PR, bug report, o sugerencia hace mejor el proyecto.
+
+---
+
+**Última actualización:** 2025-10-17
+**Versión:** 2.0.0
