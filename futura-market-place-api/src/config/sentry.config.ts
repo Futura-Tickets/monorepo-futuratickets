@@ -39,15 +39,21 @@ export function initializeSentry(configService: ConfigService): void {
 
                 // Remove sensitive query params
                 if (event.request.query_string) {
+                    const queryString = typeof event.request.query_string === 'string'
+                        ? event.request.query_string
+                        : JSON.stringify(event.request.query_string);
+
                     const sensitiveParams = ['token', 'password', 'secret', 'apiKey'];
+                    let redactedQuery = queryString;
                     for (const param of sensitiveParams) {
-                        if (event.request.query_string.includes(param)) {
-                            event.request.query_string = event.request.query_string.replace(
+                        if (redactedQuery.includes(param)) {
+                            redactedQuery = redactedQuery.replace(
                                 new RegExp(`${param}=[^&]*`, 'gi'),
                                 `${param}=[REDACTED]`
                             );
                         }
                     }
+                    event.request.query_string = redactedQuery;
                 }
             }
 
@@ -69,29 +75,33 @@ export function initializeSentry(configService: ConfigService): void {
     console.log(`✅ Sentry initialized for environment: ${environment}`);
 }
 
-// Error handler middleware
-export function sentryErrorHandler() {
-    return Sentry.Handlers.errorHandler({
-        shouldHandleError(error) {
-            // Capture all 5xx errors
-            if (error.status && error.status >= 500) {
-                return true;
-            }
-            // Capture specific error types
-            if (error instanceof TypeError || error instanceof ReferenceError) {
-                return true;
-            }
-            return false;
-        },
-    });
-}
+// Note: Sentry v10+ for NestJS uses interceptors instead of Express middleware
+// The handlers below are not used and commented out for TypeScript compilation
+// If needed, implement using @sentry/nestjs interceptors instead
 
-// Request handler middleware
-export function sentryRequestHandler() {
-    return Sentry.Handlers.requestHandler();
-}
+// // Error handler middleware (deprecated in Sentry v10+)
+// export function sentryErrorHandler() {
+//     return Sentry.Handlers.errorHandler({
+//         shouldHandleError(error) {
+//             // Capture all 5xx errors
+//             if (error.status && error.status >= 500) {
+//                 return true;
+//             }
+//             // Capture specific error types
+//             if (error instanceof TypeError || error instanceof ReferenceError) {
+//                 return true;
+//             }
+//             return false;
+//         },
+//     });
+// }
 
-// Tracing handler
-export function sentryTracingHandler() {
-    return Sentry.Handlers.tracingHandler();
-}
+// // Request handler middleware (deprecated in Sentry v10+)
+// export function sentryRequestHandler() {
+//     return Sentry.Handlers.requestHandler();
+// }
+
+// // Tracing handler (deprecated in Sentry v10+)
+// export function sentryTracingHandler() {
+//     return Sentry.Handlers.tracingHandler();
+// }

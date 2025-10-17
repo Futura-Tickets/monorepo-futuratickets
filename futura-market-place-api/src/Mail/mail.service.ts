@@ -621,7 +621,11 @@ export class MailService {
 
   }
 
-  public async sendTicketSoldConfirmation(createdTicket: CreatedTicket, account: Account): Promise<void> {
+  public async sendTicketSoldConfirmation(createdTicket: CreatedTicket | Sale, price?: number): Promise<void> {
+    // Extract account from either CreatedTicket or Sale
+    const account = 'client' in createdTicket && createdTicket.client
+      ? (createdTicket.client as unknown as Account)
+      : (createdTicket as any).client as Account;
 
     const registerToken = await this.authService.registerToken({
       account: account._id,
