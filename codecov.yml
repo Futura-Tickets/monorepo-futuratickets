@@ -1,0 +1,59 @@
+codecov:
+  require_ci_to_pass: yes
+  notify:
+    wait_for_ci: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: "60...100"
+
+  status:
+    project:
+      default:
+        target: 40%
+        threshold: 5%
+        if_ci_failed: error
+
+    patch:
+      default:
+        target: 50%
+        threshold: 10%
+        if_ci_failed: error
+
+# Flags for different components
+flags:
+  admin-api:
+    paths:
+      - futura-tickets-admin-api/src/
+    carryforward: true
+
+  marketplace-api:
+    paths:
+      - futura-market-place-api/src/
+    carryforward: true
+
+  access-api:
+    paths:
+      - futura-access-api/src/
+    carryforward: true
+
+# Comment configuration for PRs
+comment:
+  layout: "reach,diff,flags,files,footer"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
+
+# Ignore files/directories from coverage
+ignore:
+  - "**/*.spec.ts"
+  - "**/*.e2e-spec.ts"
+  - "**/test/**"
+  - "**/node_modules/**"
+  - "**/dist/**"
+  - "**/coverage/**"
+  - "**/*.interface.ts"
+  - "**/*.dto.ts"
+  - "**/main.ts"

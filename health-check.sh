@@ -75,8 +75,8 @@ echo -e "${BLUE}2. BASES DE DATOS${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-# MongoDB
-if mongosh "mongodb://futuraadmin:futurapass123@localhost:27017" --eval "db.adminCommand('ping')" > /dev/null 2>&1; then
+# MongoDB - Use Docker exec instead of requiring mongosh locally
+if docker exec futura-mongodb mongosh --quiet --eval "db.adminCommand('ping')" > /dev/null 2>&1; then
     echo -e "${GREEN}✓${NC} MongoDB connection"
     ((SUCCESS_COUNT++))
 else
@@ -84,12 +84,12 @@ else
     ((FAIL_COUNT++))
 fi
 
-# Redis
-if redis-cli -h localhost -p 6379 -a futurapass123 PING > /dev/null 2>&1; then
+# Redis - Use Docker exec instead of requiring redis-cli locally
+if docker exec futura-redis redis-cli PING > /dev/null 2>&1; then
     echo -e "${GREEN}✓${NC} Redis connection"
     ((SUCCESS_COUNT++))
 else
-    echo -e "${RED}✗${NC} Redis connection (puede ser normal si redis-cli no está instalado)"
+    echo -e "${RED}✗${NC} Redis connection"
     ((FAIL_COUNT++))
 fi
 
@@ -100,7 +100,15 @@ echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 check_http "MinIO Console" "http://localhost:9001/minio/health/live"
-check_http "Mongo Express" "http://localhost:8081"
+
+# Mongo Express returns 401 (requires auth), which means it's running
+if curl -s -I http://localhost:8081 | grep -q "HTTP"; then
+    echo -e "${GREEN}✓${NC} Mongo Express - http://localhost:8081"
+    ((SUCCESS_COUNT++))
+else
+    echo -e "${RED}✗${NC} Mongo Express - http://localhost:8081"
+    ((FAIL_COUNT++))
+fi
 
 echo ""
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
