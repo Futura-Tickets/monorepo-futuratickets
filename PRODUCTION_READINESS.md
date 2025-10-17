@@ -309,6 +309,50 @@ async ready() {
 
 ---
 
+### 18. Git Structure Inconsistency ⚠️
+
+**Problem:** Workspaces tienen nested .git directories sin .gitmodules
+**Impact:** Git status muestra 'm' flags, confusión sobre git structure
+**Location:** Root directory
+
+**Current State:**
+- 16 directories registered as gitlinks (mode 160000) in git index
+- No .gitmodules file exists
+- Each workspace has its own .git directory with uncommitted changes
+- npm workspaces configured correctly in package.json
+
+**Two Options:**
+
+**Option A: Proper Submodules** (separate histories)
+```bash
+# Create .gitmodules with proper configuration
+# Requires remote URLs for each submodule
+# Pros: Separate history for each workspace
+# Cons: More complex to manage
+```
+
+**Option B: Monorepo** (unified history)
+```bash
+# Remove nested .git directories
+find . -maxdepth 2 -name .git -type d | grep -v '^\./\.git$' | xargs rm -rf
+git add .
+# Pros: Simple single history
+# Cons: Lose individual workspace histories
+```
+
+**Recommendation:** Option B (Monorepo) because:
+- npm workspaces already configured
+- No .gitmodules exists
+- Simpler dependency management
+- Easier CI/CD
+
+**⚠️ IMPORTANT:** Backup needed before removing .git directories
+
+**Estimated Time:** 2 hours (with backups and verification)
+**Priority:** P2
+
+---
+
 ## ✅ COMPLETED
 
 - [x] Node 22.17.0 standardization
