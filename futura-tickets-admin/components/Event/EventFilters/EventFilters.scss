@@ -1,0 +1,43 @@
+.event-filter-container {
+    height: 0rem;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #e4e4e4;
+    overflow: hidden;
+    transition: 500ms;
+    position: relative;
+    bottom: 2px;
+    box-shadow: 0 0 8px #efefef;
+    &.active {
+        bottom: 0px;
+        height: 5rem;
+        .event-filter-content {
+            top: 0rem;
+        }
+    }    
+    .event-filter-content {
+        position: absolute;
+        top: -5rem;
+        transition: 500ms;
+        padding: 0 3rem;
+        display: flex;
+        align-items: center;
+        height: 5rem;
+        justify-content: space-between;
+        width: 100%;
+        box-sizing: border-box;
+        background: white;
+        .event-filter-left-content {
+            .ant-select {
+                min-width: 10rem;
+                margin: 0 2.5rem 0 0;
+                .ant-select-selection-item {
+                    font-weight: 600;
+                    font-size: 11px;
+                }
+            }
+        }
+        .event-filter-right-content {
+
+        }
+    }
+}

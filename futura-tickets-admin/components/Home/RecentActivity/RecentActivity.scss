@@ -1,0 +1,39 @@
+.recent-activity-list-container {
+    width: 100%;
+    border-top: 1px solid #e4e4e4;
+    .recent-activity-list-header {
+        display: flex;
+        padding: 0rem 3rem;
+        height: 5rem;
+        align-items: center;
+        background: #fcfcfc;
+        border-bottom: 1px solid #e4e4e4;
+        box-sizing: border-box;
+        div {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            width: 150px;
+        }
+        .recent-activity-item-name {
+            width: 250px;
+        }
+        .recent-activity-item-action {
+            width: 150px;
+            text-align: center;
+        }
+        .recent-activity-item-points {
+            width: 150px;
+            text-align: center;
+        }
+        .recent-activity-item-date {
+            width: 150px;
+            text-align: center;
+        }
+    }
+    .recent-activity-list-content {
+        display: flex;
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,41 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Run lint-staged
+npm run lint-staged
+
+# Check for console.log statements (warning only)
+if git diff --cached --name-only | grep -E '\.(ts|js)$' | xargs grep -n 'console\.log' 2>/dev/null; then
+  echo "⚠️  Warning: console.log statements found in staged files"
+  echo "   Consider removing them before committing"
+fi
+
+# Check for TODO comments in staged files
+TODO_COUNT=$(git diff --cached --name-only | grep -E '\.(ts|js)$' | xargs grep -c 'TODO:' 2>/dev/null || echo "0")
+if [ "$TODO_COUNT" -gt 0 ]; then
+  echo "ℹ️  Info: $TODO_COUNT TODO comments found in staged files"
+fi
+
+# Check for large files (>5MB)
+for file in $(git diff --cached --name-only); do
+  if [ -f "$file" ]; then
+    SIZE=$(wc -c < "$file")
+    if [ "$SIZE" -gt 5242880 ]; then
+      echo "❌ Error: File $file is larger than 5MB ($SIZE bytes)"
+      echo "   Large files should not be committed to git"
+      exit 1
+    fi
+  fi
+done
+
+# Check for secrets in staged files
+echo "🔐 Checking for potential secrets..."
+if git diff --cached --name-only | xargs grep -E '(password|secret|key|token|api_key).*=.*["\047][^"\047]{20,}' 2>/dev/null; then
+  echo "❌ Error: Potential secrets detected in staged files"
+  echo "   Please remove sensitive information before committing"
+  exit 1
+fi
+
+echo "✅ Pre-commit checks passed!"

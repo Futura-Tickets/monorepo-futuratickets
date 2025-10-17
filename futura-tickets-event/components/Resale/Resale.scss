@@ -1,0 +1,181 @@
+.resale-image-container {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding: 5rem 0 0 0;
+    .resale-image {
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        width: 100%;
+        height: 240px;
+        border-bottom: 1px solid #efefef;
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-position: center;
+    }
+    img {
+        max-height: 100%;
+        z-index: 1;
+    }
+}
+
+.resale-container {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    .resale-content {
+        width: 100%;
+        .resale-info-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 5rem;
+            padding: 5rem;
+            box-sizing: border-box;
+            margin: 0 auto;
+            .resale-info {
+                display: grid;
+                grid-column-start: 2;
+                grid-column-end: 3;
+                .resale-info-item {
+                    margin: 0 0 2.5rem 0;
+                    h2 {
+                        margin: 0px;
+                        text-transform: uppercase;
+                        font-style: oblique;
+                        font-size: 21px;
+                        .anticon {
+                            margin: 0 12px 0 0;
+                        }
+                    }
+                    p {
+                        font-size: 14px;
+                        line-height: 24px;
+                    }
+                }
+            }
+            .event-details {
+                .event-detail {
+                    margin: 0 0 50px 0;
+                    h5 {
+                        text-transform: uppercase;
+                        font-style: oblique;
+                        font-weight: 900;
+                        margin: 0 0 12px 0;
+                        font-size: 21px;
+                        .anticon {
+                            margin: 0 5px 0 0;
+                        }
+                    }
+                    ul {
+                        margin: 0;
+                    }
+                    .artists-list {
+                        .artist-item {
+                            display: flex;
+                            align-items: center;
+                            margin: 1.5rem 0;
+                            font-size: 17px;
+                            font-weight: 600;
+                            img {
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                margin: 0 1.25rem 0 0;
+                            }
+                        }
+                    }
+                    .tickets-num-container {
+                        display: flex;
+                        flex-direction: column;
+                        .tickets-num-header {
+                            display: flex;
+                            justify-content: space-between;
+                            margin: 0 0 30px 0;
+                            align-items: center;      
+                            h5 {
+                                margin: 0;
+                            }                 
+                            span {
+                                font-size: 11px;
+                                color: #666;
+                            }
+                        }
+                        .tickets-num-controller-container {
+                            .tickets-num-controller-header {
+                                h5 {
+                                    font-weight: 800;
+                                    margin: 0 0 9px 0;
+                                    font-size: 17px;
+                                }
+                            }
+                            .tickets-num-controller {
+                                display: flex;
+                                align-items: center;
+                                flex-direction: row;
+                                margin: 0 0 24px 0;
+                                justify-content: space-between;
+                                min-width: 250px;
+                                text-transform: uppercase;
+                                font-style: oblique;
+                                font-size: 21px;
+                                .tickets-num-desc {
+                                    display: flex;
+                                    align-items: center;
+                                    width: 32px;
+                                    height: 32px;
+                                    font-weight: 600;
+                                }
+                                .tickets-num-actions {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    width: 70px;
+                                    .add-ticket {
+                                        width: 32px;
+                                        height: 32px;
+                                        border: 1px solid black;
+                                        font-style: normal;
+                                        font-weight: 400;
+                                        &:disabled {
+                                            border: 1px solid #d9d9d9 !important;
+                                        }                        
+                                    }
+                                }
+                                .tickets-num-price {
+                                    display: flex;
+                                    justify-content: center;
+                                    width: 100px;
+                                    font-weight: 600;
+                                }
+                            }
+                        }
+                        .buy-tickets {
+                            font-size: 14px;
+                            width: 150px;
+                            margin: 0 0 0 auto;
+                        }
+                    }
+                    .buy-tickets-container {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                }
+                .event-time-date {
+                    margin: 0 0 45px 0;
+                    h5 {
+                        text-transform: uppercase;
+                        font-style: oblique;
+                        font-weight: 900;
+                        margin: 0 0 12px 0;
+                        font-size: 14px;
+                        .anticon {
+                            margin: 0 5px 0 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

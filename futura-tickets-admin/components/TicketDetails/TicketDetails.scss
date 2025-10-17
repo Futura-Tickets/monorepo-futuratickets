@@ -1,0 +1,421 @@
+.root-container {
+    &.active {
+        .ticket-details-container {
+            .ticket-details-header {
+                width: calc(100% - 300px);
+            }
+        }
+    }
+}
+
+.ticket-details-container {
+    min-height: 100vh;
+    box-sizing: border-box;
+    background: #fdfdfd;
+    padding: 5rem 0rem 0rem 0rem;
+    .ticket-details-header {
+        position: fixed;
+        width: calc(100% - 80px);
+        z-index: 5;
+        top: 0;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e4e4e4;
+        background: white;
+        box-shadow: 0 0 8px #efefef;
+        box-sizing: border-box;
+        overflow: hidden;
+        .ticket-details-id {
+            position: relative;
+            h1 {
+                display: flex;
+                align-items: center;
+                margin: 0;
+                .anticon {
+                    margin: 0px 12px 0 0;
+                }
+                .copy-address {
+                    margin: 0 0 0 15px;
+                }
+            }
+            h5 {
+                position: absolute;
+                text-transform: uppercase;
+                margin: 0;
+                top: -20px;
+                font-weight: 900;
+                font-size: 12px;
+            }
+        }
+        .event-header-actions {
+            display: flex;
+            margin: 0 0 0 auto;
+            .event-header-action {
+                color: #999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 18px;
+                cursor: pointer;
+                width: 80px;
+                border-left: 1px solid #e4e4e4;
+                height: 80px;
+                box-sizing: border-box;
+                &:hover {
+                    color: #333;
+                }
+            }
+        }
+    }
+    .ticket-details-content {
+        display: grid;
+        padding: 2.5rem;
+        grid-template-columns: 300px auto;
+        gap: 2.5rem;
+        .ticket-details-info-content {
+            border: 1px solid #e4e4e4;
+            border-radius: 8px;
+            margin: 0 0 2.5rem 0;
+            background: white;
+            box-shadow: 0 0 8px #efefef;
+            .ticket-details-info-content-details {
+                padding: 2.5rem;
+            }
+            &.details {
+                h2 {
+                    padding: 2.5rem;
+                    border-bottom: 1px solid #e4e4e4;
+                }
+            }
+            h2 {
+                display: flex;
+                align-items: center;
+                margin: 0;
+                padding: 2.5rem;
+                .anticon {
+                    margin: 0 24px 0 0;
+                }
+                .view-details {
+                    margin: 0 0 0 50px;
+                }
+            }
+            .ticket-details-qr {
+                img { width: 100%; }
+            }
+            .ticket-details-info {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                gap: 2.5rem;
+                .ticket-details-item {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    margin: 12px 0;
+                    label {
+                        font-size: 12px;
+                        text-transform: uppercase;
+                        font-weight: 700;
+                    }
+                    h5 {
+                        font-size: 16px;
+                        font-weight: 400;
+                        margin: 7px 0;
+                    }
+                    .processing {
+                        width: 80px;
+                        color: #fff;
+                        border-radius: 4px;
+                        padding: 5px 9px;
+                        font-weight: 600;
+                        font-size: 11px;
+                        letter-spacing: 1px;
+                        background-color: #999999;
+                        border: 1px solid #8d8d8d;
+                        text-transform: uppercase;
+                        display: flex;
+                        justify-content: center;
+                    }
+    
+                    .minted {
+                        width: 80px;
+                        color: #fff;
+                        border-radius: 4px;
+                        padding: 5px 9px;
+                        font-weight: 600;
+                        font-size: 11px;
+                        letter-spacing: 1px;
+                        background-color: #049b92;
+                        border: 1px solid #018a81;
+                        text-transform: uppercase;
+                        display: flex;
+                        justify-content: center;
+                    }
+                    
+                    .sale {
+                        width: 80px;
+                        color: #fff;
+                        border-radius: 4px;
+                        padding: 5px 9px;
+                        font-weight: 600;
+                        font-size: 11px;
+                        letter-spacing: 1px;
+                        background-color: #006f94;
+                        border: 1px solid #016587;
+                        text-transform: uppercase;
+                        display: flex;
+                        justify-content: center;
+                    }
+                    .sold {
+                        width: 80px;
+                        color: #fff;
+                        border-radius: 4px;
+                        padding: 5px 9px;
+                        font-weight: 600;
+                        font-size: 11px;
+                        letter-spacing: 1px;
+                        background-color: #555;
+                        border: 1px solid #444;
+                        text-transform: uppercase;
+                        display: flex;
+                        justify-content: center;
+                    }
+                    .transfered {
+                        width: 80px;
+                        color: #fff;
+                        border-radius: 4px;
+                        padding: 5px 9px;
+                        font-weight: 600;
+                        font-size: 11px;
+                        letter-spacing: 1px;
+                        background-color: #555;
+                        border: 1px solid #444;
+                        text-transform: uppercase;
+                        display: flex;
+                        justify-content: center;
+                    }
+                    .closed {
+                        width: 80px;
+                        color: #fff;
+                        border-radius: 4px;
+                        padding: 5px 9px;
+                        font-weight: 600;
+                        font-size: 11px;
+                        letter-spacing: 1px;
+                        background-color: #fe5456;
+                        border: 1px solid #ff3e40;
+                        text-transform: uppercase;
+                        display: flex;
+                        justify-content: center;
+                    }
+                }
+            }
+            .ticket-history {
+                .ticket-history-header {
+                    display: flex;
+                    align-items: center;
+                    padding: 0 2.5rem;
+                    height: 5rem;
+                    border-top: 1px solid #e4e4e4;
+                    div {
+                        font-size: 12px;
+                        text-transform: uppercase;
+                        font-weight: 700;
+                    }
+                    .status, .activity {
+                        width: 160px;
+                    }
+                    .information {
+                        width: 320px;
+                    }
+                    .date {
+                        width: 240px;
+                    }
+                }
+                .ticket-history-item {
+                    display: flex;;
+                    height: 5rem;
+                    padding: 0 2.5rem;
+                    border-top: 1px solid #e4e4e4;
+                    align-items: center;
+                    font-size: 14px;
+                    &:last-child {
+                        border-bottom: 0px solid #e4e4e4;
+                    }
+                    .activity {
+                        width: 160px;
+                        .processing, .pending, .transfering {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #999999;
+                            border: 1px solid #8d8d8d;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        .processed, .transfered, .open {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #049b92;
+                            border: 1px solid #018a81;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        .transfered {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #049b92;
+                            border: 1px solid #018a81;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        .granted {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #049b92;
+                            border: 1px solid #018a81;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+    
+                        .closed {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #fe5456;
+                            border: 1px solid #ff3e40;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+                    }
+                    .status {
+                        width: 160px;
+                        .processing, .pending, .transfering {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #999999;
+                            border: 1px solid #8d8d8d;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        .processed, .transfered, .open {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #049b92;
+                            border: 1px solid #018a81;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        .transfered {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #555;
+                            border: 1px solid #444;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+    
+                        .sale {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #006f94;
+                            border: 1px solid #016587;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+    
+                        .granted {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #049b92;
+                            border: 1px solid #018a81;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        .closed {
+                            width: 80px;
+                            color: #fff;
+                            border-radius: 4px;
+                            padding: 5px 9px;
+                            font-weight: 600;
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                            background-color: #fe5456;
+                            border: 1px solid #ff3e40;
+                            text-transform: uppercase;
+                            display: flex;
+                            justify-content: center;
+                        }
+                    }
+                    .information {
+                        width: 320px;
+                    }
+                    .date {
+                        width: 240px;
+                        .anticon {
+                            margin: 0 4px 0 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

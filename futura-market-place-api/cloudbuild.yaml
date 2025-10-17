@@ -1,0 +1,90 @@
+# ========================================
+# Google Cloud Build Configuration
+# Futura Marketplace API (NestJS)
+# ========================================
+
+steps:
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:latest'
+      - '--build-arg'
+      - 'NODE_ENV=production'
+      - '.'
+    id: 'build-image'
+
+  # Step 2: Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}'
+    id: 'push-image'
+
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA'
+      - '--region'
+      - '${_REGION}'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '3000'
+      - '--memory'
+      - '${_MEMORY}'
+      - '--cpu'
+      - '${_CPU}'
+      - '--min-instances'
+      - '${_MIN_INSTANCES}'
+      - '--max-instances'
+      - '${_MAX_INSTANCES}'
+      - '--concurrency'
+      - '${_CONCURRENCY}'
+      - '--timeout'
+      - '${_TIMEOUT}'
+      - '--set-env-vars'
+      - 'NODE_ENV=production,PORT=3000'
+      - '--set-secrets'
+      - 'MONGO_URL=MONGO_URL:latest,JWT_SECRET_KEY=JWT_SECRET_KEY:latest,STRIPE_PUBLIC_KEY=STRIPE_PUBLIC_KEY:latest,STRIPE_PRIVATE_KEY=STRIPE_PRIVATE_KEY:latest,STRIPE_ENDPOINT_SECRET=STRIPE_ENDPOINT_SECRET:latest,REDIS_HOST=REDIS_HOST:latest,REDIS_PASSWORD=REDIS_PASSWORD:latest,MAIL_HOST=MAIL_HOST:latest,MAIL_USER=MAIL_USER:latest,MAIL_PASSWORD=MAIL_PASSWORD:latest,AZURE_STORAGE_CONNECTION_STRING=AZURE_STORAGE_CONNECTION_STRING:latest,SOCKET_MARKET_PLACE=SOCKET_MARKET_PLACE:latest,BLOB_URL=BLOB_URL:latest,FUTURA_MARKET_PLACE=FUTURA_MARKET_PLACE:latest'
+      - '--vpc-connector'
+      - '${_VPC_CONNECTOR}'
+      - '--vpc-egress'
+      - 'private-ranges-only'
+    id: 'deploy-cloudrun'
+
+# Substitutions (default values, override via trigger or gcloud command)
+substitutions:
+  _SERVICE_NAME: 'futura-marketplace-api'
+  _REGION: 'europe-west1'
+  _REPOSITORY: 'futura-tickets'
+  _MEMORY: '1Gi'
+  _CPU: '1'
+  _MIN_INSTANCES: '1'
+  _MAX_INSTANCES: '10'
+  _CONCURRENCY: '80'
+  _TIMEOUT: '300s'
+  _VPC_CONNECTOR: 'projects/${PROJECT_ID}/locations/${_REGION}/connectors/futura-vpc-connector'
+
+# Artifact Registry images
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:latest'
+
+# Build options
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+
+# Build timeout (30 minutes)
+timeout: '1800s'

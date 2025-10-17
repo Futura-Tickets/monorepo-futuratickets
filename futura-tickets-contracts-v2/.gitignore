@@ -1,0 +1,40 @@
+# Dependencies
+node_modules
+
+# Hardhat
+cache
+artifacts
+typechain
+deployments/localhost
+coverage
+coverage.json
+gas-report.txt
+
+# Security Audit Reports
+audit-reports/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Backup & Temp
+.backup
+*.tmp
+*.temp
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

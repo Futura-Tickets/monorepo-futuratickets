@@ -1,0 +1,79 @@
+.calendar-container {
+    
+    .calendar-header {
+        height: 120px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e4e4e4;
+        h1 {
+            margin: 0;
+            .anticon {
+                margin: 0px 12px 0 0;
+            }
+        }
+        .calendar-stats {
+            display: flex;
+            margin: 0 0 0 auto;
+            .calendar-stat {
+                display: flex;
+                flex-direction: column;
+                font-size: 16px;
+                margin: 0 0 0 1.25rem;
+                width: 140px;
+                box-sizing: border-box;
+                padding: 0.75rem 0.75rem;
+                font-weight: 700;
+                color: #333;
+                border: 1px solid #e4e4e4;
+                border-radius: 4px;
+                span {
+                    text-transform: uppercase;
+                    font-weight: 700;
+                    font-size: 9px;
+                    margin: 0 0 3px 0;
+                }
+            }
+        }
+        .calendar-header-actions {
+            display: flex;
+            margin: 0 0 0 auto;
+            .calendar-header-action {
+                color: #999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 18px;
+                cursor: pointer;
+                width: 80px;
+                border-left: 1px solid #e4e4e4;
+                height: 80px;
+                box-sizing: border-box;
+                &:hover {
+                    color: #333;
+                }
+            }
+        }
+    }
+    
+    .calendar-content {
+        display: grid;
+        grid-template-columns: auto 484px;
+        height: calc(100vh - 121px);
+        overflow: hidden;
+        .calendar-event-list {
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #e4e4e4;
+            height: calc(100vh - 120px);
+            overflow: scroll;
+            .calendar-item {
+                height: 120px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #e4e4e4;
+                padding: 0 2.5rem;
+            }
+        }
+    }
+}

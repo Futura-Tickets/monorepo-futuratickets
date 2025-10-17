@@ -1,0 +1,138 @@
+.coupons-list-container {
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 0 8px #efefef;
+    .coupons-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80px;
+        padding: 0 2rem;
+        box-sizing: border-box;
+        background: #ffffff;
+        border-bottom: 1px solid #e4e4e4;
+        h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    }
+    
+    .coupons-list-info-content {
+        .coupons-list-info-header {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr) auto;
+            gap: 16px;
+            height: 4rem;
+            padding: 0 2rem;
+            align-items: center;
+            border-bottom: 1px solid #e4e4e4;
+            box-sizing: border-box;
+            
+            div {
+                text-transform: uppercase;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: 1px;
+                width: 100%;
+            }
+        }
+        
+        .coupons-list-content {
+            max-height: 400px;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            &::-webkit-scrollbar {
+                width: 4px;
+            }
+            
+            &::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            
+            &::-webkit-scrollbar-thumb {
+                background: #c1c1c1;
+                border-radius: 4px;
+            }
+            
+            &::-webkit-scrollbar-thumb:hover {
+                background: #a1a1a1;
+            }
+        }
+        
+        .no-coupons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            color: #999;
+            font-size: 14px;
+        }
+    }
+    .error-state {
+        display: flex;
+        justify-content: center;
+        padding: 20px 0;
+        
+        .error-icon {
+            font-size: 48px;
+            color: #ff4d4f;
+            margin: 0 0 8px;
+        }
+        
+        .error-empty {
+            margin: 0;
+            padding: 0;
+            
+            .error-content {
+                text-align: center;
+                
+                p {
+                    margin: 0 0 8px;
+                }
+                
+                .retry-button {
+                    margin-top: 8px;
+                }
+            }
+        }
+    }
+}
+
+.add-coupon-container {
+    .add-coupon-header {
+        margin-bottom: 1.5rem;
+        
+        h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+    }
+    
+    .add-coupon-content {
+        .ant-form-item-label {
+            label {
+                font-size: 12px;
+                text-transform: uppercase;
+                font-weight: 700;
+            }
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 16px;
+        }
+        
+        .full-width-input {
+            width: 100%;
+        }
+        
+        .coupon-btn {
+            width: 100%;
+        }
+    }
+}

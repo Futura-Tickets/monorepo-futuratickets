@@ -1,0 +1,82 @@
+.cart-container {
+    display: flex;
+    justify-content: center;
+    padding: 10rem 5rem 7.5rem 5rem;
+    flex-direction: row;
+    position: relative;
+    min-height: 100vh;
+    box-sizing: border-box;
+    &.empty {
+        justify-content: center;
+        left: 0px;
+    }
+    .cart-content {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        margin: 4rem 7.5rem;
+        h1 {
+            font-size: 21px;
+            font-weight: 600;
+            margin: 0px 2.5rem;
+            cursor: pointer;
+            text-align: right;
+            font-family: "Oswald", sans-serif;
+            text-transform: uppercase;
+            color: #333;
+            font-style: oblique;
+        }
+        .cart-items {
+            width: 640px;
+            .cart-item {
+                background-color: white;
+                height: 80px;
+                border-radius: 20px;
+                padding: 20px;
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 680px;
+                margin: 0 0 7px 0;
+                .cart-item-id {
+                    width: 2.5rem;
+                    display: flex;
+                }
+                .cart-item-info {
+                    display: flex;
+                    flex-direction: column;
+                }
+                img {
+                    width: 90px;
+                    margin: 0 1.25rem 0 0;
+                }
+                .cart-item-currency {
+                    margin: 0 0 0 auto;
+                }
+                .remove-item {
+                    margin: 0 0 0 auto;
+                    padding: 0 2.5rem;
+                }
+            }
+
+
+        }
+        .total-amount {
+            display: flex;
+            justify-content: end;
+            font-weight: 600;
+            margin: 1.25rem 0;
+        }
+        .cart-checkout {
+            display: flex;
+            justify-content: end;
+        }
+        .cart-item-container {
+            border-top: 1px solid #333;
+            &:last-child {
+                border-bottom: 1px solid #333;
+            }
+        }
+    }
+}

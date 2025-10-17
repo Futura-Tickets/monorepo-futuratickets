@@ -1,0 +1,209 @@
+// FuturaTickets Admin - Responsive Design Mixins
+@import './variables';
+
+// Media query mixins for responsive design
+// Usage: @include mobile { ... }
+
+// Mobile first approach
+@mixin mobile-sm {
+  @media (min-width: $breakpoint-mobile-sm) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (min-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: $breakpoint-tablet) {
+    @content;
+  }
+}
+
+@mixin desktop-sm {
+  @media (min-width: $breakpoint-desktop-sm) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
+@mixin desktop-lg {
+  @media (min-width: $breakpoint-desktop-lg) {
+    @content;
+  }
+}
+
+@mixin desktop-xl {
+  @media (min-width: $breakpoint-desktop-xl) {
+    @content;
+  }
+}
+
+// Max-width approach (for overriding mobile-first)
+@mixin mobile-only {
+  @media (max-width: #{$breakpoint-tablet - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet-only {
+  @media (min-width: $breakpoint-tablet) and (max-width: #{$breakpoint-desktop-sm - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop-only {
+  @media (min-width: $breakpoint-desktop-sm) {
+    @content;
+  }
+}
+
+// Responsive container
+@mixin container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $spacing-md;
+  padding-right: $spacing-md;
+
+  @include tablet {
+    max-width: $container-tablet;
+    padding-left: $spacing-lg;
+    padding-right: $spacing-lg;
+  }
+
+  @include desktop-sm {
+    max-width: $container-desktop-sm;
+  }
+
+  @include desktop {
+    max-width: $container-desktop;
+  }
+
+  @include desktop-lg {
+    max-width: $container-desktop-lg;
+  }
+}
+
+// Flexbox helpers
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Responsive font size
+@mixin responsive-font($mobile-size, $desktop-size) {
+  font-size: $mobile-size;
+
+  @include desktop-sm {
+    font-size: $desktop-size;
+  }
+}
+
+// Responsive spacing
+@mixin responsive-padding($mobile-padding, $desktop-padding) {
+  padding: $mobile-padding;
+
+  @include desktop-sm {
+    padding: $desktop-padding;
+  }
+}
+
+@mixin responsive-margin($mobile-margin, $desktop-margin) {
+  margin: $mobile-margin;
+
+  @include desktop-sm {
+    margin: $desktop-margin;
+  }
+}
+
+// Hide/Show on different breakpoints
+@mixin hide-mobile {
+  @include mobile-only {
+    display: none !important;
+  }
+}
+
+@mixin hide-tablet {
+  @include tablet-only {
+    display: none !important;
+  }
+}
+
+@mixin hide-desktop {
+  @include desktop-only {
+    display: none !important;
+  }
+}
+
+@mixin show-mobile-only {
+  @include tablet {
+    display: none !important;
+  }
+}
+
+@mixin show-tablet-only {
+  display: none !important;
+
+  @include tablet-only {
+    display: block !important;
+  }
+}
+
+@mixin show-desktop-only {
+  display: none !important;
+
+  @include desktop-only {
+    display: block !important;
+  }
+}
+
+// Truncate text
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Multi-line truncate
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Responsive grid
+@mixin grid($cols-mobile: 1, $cols-tablet: 2, $cols-desktop: 3, $gap: $spacing-md) {
+  display: grid;
+  grid-template-columns: repeat($cols-mobile, 1fr);
+  gap: $gap;
+
+  @include tablet {
+    grid-template-columns: repeat($cols-tablet, 1fr);
+  }
+
+  @include desktop-sm {
+    grid-template-columns: repeat($cols-desktop, 1fr);
+  }
+}

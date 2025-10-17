@@ -1,0 +1,1 @@
+export const GLOBAL_MAX_TICKETS = 3;

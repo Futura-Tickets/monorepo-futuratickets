@@ -1,0 +1,151 @@
+.invitation-item-container {
+    .invitation-item-content {
+        display: grid;
+        grid-template-columns: 75px 75px 250px 100px 150px 170px 180px auto;
+        gap: 16px;
+        align-items: center;
+        background: #fff;
+        padding: 0 2rem;
+        height: 80px;
+        font-size: 14px;
+        border-bottom: 1px solid #e4e4e4;
+        
+        &:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .order {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            img {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+        .token-id {
+            width: 75px;
+        }
+        .client {
+            width: 200px;
+        }
+        .email {
+            width: 250px;
+        }
+        .type {
+            width: 150px;
+        }
+        .status {
+            width: 170px;
+            span {
+                display: flex;
+                justify-content: center;
+                width: 100px;
+            }
+            .denied {
+                background-color: #fe5456;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #ff3e40;
+            }
+            .granted {
+                background-color: #049b92;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #018a81;
+            }
+            .processing {
+                background-color: #999999;
+                color: #fff;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #8d8d8d;
+                .anticon {
+                    margin: 0 0 0 9px;
+                }
+            }
+        }
+        .information {
+            width: 240px;
+        }
+        .created {
+            width: 180px;
+        }
+        .view {
+            margin: 0 0 0 auto;
+            display: flex;
+            align-items: center;
+            
+            .delete-btn {
+                margin-right: 92px;
+                margin-top: 1px;
+            }
+        }  
+    }
+    &:last-child {
+        .invitation-item-content {
+            border-bottom: none;
+        }
+    }
+}
+
+.delete-invitation-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem 0;
+
+    .modal-title {
+        font-size: 24px;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+    
+    p {
+        margin: 0.25rem 0;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    
+    .warning-text {
+        margin-top: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .remove-invitation-btn {
+        background-color: #049b92;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        font-size: 14px;
+        font-style: oblique;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 250px;
+        text-transform: uppercase;
+        
+        &:hover {
+            background-color: #038a82;
+        }
+        
+        &:disabled {
+            background-color: #82c5c1;
+            cursor: not-allowed;
+        }
+    }
+}

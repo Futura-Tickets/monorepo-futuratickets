@@ -1,0 +1,111 @@
+.invitations-list-container {
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 0 8px #efefef;
+    .invitations-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80px;
+        padding: 0 2rem;
+        background: #ffffff;
+        border-bottom: 1px solid #e4e4e4;
+        h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    }
+    
+    .invitations-list-info-content {
+        overflow: hidden;
+        .invitations-list-info-header {
+            display: grid;
+            grid-template-columns: 75px 75px 250px 100px 150px auto;
+            gap: 16px;
+            height: 4rem;
+            padding: 0 2rem;
+            align-items: center;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e4e4e4;
+            background-color: #fff;
+            div {
+                text-transform: uppercase;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 1px;
+            }
+            
+            .details {
+                padding-left: 0rem;
+            }
+        }
+        
+        .invitations-list-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100px;
+            padding: 0;
+            max-height: 485px;
+            overflow-y: auto;
+            
+            &::-webkit-scrollbar {
+                width: 4px;
+            }
+            
+            &::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            
+            &::-webkit-scrollbar-thumb {
+                background: #c1c1c1;
+                border-radius: 4px;
+            }
+            
+            &::-webkit-scrollbar-thumb:hover {
+                background: #a1a1a1;
+            }
+            
+            .no-invitations {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100px;
+                color: #999;
+                font-size: 14px;
+            }
+        }
+        
+    }
+    
+    .error-state {
+        display: flex;
+        justify-content: center;
+        padding: 20px 0;
+        
+        .error-icon {
+            font-size: 48px;
+            color: #ff4d4f;
+            margin: 0 0 8px;
+        }
+        
+        .error-empty {
+            margin: 0;
+            padding: 0;
+            
+            .error-content {
+                text-align: center;
+                
+                p {
+                    margin: 0 0 8px;
+                }
+                
+                .retry-button {
+                    margin-top: 8px;
+                }
+            }
+        }
+    }
+}

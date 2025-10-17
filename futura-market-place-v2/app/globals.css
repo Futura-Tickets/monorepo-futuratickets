@@ -1,0 +1,310 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 177 95% 31%; /* Futura Tickets Teal #049B92 */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 175 100% 5%; /* Futura Tickets Dark #001917 */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 16 99% 50%; /* Futura Tickets Orange #FE3E01 */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 177 95% 31%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%; /* Futura Tickets Dark #001917 */
+    --foreground: 0 0% 98%;
+    --card: 175 100% 7%;
+    --card-foreground: 0 0% 98%;
+    --popover: 175 100% 5%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 177 95% 31%; /* Futura Tickets Teal #049B92 */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 16 99% 50%; /* Futura Tickets Orange #FE3E01 */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 177 95% 31%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Leaflet popup styling */
+.leaflet-popup-content-wrapper {
+  background-color: #001917;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaflet-popup-tip {
+  background-color: #001917;
+}
+
+.leaflet-container {
+  font-family: inherit;
+}
+
+.leaflet-control-zoom a {
+  color: #333;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  html,
+  body {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+}
+
+/* Hide scrollbars but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Improve touch targets for mobile */
+@media (max-width: 640px) {
+  button,
+  [role="button"],
+  a.btn,
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* AUTOFILL STYLING */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #18453f inset !important;
+    border-color: #00817A !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s  0s;
+}
+
+/* Añadir esta regla para limitar el efecto del zoom */
+.event-card .event-image-container {
+  overflow: hidden;
+  background: linear-gradient(to bottom, var(--futura-dark), #000);
+}
+
+.event-card .event-image {
+  transition: transform 0.3s ease;
+}
+
+.event-card:hover .event-image {
+  transform: scale(1.05); /* Reducido de 1.10 a 1.05 o el valor original */
+}
+
+/* Estilos personalizados para el componente PhoneInput */
+.phone-input-container .PhoneInput {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+
+.phone-input-container .PhoneInputCountry {
+  margin-right: 8px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.phone-input-container .PhoneInputInput {
+  background-color: transparent;
+  border: none;
+  color: white;
+  flex: 1;
+  outline: none;
+  height: 40px;
+  width: 100%;
+  padding-left: 8px;
+}
+
+.phone-input-container .PhoneInputCountrySelect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.phone-input-container .PhoneInputCountryIcon {
+  width: 24px;
+  height: 18px;
+  opacity: 0.9;
+}
+
+.phone-input-container .PhoneInput--focus {
+  border-color: #40E0D0;
+}
+
+/* Estilos para el estado deshabilitado */
+.phone-input-container .PhoneInput--disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.phone-input-container .PhoneInput--disabled .PhoneInputInput,
+.phone-input-container .PhoneInput--disabled .PhoneInputCountrySelect {
+  pointer-events: none;
+}
+
+/* Estilos para el dropdown de países */
+.PhoneInputCountrySelect option {
+  background-color: #001917; /* Color de fondo oscuro */
+  color: white;
+  padding: 8px;
+}
+
+/* Forzar que el dropdown aparezca hacia abajo */
+.PhoneInputCountrySelectArrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: rgba(255, 255, 255, 0.7) transparent transparent transparent;
+}
+
+/* Ajustar el dropdown y su posición */
+.phone-input-container {
+  position: relative;
+}
+
+/* Estilo para el menú desplegable nativo */
+.PhoneInputCountrySelect {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Estilo adicional para cuando se abra en navegadores modernos */
+@supports selector(::-webkit-calendar-picker-indicator) {
+  .PhoneInputCountrySelect::-webkit-calendar-picker-indicator {
+    opacity: 0;
+  }
+}
+
+/* Estilo para el menú desplegable cuando está abierto */
+.PhoneInputCountrySelect[size],
+.PhoneInputCountrySelect[multiple] {
+  background-color: #001917;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Sobreescribir comportamiento de dropdown en Chrome/Safari */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .PhoneInputCountrySelect {
+    direction: rtl;
+  }
+}
+
+/* Estilos mejorados para el componente PhoneInput */
+.custom-phone-dropdown .PhoneInputCountrySelect {
+  direction: ltr !important; /* Forzar dirección de izquierda a derecha */
+  text-align: left !important;
+}
+
+/* Forzar que el menú se despliegue hacia abajo */
+.custom-phone-dropdown .PhoneInputCountrySelect option {
+  background-color: #001917 !important;
+  color: white !important;
+  padding: 8px !important;
+  text-align: left !important;
+  direction: ltr !important;
+}
+
+/* Corregir el alineamiento de texto en el selector */
+.custom-phone-dropdown .PhoneInputCountry {
+  text-align: left;
+  direction: ltr;
+}
+
+/* Asegurar que el overflow sea hacia la derecha */
+.custom-phone-dropdown .PhoneInputCountrySelectArrow {
+  opacity: 0.8;
+  margin-left: 5px;
+}
+
+/* Estilos para navegadores específicos */
+@-moz-document url-prefix() {
+  .custom-phone-dropdown .PhoneInputCountrySelect {
+    text-align: left !important;
+    padding-right: 20px !important;
+  }
+}
+
+/* Estilos para Chrome/Safari */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  .custom-phone-dropdown .PhoneInputCountrySelect {
+    direction: ltr !important;
+    text-align: left !important;
+  }
+  
+  .custom-phone-dropdown .PhoneInputCountrySelect option {
+    direction: ltr !important;
+    text-align: left !important;
+  }
+}
+
+/* Eliminar cualquier comportamiento de dirección RTL que pueda causar problemas */
+.phone-input-container.custom-phone-dropdown * {
+  direction: ltr;
+}
+
+/* Forzar la posición del dropdown con CSS más específico */
+.phone-input-container.custom-phone-dropdown .PhoneInputCountrySelect {
+  transform-origin: top left;
+}

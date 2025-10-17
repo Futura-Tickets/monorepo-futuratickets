@@ -1,0 +1,60 @@
+.order-sales-list-container {
+    margin: 2.5rem;
+    border: 1px solid #e4e4e4;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 8px #efefef;
+    .order-sales-list-header {
+        display: flex;
+        padding: 0 2rem;
+        height: 5rem;
+        align-items: center;
+        border-bottom: 1px solid #e4e4e4;
+        box-sizing: border-box;
+        &.fixed {
+            position: fixed;
+            top: 0;
+            width: calc(100% - 80px);
+            z-index: 5;
+            border-bottom: 1px solid #e4e4e4;
+        }
+        div {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .details {
+            width: 75px;
+        }
+        .qr-code {
+            width: 75px;
+        }
+        .token-id {
+            width: 75px;
+        }
+        .client {
+            width: 200px;
+        }
+        .email {
+            width: 250px;
+        }
+        .type {
+            width: 120px;
+        }
+        .price {
+            width: 120px;
+        }
+        .status {
+            width: 170px;
+        }
+        .created {
+            width: 180px;
+        }
+    }
+    .order-sales-list-content {
+        display: flex;
+        flex-direction: column;
+    }
+}

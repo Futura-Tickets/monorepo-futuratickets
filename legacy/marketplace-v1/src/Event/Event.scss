@@ -1,0 +1,120 @@
+.event-container {
+    display: flex;
+    justify-content: center;
+    margin: 80px 0 80px 0;
+    min-height: 100vh;
+    .event-content {
+        width: 100%;
+        .event-image {
+            display: flex;
+            justify-content: center;
+            height: 380px;
+            overflow: hidden;
+            border-bottom: 1px solid #efefef;
+            img {
+                max-height: 100%;
+            }
+        }
+        .event-info-container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 5rem;
+            padding: 5rem;
+            box-sizing: border-box;
+            width: 60%;
+            margin: 0 auto;
+            .event-info {
+                display: grid;
+                grid-column-start: 1;
+                grid-column-end: 2;
+                .event-info-item {
+                    margin: 0 0 2.5rem 0;
+                    h2 {
+                        margin: 0px;
+                        text-transform: uppercase;
+                        font-style: oblique;
+                        font-size: 21px;
+                    }
+                    p {
+                        font-size: 14px;
+                        line-height: 24px;
+                    }
+                }
+            }
+            .event-details {
+                grid-column-start: 2;
+                grid-column-end: 3;
+                .event-detail {
+                    margin: 0 0 35px 0;
+                    h5 {
+                        text-transform: uppercase;
+                        font-style: oblique;
+                        font-weight: 900;
+                        margin: 0 0 12px 0;
+                        .anticon {
+                            margin: 0 5px 0 0;
+                        }
+                    }
+                    .tickets-num-container {
+                        display: flex;
+                        flex-direction: column;
+                        .tickets-num-header {
+                            display: flex;
+                            justify-content: space-between;
+                            margin: 0 0 10px 0;
+                            span {
+                                font-size: 11px;
+                                color: #666;
+                            }
+                        }
+                        .tickets-num-controller {
+                            display: flex;
+                            align-items: center;
+                            flex-direction: row;
+                            margin: 0 0 15px 0;
+                            justify-content: space-around;
+                            min-width: 250px;
+                            text-transform: uppercase;
+                            font-style: oblique;
+                            .tickets-num-desc {
+                                display: flex;
+                                align-items: center;
+                                width: 70px;
+                                height: 32px;
+                                justify-content: center;
+                                font-weight: 600;
+                            }
+                            .tickets-num-actions {
+                                display: flex;
+                                justify-content: space-between;
+                                width: 70px;
+                                .add-ticket {
+                                    width: 32px;
+                                    height: 32px;
+                                    border: 1px solid black;
+                                    font-style: normal;
+                                    font-weight: 400;                                
+                                }
+                            }
+                            .tickets-num-price {
+                                display: flex;
+                                justify-content: center;
+                                width: 100px;
+                                font-weight: 600;
+                            }
+                        }
+                        .buy-tickets {
+                            font-size: 12px;
+                            width: 150px;
+                            margin: 14px 0 0 auto;
+                        }
+                    }
+                    .buy-tickets-container {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                }
+            }
+        }
+    }
+}

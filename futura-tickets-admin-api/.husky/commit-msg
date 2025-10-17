@@ -1,0 +1,101 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "📝 Validating commit message..."
+
+# Read commit message
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Conventional Commits regex pattern
+# Format: <type>[optional scope]: <description>
+# Example: feat(auth): add JWT authentication
+PATTERN="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .{1,100}$"
+
+# Check if commit message follows Conventional Commits
+if ! echo "$COMMIT_MSG" | grep -qE "$PATTERN"; then
+  echo ""
+  echo "❌ Invalid commit message format!"
+  echo ""
+  echo "Your commit message:"
+  echo "  $COMMIT_MSG"
+  echo ""
+  echo "Expected format: <type>[optional scope]: <description>"
+  echo ""
+  echo "Valid types:"
+  echo "  feat:     A new feature"
+  echo "  fix:      A bug fix"
+  echo "  docs:     Documentation only changes"
+  echo "  style:    Changes that don't affect code meaning (formatting, etc)"
+  echo "  refactor: Code change that neither fixes a bug nor adds a feature"
+  echo "  perf:     Performance improvement"
+  echo "  test:     Adding or modifying tests"
+  echo "  build:    Changes to build system or dependencies"
+  echo "  ci:       Changes to CI configuration"
+  echo "  chore:    Other changes that don't modify src or test files"
+  echo "  revert:   Reverts a previous commit"
+  echo ""
+  echo "Examples:"
+  echo "  feat: add user authentication"
+  echo "  fix(api): handle null response from database"
+  echo "  docs: update README with installation steps"
+  echo "  refactor(auth): simplify JWT validation logic"
+  echo ""
+  exit 1
+fi
+
+# Check for minimum description length
+DESCRIPTION=$(echo "$COMMIT_MSG" | sed -E 's/^[^:]+: //')
+DESCRIPTION_LENGTH=${#DESCRIPTION}
+
+if [ "$DESCRIPTION_LENGTH" -lt 10 ]; then
+  echo ""
+  echo "⚠️  Warning: Commit description is too short ($DESCRIPTION_LENGTH characters)"
+  echo "   Consider providing more details (minimum 10 characters recommended)"
+  echo ""
+fi
+
+# Check for imperative mood (starts with verb)
+FIRST_WORD=$(echo "$DESCRIPTION" | awk '{print $1}')
+if echo "$FIRST_WORD" | grep -qE "(added|adding|fixed|fixing|updated|updating)"; then
+  echo ""
+  echo "ℹ️  Tip: Use imperative mood in commit messages"
+  echo "   Good: 'add feature' (imperative)"
+  echo "   Bad:  'added feature' or 'adding feature' (past/continuous)"
+  echo ""
+fi
+
+# Check for capitalize first letter
+if ! echo "$DESCRIPTION" | grep -qE "^[A-Z]"; then
+  echo ""
+  echo "ℹ️  Tip: Start description with lowercase letter"
+  echo "   Good: 'add user authentication'"
+  echo "   Bad:  'Add user authentication'"
+  echo ""
+fi
+
+# Check for period at end
+if echo "$DESCRIPTION" | grep -qE "\.$"; then
+  echo ""
+  echo "ℹ️  Tip: Don't end commit message with a period"
+  echo "   Good: 'add user authentication'"
+  echo "   Bad:  'add user authentication.'"
+  echo ""
+fi
+
+# Special handling for breaking changes
+if echo "$COMMIT_MSG" | grep -qE "BREAKING CHANGE:"; then
+  echo ""
+  echo "⚠️  BREAKING CHANGE detected!"
+  echo "   This commit introduces breaking changes"
+  echo "   Make sure to update documentation and version accordingly"
+  echo ""
+fi
+
+# Special handling for merge commits
+if echo "$COMMIT_MSG" | grep -qE "^Merge "; then
+  echo "ℹ️  Merge commit detected - skipping validation"
+  exit 0
+fi
+
+echo "✅ Commit message is valid!"

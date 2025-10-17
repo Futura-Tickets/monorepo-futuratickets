@@ -1,0 +1,11 @@
+# Use the official Node.js image as the base image
+FROM node:18-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Command to run the application
+CMD ["npm", "start"]

@@ -1,0 +1,75 @@
+.access-item-container {
+    &:last-child {
+        .access-item-content {
+            border-bottom: 1px solid #e4e4e4;
+        }
+    }
+    .access-item-content {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        padding: 0 2rem;
+        height: 80px;
+        font-size: 14px;
+        border-bottom: 1px solid #e4e4e4;
+        .order {
+            width: 75px;
+            display: flex;
+            align-items: center;
+            img {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+        .token-id {
+            width: 75px;
+        }
+        .client {
+            width: 200px;
+        }
+        .email {
+            width: 250px;
+        }
+        .type {
+            width: 150px;
+        }
+        .status {
+            width: 170px;
+            span {
+                display: flex;
+                justify-content: center;
+                width: 100px;
+            }
+            .denied {
+                background-color: #fe5456;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #ff3e40;
+            }
+            .granted {
+                background-color: #049b92;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #018a81;
+            }
+            
+        }
+        .information {
+            width: 240px;
+        }
+        .created {
+            width: 180px;
+        }
+        .view {
+            margin: 0 0 0 auto;
+        }
+    }
+}

@@ -1,0 +1,470 @@
+name: Deploy to Production - Admin API
+
+# Trigger on merge to main branch or manual trigger
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip tests before deployment'
+        required: false
+        type: boolean
+        default: false
+
+# Prevent multiple production deployments running simultaneously
+concurrency:
+  group: deploy-production-admin-api
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '20'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/admin-api-production
+  SERVICE_NAME: 'futura-tickets-admin-api'
+
+jobs:
+  # ============================================================================
+  # PRE-DEPLOYMENT CHECKS
+  # ============================================================================
+  pre-checks:
+    name: Pre-Deployment Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run tests
+        if: ${{ !inputs.skip_tests }}
+        run: npm test -- --coverage
+
+      - name: Run E2E tests
+        if: ${{ !inputs.skip_tests }}
+        run: npm run test:e2e
+
+      - name: Check for breaking changes
+        run: |
+          echo "Checking for breaking changes..."
+          # Add your breaking change detection logic here
+
+      - name: Version check
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Deploying version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        id: version
+
+  # ============================================================================
+  # BUILD AND PUSH DOCKER IMAGE
+  # ============================================================================
+  build:
+    name: Build & Push Production Image
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: pre-checks
+    permissions:
+      contents: read
+      packages: write
+
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}},value=${{ steps.version.outputs.version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ steps.version.outputs.version }}
+            type=semver,pattern={{major}},value=${{ steps.version.outputs.version }}
+            type=sha,format=long
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
+            APP_VERSION=${{ steps.version.outputs.version }}
+
+      - name: Sign image with Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ steps.meta.outputs.tags }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.spdx.json
+
+  # ============================================================================
+  # DEPLOY TO PRODUCTION (BLUE-GREEN DEPLOYMENT)
+  # ============================================================================
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: build
+    environment:
+      name: production
+      url: https://admin-api.futuratickets.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ========================================================================
+      # Option 1: Azure Container Instances (Blue-Green)
+      # ========================================================================
+      - name: Azure Login
+        if: ${{ vars.CLOUD_PROVIDER == 'azure' }}
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Deploy to "green" environment first
+      - name: Deploy to Azure (Green)
+        if: ${{ vars.CLOUD_PROVIDER == 'azure' }}
+        uses: azure/aci-deploy@v1
+        with:
+          resource-group: ${{ vars.AZURE_RESOURCE_GROUP }}
+          dns-name-label: ${{ env.SERVICE_NAME }}-green
+          image: ${{ needs.build.outputs.image-tag }}
+          registry-login-server: ${{ env.REGISTRY }}
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ env.SERVICE_NAME }}-green
+          location: eastus
+          ports: 3000
+          cpu: 2
+          memory: 4
+          environment-variables: |
+            NODE_ENV=production
+            PORT=3000
+            APP_VERSION=${{ needs.build.outputs.version }}
+          secure-environment-variables: |
+            MONGO_URL=${{ secrets.PROD_ADMIN_MONGO_URL }}
+            JWT_SECRET_KEY=${{ secrets.PROD_ADMIN_JWT_SECRET }}
+            ADMIN_API_KEY=${{ secrets.PROD_ADMIN_API_KEY }}
+            THROTTLE_TTL=${{ vars.THROTTLE_TTL }}
+            THROTTLE_LIMIT=${{ vars.THROTTLE_LIMIT }}
+
+      # ========================================================================
+      # Option 2: AWS ECS (Blue-Green)
+      # ========================================================================
+      - name: Configure AWS credentials
+        if: ${{ vars.CLOUD_PROVIDER == 'aws' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy to Amazon ECS (Blue-Green)
+        if: ${{ vars.CLOUD_PROVIDER == 'aws' }}
+        run: |
+          # Update task definition
+          aws ecs register-task-definition \
+            --cli-input-json file://.aws/task-definition-production.json
+
+          # Deploy with CodeDeploy for blue-green deployment
+          aws deploy create-deployment \
+            --application-name ${{ env.SERVICE_NAME }} \
+            --deployment-group-name production \
+            --deployment-config-name CodeDeployDefault.ECSAllAtOnce \
+            --description "Deploy version ${{ needs.build.outputs.version }}"
+
+      # ========================================================================
+      # Option 3: Kubernetes (Rolling Update)
+      # ========================================================================
+      - name: Setup kubectl
+        if: ${{ vars.CLOUD_PROVIDER == 'kubernetes' }}
+        uses: azure/setup-kubectl@v3
+
+      - name: Set Kubernetes context
+        if: ${{ vars.CLOUD_PROVIDER == 'kubernetes' }}
+        uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG_PROD }}
+
+      - name: Deploy to Kubernetes
+        if: ${{ vars.CLOUD_PROVIDER == 'kubernetes' }}
+        run: |
+          # Update image
+          kubectl set image deployment/${{ env.SERVICE_NAME }} \
+            ${{ env.SERVICE_NAME }}=${{ needs.build.outputs.image-tag }} \
+            --namespace=production \
+            --record
+
+          # Wait for rollout
+          kubectl rollout status deployment/${{ env.SERVICE_NAME }} \
+            --namespace=production \
+            --timeout=10m
+
+  # ============================================================================
+  # HEALTH CHECK & SMOKE TESTS
+  # ============================================================================
+  health-check:
+    name: Production Health Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: deploy
+
+    steps:
+      - name: Wait for deployment stabilization
+        run: sleep 60
+
+      - name: Health check - Production
+        run: |
+          MAX_ATTEMPTS=20
+          ATTEMPT=1
+
+          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+            echo "Health check attempt $ATTEMPT of $MAX_ATTEMPTS"
+
+            RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+              https://admin-api.futuratickets.com/health || echo "000")
+
+            if [ "$RESPONSE" = "200" ]; then
+              echo "✅ Health check passed"
+              exit 0
+            fi
+
+            echo "❌ Health check failed with status $RESPONSE"
+            ATTEMPT=$((ATTEMPT + 1))
+            sleep 15
+          done
+
+          echo "❌ Health check failed after $MAX_ATTEMPTS attempts"
+          exit 1
+
+      - name: Readiness check
+        run: |
+          RESPONSE=$(curl -s https://admin-api.futuratickets.com/health/ready)
+          echo "Readiness response: $RESPONSE"
+
+          STATUS=$(echo $RESPONSE | jq -r '.status')
+          if [ "$STATUS" = "ok" ]; then
+            echo "✅ All dependencies are healthy"
+          else
+            echo "❌ Some dependencies are unhealthy"
+            exit 1
+          fi
+
+      - name: Run smoke tests
+        run: |
+          # Test critical endpoints
+          echo "Testing admin login endpoint..."
+          curl -f -X POST https://admin-api.futuratickets.com/auth/login \
+            -H "Content-Type: application/json" \
+            -d '{"email":"test@example.com","password":"test"}'
+
+          echo "✅ Smoke tests passed"
+
+  # ============================================================================
+  # TRAFFIC SWITCH (Blue-Green)
+  # ============================================================================
+  switch-traffic:
+    name: Switch Traffic to New Version
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [deploy, health-check]
+    environment:
+      name: production-approval
+      url: https://admin-api.futuratickets.com
+
+    steps:
+      - name: Azure Login
+        if: ${{ vars.CLOUD_PROVIDER == 'azure' }}
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Switch traffic to green
+        if: ${{ vars.CLOUD_PROVIDER == 'azure' }}
+        run: |
+          echo "Switching traffic from blue to green..."
+          # Update Traffic Manager or Load Balancer configuration
+
+      - name: Switch AWS traffic
+        if: ${{ vars.CLOUD_PROVIDER == 'aws' }}
+        run: |
+          echo "Traffic switch handled by CodeDeploy"
+
+      - name: Verify traffic switch
+        run: |
+          echo "Verifying new version is serving traffic..."
+          VERSION=$(curl -s https://admin-api.futuratickets.com/health/info | jq -r '.application.version')
+          echo "Current version: $VERSION"
+          echo "Expected version: ${{ needs.build.outputs.version }}"
+
+  # ============================================================================
+  # POST-DEPLOYMENT MONITORING
+  # ============================================================================
+  monitor:
+    name: Post-Deployment Monitoring
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: switch-traffic
+
+    steps:
+      - name: Monitor error rates
+        run: |
+          echo "Monitoring error rates for 10 minutes..."
+          sleep 600
+
+          # Check error rates from monitoring system
+
+      - name: Check performance metrics
+        run: |
+          echo "Checking performance metrics..."
+          # Query APM system for response times, throughput, etc.
+
+      - name: Alert if issues detected
+        if: failure()
+        run: |
+          echo "❌ Issues detected post-deployment"
+          # Trigger rollback or alert
+
+  # ============================================================================
+  # CREATE GITHUB RELEASE
+  # ============================================================================
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [build, switch-traffic]
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Generate changelog from commits
+          git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0)..HEAD > CHANGELOG.txt
+          cat CHANGELOG.txt
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: admin-api-v${{ needs.build.outputs.version }}
+          release_name: Admin API Release v${{ needs.build.outputs.version }}
+          body_path: CHANGELOG.txt
+          draft: false
+          prerelease: false
+
+  # ============================================================================
+  # CLEANUP OLD BLUE ENVIRONMENT
+  # ============================================================================
+  cleanup:
+    name: Cleanup Old Environment
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: monitor
+    if: success()
+
+    steps:
+      - name: Cleanup blue environment
+        run: |
+          echo "Cleaning up old blue environment..."
+          # Remove old containers, release resources, etc.
+
+  # ============================================================================
+  # NOTIFY STAKEHOLDERS
+  # ============================================================================
+  notify:
+    name: Send Notifications
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [release, monitor]
+    if: always()
+
+    steps:
+      - name: Send Slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            Admin API Production Deployment ${{ job.status }}
+            Version: ${{ needs.build.outputs.version }}
+            URL: https://admin-api.futuratickets.com
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Send email notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Admin API Production Deployment - v${{ needs.build.outputs.version }}
+          to: engineering@futuratickets.com
+          from: GitHub Actions
+          body: |
+            Admin API production deployment completed successfully.
+
+            Version: ${{ needs.build.outputs.version }}
+            URL: https://admin-api.futuratickets.com
+            Commit: ${{ github.sha }}

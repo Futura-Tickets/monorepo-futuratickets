@@ -1,0 +1,19 @@
+{
+    "name": "Futura Ticket NFT Event",
+    "description": "Description for the event",
+    "image": "http://url-to-image-in-public-storage-preference-ipfs.png",
+    "attributes": [
+      {
+        "trait_type": "place",
+        "value": "Zone 1A"
+      },
+      {
+        "trait_type": "type",
+        "value": "Gold Ticket"
+      },
+      {
+        "trait_type": "seat",
+        "value": "1"
+      }
+    ]
+  }

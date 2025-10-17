@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  margin: 0;
+  font-family: "Roboto", serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #000;
+}
+
+code {
+  font-family: "Roboto";
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.ant-btn {
+  color: #000;
+  background: #fff;
+  box-shadow: 0 2px 0 rgb(0 148 138 / 10%);
+  text-transform: uppercase;
+  font-style: oblique;
+  font-weight: 800;
+  font-size: 14px;
+  &:disabled {
+    color: #d9d9d9;
+    &:hover {
+      background: #f5f5f5 !important;
+      border: 1px solid #d5d5d5 !important;
+      color: #d5d5d5 !important;
+    }
+  }
+}
+
+.ant-btn-primary {
+  color: #fff;
+  background: #000;
+  box-shadow: 0 2px 0 rgb(0 148 138 / 10%);
+  text-transform: uppercase;
+  font-style: oblique;
+  font-weight: 800;
+  font-size: 14px;
+  &:hover {
+    color: #ffffff !important;
+    border: 1px solid #008379 !important;
+    background: #00948a !important;
+  }
+  &:disabled {
+    color: #d9d9d9;
+    &:hover {
+      background: #f5f5f5 !important;
+    }
+  }
+}
+
+.ant-input {
+  border-radius: 4px;
+}
+
+.ant-form-item-label > label {
+  font-weight: 800;
+  letter-spacing: 1px;
+  font-size: 11px !important;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+.ant-modal-content {
+  padding: 0 !important;
+}

@@ -1,0 +1,31 @@
+.events-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 120px 0px;
+    &.not-found, &.loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .events-content {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            padding: 0 80px;
+        }
+    }
+    .events-content {
+        display: grid;
+        height: 100%;
+        padding: 0 80px;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        h1 {
+            text-transform: uppercase;
+            font-style: oblique;
+            color: #333;
+            font-size: 24px;
+        }
+    }
+}

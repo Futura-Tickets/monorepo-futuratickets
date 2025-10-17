@@ -1,0 +1,145 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: futura-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: futurapass123
+      MONGO_INITDB_DATABASE: futuratickets
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - futura-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for Bull queues
+  redis:
+    image: redis:7-alpine
+    container_name: futura-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - futura-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Mailhog for email testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: futura-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web UI
+    networks:
+      - futura-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8025"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # Admin API
+  admin-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: futura-admin-api
+    restart: unless-stopped
+    ports:
+      - "3004:3004"
+    environment:
+      # Application
+      PORT: 3004
+      NODE_ENV: development
+
+      # Database
+      MONGO_URL: mongodb://admin:futurapass123@mongodb:27017/futuratickets?authSource=admin
+
+      # JWT
+      JWT_SECRET_KEY: dev-secret-key-change-in-production-12345678901234567890
+      JWT_EXPIRES_IN: 7d
+      JWT_EXPIRATION_TIME: 7d
+
+      # Encryption
+      ENCRYPT_SECRET_KEY: 12345678901234567890123456789012
+      ENCRYPT_SECRET_KEY_VI: 1234567890123456
+
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+
+      # Stripe (usar tus keys reales)
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY:-pk_test_placeholder}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_placeholder}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-whsec_placeholder}
+
+      # Rate Limiting
+      THROTTLE_TTL: 60000
+      THROTTLE_LIMIT: 100
+
+      # Google Cloud Storage (configurar después)
+      GCS_PROJECT_ID: ${GCS_PROJECT_ID:-your-gcp-project-id}
+      GCS_BUCKET_NAME: ${GCS_BUCKET_NAME:-futuratickets-dev-images}
+      GCS_KEY_FILE: ${GCS_KEY_FILE:-./config/gcs-service-account-key.json}
+
+      # Email - Mailhog
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      MAIL_USER: ""
+      MAIL_PASSWORD: ""
+      MAIL_FROM: noreply@futuratickets.com
+
+      # CORS
+      CORS_ORIGINS: http://localhost:3006,http://localhost:3001,http://localhost:3007
+
+      # Blockchain (opcional)
+      RPC_URL: ${RPC_URL:-}
+      PRIVATE_KEY: ${PRIVATE_KEY:-}
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS:-}
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./config:/app/config
+    networks:
+      - futura-network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailhog:
+        condition: service_healthy
+    command: npm run start:dev
+
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  futura-network:
+    driver: bridge

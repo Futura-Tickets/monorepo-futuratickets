@@ -1,0 +1,199 @@
+.menu-container {
+    z-index: var(--z-modal);
+    height: 60px;
+    position: relative;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+
+    .menu-content {
+        background-color: var(--color-bg-primary);
+        border-top: 1px solid var(--color-border-light);
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0;
+        height: 100%;
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--color-text-disabled);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+            border-right: 1px solid var(--color-border-light);
+
+            &:last-child {
+                border-right: none;
+            }
+
+            // Active indicator
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 0;
+                background: var(--color-primary);
+                transition: height var(--transition-fast);
+            }
+
+            &.active {
+                color: var(--color-primary);
+                background-color: var(--color-bg-secondary);
+
+                &::before {
+                    height: 3px;
+                }
+            }
+
+            &:hover:not(.active) {
+                background-color: var(--color-gray-50);
+                color: var(--color-primary-light);
+            }
+
+            &:active {
+                background-color: var(--color-gray-100);
+                transform: scale(0.95);
+            }
+
+            // Icon pulse on active
+            &.active .anticon {
+                animation: pulse 2s ease-in-out infinite;
+            }
+        }
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+// ============================================
+// RESPONSIVE DESIGN
+// ============================================
+
+@media (max-width: 767px) {
+    .menu-container {
+        height: 56px;
+        box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.1);
+
+        .menu-content {
+            .menu-item {
+                font-size: 24px;
+
+                &::before {
+                    height: 0;
+                }
+
+                &.active::before {
+                    height: 3px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-container {
+        height: 52px;
+
+        .menu-content {
+            .menu-item {
+                font-size: 22px;
+
+                &.active::before {
+                    height: 2px;
+                }
+            }
+        }
+    }
+}
+
+// Landscape mode on mobile
+@media (max-width: 767px) and (orientation: landscape) {
+    .menu-container {
+        height: 48px;
+
+        .menu-content {
+            .menu-item {
+                font-size: 20px;
+            }
+        }
+    }
+}
+
+// ============================================
+// DARK MODE SUPPORT
+// ============================================
+
+@media (prefers-color-scheme: dark) {
+    .menu-container {
+        box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.5);
+
+        .menu-content {
+            background-color: var(--color-bg-secondary);
+            border-top-color: var(--color-border-light);
+
+            .menu-item {
+                color: var(--color-text-disabled);
+
+                &.active {
+                    background-color: var(--color-bg-tertiary);
+                    color: var(--color-primary-light);
+                }
+
+                &:hover:not(.active) {
+                    background-color: var(--color-bg-tertiary);
+                    color: var(--color-primary-light);
+                }
+            }
+        }
+    }
+}
+
+// ============================================
+// ACCESSIBILITY
+// ============================================
+
+.menu-item:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: -3px;
+    z-index: 1;
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+    .menu-container {
+        .menu-content {
+            border-top-width: 2px;
+
+            .menu-item {
+                border-right-width: 2px;
+
+                &.active::before {
+                    height: 4px;
+                }
+            }
+        }
+    }
+}
+
+// Touch target size (minimum 44x44px)
+@media (pointer: coarse) {
+    .menu-container {
+        min-height: 56px;
+
+        .menu-content {
+            .menu-item {
+                min-height: 56px;
+            }
+        }
+    }
+}

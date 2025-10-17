@@ -1,0 +1,117 @@
+.ticket-item-container {
+    width: 300px;
+    height: 510px;
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 0 8px #efefef;
+    .ticket-item-image {
+        width: 300px;
+        height: 200px;
+        background-size: 100%;
+        position: relative;
+        .ticket-qr {
+            width: 180px;
+            height: 180px;
+            position: absolute;
+            bottom: -35px;
+            left: calc(50% - 90px);
+            border: 1px solid #d9d9d9;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 110px;
+            overflow: hidden;
+            img {
+                width: 100%;
+                border-radius: 8px;
+            }
+        }
+    }
+    .ticket-item-content {
+        padding: 2.5rem;
+        box-sizing: border-box;
+        height: 350px;
+        position: relative;
+        h5 {
+            text-transform: uppercase;
+            font-size: 21px;
+            font-style: italic;
+            font-weight: 900;
+            text-align: center;
+            margin: 24px 0 4px 0;
+            text-align: center;
+        }
+        .ticket-status {
+            text-transform: uppercase;
+            color: white;
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: 900;
+            text-align: center;
+            margin: 20px 0;
+            div {
+                border-radius: 4px;
+                padding: 10px 10px;
+                width: 80%;
+                margin: 0 auto;
+                font-style: italic;
+            }
+            .open {
+                background-color: #049b92;
+                border: 1px solid #018a81;
+            }
+            .closed {
+                background-color: #fe5456;
+                border: 1px solid #ff3e40;
+            }
+            .pending {
+                background-color: #999999;
+                border: 1px solid #8d8d8d;
+            }
+            .sale {
+                background-color: #006f94;
+                border: 1px solid #016587;
+            }
+            .transfered {
+                background-color: #555;
+                border: 1px solid #444;
+            }
+            .sold {
+                background-color: #555;
+                border: 1px solid #444;
+            } 
+        }
+        .ticket-type {
+            .regular {
+                border-radius: 4px;
+                padding: 10px 10px;
+                width: 80%;
+                margin: 0 auto;
+                text-transform: uppercase;
+                font-size: 16px;
+                font-style: italic;
+                font-weight: 900;
+                text-align: center;
+                border: 1px solid #444;
+            }
+        }
+        .ticket-date-time {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 10px;
+        }
+        .ticket-info {
+            
+            ul {
+                font-size: 16px;
+                li {
+                    line-height: 32px;
+                }
+            }
+        }
+    }
+}

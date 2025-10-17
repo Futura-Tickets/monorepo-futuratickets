@@ -1,0 +1,30 @@
+.next-events-container {
+    border-right: 1px solid #e4e4e4;
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 0 8px #efefef;
+    .next-events-header {
+        display: flex;
+        align-items: center;
+        height: 5rem;
+        padding: 0 2.5rem;
+        border-bottom: 1px solid #e4e4e4;
+    }
+}
+
+.next-event-container {
+    display: flex;
+    justify-content: space-between;
+    height: 5rem;
+    align-items: center;
+    border-bottom: 1px solid #e4e4e4;
+    padding: 0 2.5rem;
+    .next-event-name {
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .next-event-date {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,41 @@
+// FuturaTickets Admin - Responsive Design Variables
+// Breakpoints based on common device sizes
+
+// Breakpoint values
+$breakpoint-mobile-sm: 320px;
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop-sm: 1024px;
+$breakpoint-desktop: 1280px;
+$breakpoint-desktop-lg: 1440px;
+$breakpoint-desktop-xl: 1920px;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+
+// Z-index layers
+$z-index-base: 1;
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+
+// Container max widths
+$container-mobile: 100%;
+$container-tablet: 720px;
+$container-desktop-sm: 960px;
+$container-desktop: 1200px;
+$container-desktop-lg: 1400px;
+
+// Common transitions
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+$transition-slow: 0.5s ease;

@@ -1,0 +1,102 @@
+.promo-code-item-container {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    .promo-code-item-content {
+        display: grid;
+        grid-template-columns: 3fr 1fr 1fr 40px;
+        gap: 10px;
+        padding: 0 2rem;
+        align-items: center;
+        font-size: 14px;
+        box-sizing: border-box;
+        height: 5rem;
+        .code {
+            .url {
+                font-weight: 600;
+                color: #1890ff;
+                padding: 0 0.75rem 0 0;
+                cursor: pointer;
+            }
+        }
+
+        .name, .lastName, .email {
+            color: #333;
+        }
+
+        .created {
+            color: #888;
+        }
+
+        .view {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+
+            .delete-btn {
+                min-width: 32px;
+                height: 32px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .view-details {
+                background-color: #049b92;
+                color: white;
+                border: none;
+                height: 32px;
+                border-radius: 6px;
+                padding: 0 15px;
+                font-weight: 500;
+                
+                &:hover {
+                    background-color: darken(#049b92, 5%);
+                }
+            }
+        }
+    }
+}
+
+.delete-promo-code-modal {
+    text-align: center;
+    padding: 20px;
+
+    .modal-title {
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #ff4d4f;
+    }
+
+    p {
+        margin: 5px 0;
+    }
+
+    .warning-text {
+        margin: 20px 0;
+        color: #ff4d4f;
+        font-weight: 600;
+    }
+
+    .remove-promo-code-btn {
+        width: 100%;
+        height: 46px;
+        background-color: #ff4d4f;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 10px;
+
+        &:hover {
+            background-color: #ff7875;
+        }
+
+        &:disabled {
+            background-color: #d9d9d9;
+            cursor: not-allowed;
+            color: rgba(0, 0, 0, 0.25);
+        }
+    }
+}

@@ -1,0 +1,1915 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/accounts/admin": {
+      "get": {
+        "description": "Retrieve all admin accounts for the authenticated promoter.",
+        "operationId": "AccountController_getAdminAccounts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of admin accounts retrieved successfully."
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token."
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get admin accounts",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/access/{event}": {
+      "get": {
+        "description": "Retrieve all access control accounts assigned to a specific event.",
+        "operationId": "AccountController_getEventAccessAccounts",
+        "parameters": [
+          {
+            "name": "event",
+            "required": true,
+            "in": "path",
+            "description": "Event ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of access accounts retrieved successfully."
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token."
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get access accounts for event",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/admin/{account}": {
+      "delete": {
+        "description": "Delete an admin account by ID. Requires promoter authentication.",
+        "operationId": "AccountController_deleteAdminAccounts",
+        "parameters": [
+          {
+            "name": "account",
+            "required": true,
+            "in": "path",
+            "description": "Account ID to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin account deleted successfully."
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token."
+          },
+          "404": {
+            "description": "Account not found."
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Delete admin account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/create": {
+      "post": {
+        "description": "Create a new user account. Public endpoint for user registration.",
+        "operationId": "AccountController_createAccount",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "createAccount": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Juan"
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "example": "Pérez"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "juan.perez@example.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "example": "SecurePass123!"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "example": "+34600123456"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "lastName",
+                      "email",
+                      "password"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account created successfully."
+          },
+          "400": {
+            "description": "Invalid input data."
+          },
+          "409": {
+            "description": "Email already exists."
+          }
+        },
+        "summary": "Create new account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/update": {
+      "patch": {
+        "operationId": "AccountController_updateAccount",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/admin/update": {
+      "patch": {
+        "operationId": "AccountController_updateAdminAccount",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/create-promoter": {
+      "post": {
+        "operationId": "AccountController_createPromoterAccount",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/create-access": {
+      "post": {
+        "operationId": "AccountController_createAccessAccount",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/login": {
+      "post": {
+        "description": "Authenticate a user with email and password. Returns user data with JWT token.",
+        "operationId": "AccountController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful. Returns account data with JWT token."
+          },
+          "401": {
+            "description": "Invalid credentials."
+          }
+        },
+        "summary": "User login",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/login-google": {
+      "post": {
+        "operationId": "AccountController_loginGoogle",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/access/login": {
+      "post": {
+        "operationId": "AccountController_accessLogin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/validate": {
+      "post": {
+        "operationId": "AccountController_validate",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/address/{address}": {
+      "get": {
+        "operationId": "AccountController_getAccountByAddress",
+        "parameters": [
+          {
+            "name": "address",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/export/all": {
+      "get": {
+        "operationId": "AccountController_exportAllClients",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/admin/events/upload": {
+      "post": {
+        "operationId": "AdminEventController_UploadedFilesUsingInterceptor",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/create": {
+      "post": {
+        "operationId": "AdminEventController_createEvent",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/update/{event}": {
+      "patch": {
+        "operationId": "AdminEventController_updateEvent",
+        "parameters": [
+          {
+            "name": "event",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/access/{event}": {
+      "get": {
+        "operationId": "AdminEventController_getAccessEvent",
+        "parameters": [
+          {
+            "name": "event",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/access": {
+      "patch": {
+        "operationId": "AdminEventController_checkAccessEvent",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/resale/{event}": {
+      "get": {
+        "operationId": "AdminEventController_getResaleEvent",
+        "parameters": [
+          {
+            "name": "event",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminEventController_setResaleEvent",
+        "parameters": [
+          {
+            "name": "event",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/attendants/{event}": {
+      "get": {
+        "operationId": "AdminEventController_getAttendantsEvent",
+        "parameters": [
+          {
+            "name": "event",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events": {
+      "get": {
+        "operationId": "AdminEventController_getEvents",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/{eventId}": {
+      "get": {
+        "operationId": "AdminEventController_getEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminEventController_editEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      },
+      "delete": {
+        "operationId": "AdminEventController_deleteEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/coupons/{eventId}": {
+      "get": {
+        "operationId": "AdminEventController_getCouponsByEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/coupons/create": {
+      "post": {
+        "operationId": "AdminEventController_createCoupon",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/invitations/{eventId}": {
+      "get": {
+        "operationId": "AdminEventController_getInvitationsByEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/invitations/create": {
+      "post": {
+        "operationId": "AdminEventController_createInvitation",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/coupons/{eventId}/{code}": {
+      "delete": {
+        "operationId": "AdminEventController_deleteCouponByCode",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/promocodes/{eventId}": {
+      "get": {
+        "operationId": "AdminEventController_getPromocodesByEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/promocodes/create": {
+      "post": {
+        "operationId": "AdminEventController_createPromocode",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/promocodes/{eventId}/{code}": {
+      "delete": {
+        "operationId": "AdminEventController_deletePromocodeByCode",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/admin/events/webhook": {
+      "post": {
+        "operationId": "AdminEventController_webhook",
+        "parameters": [
+          {
+            "name": "stripe-signature",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminEvent"
+        ]
+      }
+    },
+    "/user/events/resale": {
+      "patch": {
+        "operationId": "UserEventController_resale",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "UserEvent"
+        ]
+      }
+    },
+    "/user/events/cancel-resale": {
+      "patch": {
+        "operationId": "UserEventController_cancelResale",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "UserEvent"
+        ]
+      }
+    },
+    "/user/events/transfer": {
+      "patch": {
+        "operationId": "UserEventController_transfer",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "UserEvent"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "description": "Basic health check to verify the application is running. Returns service info, uptime, and version.",
+        "operationId": "HealthCheckController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Application is running.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "example": "2025-10-14T15:30:00.000Z"
+                    },
+                    "uptime": {
+                      "type": "number",
+                      "example": 123.456
+                    },
+                    "version": {
+                      "type": "string",
+                      "example": "1.0.0"
+                    },
+                    "environment": {
+                      "type": "string",
+                      "example": "development"
+                    },
+                    "service": {
+                      "type": "string",
+                      "example": "futura-tickets-admin-api"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Health check (liveness)",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "description": "Comprehensive health check of all dependencies (MongoDB, Redis, Memory, Disk). Used by load balancers and readiness probes.",
+        "operationId": "HealthCheckController_checkReadiness",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {},
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Readiness check",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/health/info": {
+      "get": {
+        "description": "Detailed system information including memory usage, CPU, uptime, and Redis status. Does not perform health checks.",
+        "operationId": "HealthCheckController_getSystemInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "System information retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "application": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "FuturaTickets Admin API"
+                        },
+                        "version": {
+                          "type": "string",
+                          "example": "1.0.0"
+                        },
+                        "environment": {
+                          "type": "string",
+                          "example": "development"
+                        },
+                        "nodeVersion": {
+                          "type": "string",
+                          "example": "v20.0.0"
+                        },
+                        "platform": {
+                          "type": "string",
+                          "example": "darwin"
+                        },
+                        "architecture": {
+                          "type": "string",
+                          "example": "arm64"
+                        }
+                      }
+                    },
+                    "uptime": {
+                      "type": "object",
+                      "properties": {
+                        "process": {
+                          "type": "number",
+                          "example": 123
+                        },
+                        "system": {
+                          "type": "number",
+                          "example": 456789
+                        }
+                      }
+                    },
+                    "memory": {
+                      "type": "object",
+                      "properties": {
+                        "rss": {
+                          "type": "string",
+                          "example": "50MB"
+                        },
+                        "heapTotal": {
+                          "type": "string",
+                          "example": "25MB"
+                        },
+                        "heapUsed": {
+                          "type": "string",
+                          "example": "20MB"
+                        },
+                        "external": {
+                          "type": "string",
+                          "example": "2MB"
+                        },
+                        "arrayBuffers": {
+                          "type": "string",
+                          "example": "1MB"
+                        }
+                      }
+                    },
+                    "cpu": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "number"
+                        },
+                        "system": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "redis": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "connected"
+                        },
+                        "version": {
+                          "type": "string",
+                          "example": "8.2.2"
+                        },
+                        "uptime": {
+                          "type": "number",
+                          "example": 3600
+                        },
+                        "host": {
+                          "type": "string",
+                          "example": "localhost"
+                        },
+                        "port": {
+                          "type": "number",
+                          "example": 6379
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "System information",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/notifications": {
+      "get": {
+        "operationId": "NotificationsController_getNotifications",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/{id}": {
+      "get": {
+        "operationId": "NotificationsController_getNotification",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "delete": {
+        "operationId": "NotificationsController_deleteNotification",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/order/{orderId}": {
+      "get": {
+        "operationId": "NotificationsController_getNotificationByOrderId",
+        "parameters": [
+          {
+            "name": "orderId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/client/{clientId}": {
+      "get": {
+        "operationId": "NotificationsController_getNotificationByClientId",
+        "parameters": [
+          {
+            "name": "clientId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/{id}/read": {
+      "patch": {
+        "operationId": "NotificationsController_markAsRead",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/read": {
+      "patch": {
+        "operationId": "NotificationsController_markAllAsRead",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/user/{userId}/unread/count": {
+      "get": {
+        "operationId": "NotificationsController_countUnreadNotifications",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/admin/orders/{order}": {
+      "get": {
+        "operationId": "AdminOrdersController_getOrderById",
+        "parameters": [
+          {
+            "name": "order",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminOrders"
+        ]
+      }
+    },
+    "/admin/orders/resend": {
+      "post": {
+        "operationId": "AdminOrdersController_resendOrder",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "AdminOrders"
+        ]
+      }
+    },
+    "/orders/config": {
+      "get": {
+        "operationId": "OrdersController_getOrderConfig",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/orders": {
+      "get": {
+        "operationId": "OrdersController_getOrdersByAccount",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/promoters/clients": {
+      "get": {
+        "operationId": "PromoterController_getPromoterUsers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      }
+    },
+    "/promoters/clients/{client}": {
+      "get": {
+        "operationId": "PromoterController_getPromoterUser",
+        "parameters": [
+          {
+            "name": "client",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      }
+    },
+    "/promoters/api": {
+      "get": {
+        "operationId": "PromoterController_getPromoterApi",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      },
+      "patch": {
+        "operationId": "PromoterController_setPromoterApi",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      }
+    },
+    "/payments": {
+      "get": {
+        "operationId": "PaymentsController_getPayments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Payments"
+        ]
+      },
+      "post": {
+        "operationId": "PaymentsController_createPayment",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Payments"
+        ]
+      }
+    },
+    "/payments/{id}": {
+      "get": {
+        "operationId": "PaymentsController_getPayment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Payments"
+        ]
+      },
+      "delete": {
+        "operationId": "PaymentsController_deletePayment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Payments"
+        ]
+      }
+    },
+    "/payment-methods": {
+      "get": {
+        "operationId": "PaymentMethodsController_getPaymentMethods",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "PaymentMethods"
+        ]
+      },
+      "post": {
+        "operationId": "PaymentMethodsController_createPaymentMethod",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "PaymentMethods"
+        ]
+      }
+    },
+    "/payment-methods/{id}": {
+      "get": {
+        "operationId": "PaymentMethodsController_getPaymentMethod",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "PaymentMethods"
+        ]
+      },
+      "delete": {
+        "operationId": "PaymentMethodsController_deletePaymentMethod",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "PaymentMethods"
+        ]
+      }
+    },
+    "/stripe/config": {
+      "get": {
+        "operationId": "StripeController_getStripeConfig",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Stripe"
+        ]
+      }
+    },
+    "/api/sales/{id}": {
+      "get": {
+        "operationId": "SalesController_getSale",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    },
+    "/api/sales/{id}/resale": {
+      "patch": {
+        "operationId": "SalesController_putForResale",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutForResaleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    },
+    "/api/sales/{id}/validate": {
+      "post": {
+        "operationId": "SalesController_validateEntry",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/sales/{saleId}": {
+      "get": {
+        "operationId": "SalesController_getSale",
+        "parameters": [
+          {
+            "name": "saleId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    },
+    "/sales/verify/{ticketCode}": {
+      "get": {
+        "operationId": "SalesController_verifyTicket",
+        "parameters": [
+          {
+            "name": "ticketCode",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    },
+    "/sales/resale/{event}": {
+      "get": {
+        "operationId": "SalesController_getEventResales",
+        "parameters": [
+          {
+            "name": "event",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    },
+    "/sales": {
+      "get": {
+        "operationId": "SalesController_getSales",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    },
+    "/sales/export/{eventId}": {
+      "get": {
+        "operationId": "SalesController_exportEventSales",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "FuturaTickets Admin API",
+    "description": "\n## FuturaTickets Admin API Documentation\n\nThis API provides comprehensive endpoints for managing events, tickets, orders, and users in the FuturaTickets platform.\n\n### Getting Started\n\n1. **Authentication**: Most endpoints require a JWT Bearer token. Obtain a token by logging in via `/auth/login`.\n2. **Authorization**: Click the \"Authorize\" button above and enter your Bearer token.\n3. **Roles**: Different endpoints require different roles (ADMIN, PROMOTER, USER).\n\n### API Features\n\n- Event Management (CRUD operations)\n- Order Processing & Payment Integration\n- Ticket Sales & Validation\n- User & Account Management\n- Promoter Management\n- Email Notifications\n- WebSocket Support for Real-time Updates\n\n### Rate Limits\n\n| Endpoint Type | Requests per Minute |\n|--------------|---------------------|\n| Authentication | 10 |\n| Read Operations | 100 |\n| Write Operations | 50 |\n\n### Error Codes\n\n| Code | Description |\n|------|-------------|\n| 400 | Bad Request - Invalid input |\n| 401 | Unauthorized - Missing or invalid token |\n| 403 | Forbidden - Insufficient permissions |\n| 404 | Not Found - Resource doesn't exist |\n| 429 | Too Many Requests - Rate limit exceeded |\n| 500 | Internal Server Error |\n  ",
+    "version": "1.0.0",
+    "contact": {
+      "name": "FuturaTickets Support",
+      "url": "https://futuratickets.com/support",
+      "email": "support@futuratickets.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "termsOfService": "https://futuratickets.com/terms"
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "User authentication and authorization endpoints"
+    },
+    {
+      "name": "Accounts",
+      "description": "User account management"
+    },
+    {
+      "name": "Events",
+      "description": "Event creation, management, and listings"
+    },
+    {
+      "name": "Orders",
+      "description": "Order management and tracking"
+    },
+    {
+      "name": "Payments",
+      "description": "Payment processing and transactions"
+    },
+    {
+      "name": "Tickets",
+      "description": "Ticket operations and validation"
+    },
+    {
+      "name": "Sales",
+      "description": "Sales tracking and analytics"
+    },
+    {
+      "name": "Promoters",
+      "description": "Promoter management"
+    },
+    {
+      "name": "Notifications",
+      "description": "Push notifications and email management"
+    },
+    {
+      "name": "Stripe",
+      "description": "Stripe payment integration"
+    },
+    {
+      "name": "Health",
+      "description": "Health check and monitoring endpoints"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3002",
+      "description": "Local Development"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "JWT-auth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "name": "JWT",
+        "description": "Enter your JWT token obtained from the login endpoint",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "user@futuratickets.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "SecurePassword123",
+            "minLength": 6
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "PutForResaleDto": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "API Changelog",
+    "url": "https://docs.futuratickets.com/changelog"
+  }
+}

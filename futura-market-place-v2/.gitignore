@@ -1,0 +1,43 @@
+# Futura Tickets Monorepo - .gitignore
+# Node
+node_modules/
+*.log
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Testing
+test-results/
+playwright-report/
+
+# Blockchain
+cache/
+artifacts/
+typechain/
+
+# Secrets
+*.pem
+*.key
+credentials.json
+
+# Temp
+tmp/
+temp/
+*.tmp
+
+# Keep
+!.env.example
+!.gitkeep

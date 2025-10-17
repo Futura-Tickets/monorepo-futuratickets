@@ -1,0 +1,108 @@
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    height: 5rem;
+    color: white;
+    z-index: 10;
+    transition: 500ms;
+    background: white;
+    border-bottom: 1px solid #d9d9d9;
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        position: relative;
+        width: 100%;        
+        .header-actions {
+            display: flex;
+            flex-direction: row;
+            margin: 0px;
+            padding: 0 5rem;
+            list-style: none;
+            align-items: center;
+            ul {
+                display: flex;
+                padding: 0px;
+                list-style: none;
+                li {
+                    font-size: 14px;
+                    font-weight: 600;
+                    margin: 0 0 0 5rem;
+                    cursor: pointer;
+                    text-align: right;
+                    font-family: "Oswald", sans-serif;
+                    text-transform: uppercase;
+                    color: #000;
+                    font-style: oblique;
+                    &.disconnect {
+                        font-size: 18px;
+                    }
+                }
+            }
+        }
+        img {
+            width: 90px;
+            cursor: pointer;
+            margin: 0 5rem 0 0;        
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .header-container {
+        .header-content {
+            img {
+                margin: 0;
+            }
+        }
+        .header-actions {
+            &.left {
+                padding: 0 0 0 1.5rem;
+                ul {
+                    display: none;
+                }
+            }
+            &.right {
+                padding: 0 1.5rem 0 0;
+                ul {
+                    display: inherit;
+                    li {
+                        margin: 0 0 0 1.25rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 768px)  and (max-width: 1024px) {
+    .header-container {
+        .header-content {
+            img {
+                margin: 0;
+            }
+        }
+        .header-actions {
+            &.left {
+                padding: 0 0 0 1.5rem;
+                ul {
+                    display: none;
+                }
+            }
+            &.right {
+                padding: 0 1.5rem 0 0;
+                ul {
+                    display: inherit;
+                    li {
+                        margin: 0 0 0 1.25rem;
+                    }
+                }
+            }
+        }
+    }
+}

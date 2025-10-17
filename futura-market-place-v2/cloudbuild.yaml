@@ -1,0 +1,99 @@
+# ========================================
+# Google Cloud Build Configuration
+# Futura Marketplace V2 (Next.js 15)
+# ========================================
+
+steps:
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:latest'
+      - '--build-arg'
+      - 'NODE_ENV=production'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FUTURA_API=${_NEXT_PUBLIC_FUTURA_API}'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_FUTURA=${_NEXT_PUBLIC_FUTURA}'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_REFACTOR_RESALE_API=${_NEXT_PUBLIC_REFACTOR_RESALE_API}'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_BLOB_URL=${_NEXT_PUBLIC_BLOB_URL}'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_GOOGLE_CLIENT_ID=${_NEXT_PUBLIC_GOOGLE_CLIENT_ID}'
+      - '.'
+    id: 'build-image'
+
+  # Step 2: Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}'
+    id: 'push-image'
+
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA'
+      - '--region'
+      - '${_REGION}'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '3000'
+      - '--memory'
+      - '${_MEMORY}'
+      - '--cpu'
+      - '${_CPU}'
+      - '--min-instances'
+      - '${_MIN_INSTANCES}'
+      - '--max-instances'
+      - '${_MAX_INSTANCES}'
+      - '--concurrency'
+      - '${_CONCURRENCY}'
+      - '--timeout'
+      - '${_TIMEOUT}'
+      - '--set-env-vars'
+      - 'NODE_ENV=production,PORT=3000,NEXT_PUBLIC_FUTURA_API=${_NEXT_PUBLIC_FUTURA_API},NEXT_PUBLIC_FUTURA=${_NEXT_PUBLIC_FUTURA},NEXT_PUBLIC_REFACTOR_RESALE_API=${_NEXT_PUBLIC_REFACTOR_RESALE_API},NEXT_PUBLIC_BLOB_URL=${_NEXT_PUBLIC_BLOB_URL},NEXT_PUBLIC_GOOGLE_CLIENT_ID=${_NEXT_PUBLIC_GOOGLE_CLIENT_ID}'
+    id: 'deploy-cloudrun'
+
+# Substitutions (default values, override via trigger or gcloud command)
+substitutions:
+  _SERVICE_NAME: 'futura-marketplace-v2'
+  _REGION: 'europe-west1'
+  _REPOSITORY: 'futura-tickets'
+  _MEMORY: '512Mi'
+  _CPU: '1'
+  _MIN_INSTANCES: '0'
+  _MAX_INSTANCES: '5'
+  _CONCURRENCY: '80'
+  _TIMEOUT: '300s'
+  # Frontend environment variables (NEXT_PUBLIC_*)
+  _NEXT_PUBLIC_FUTURA_API: 'https://api.futuratickets.com'
+  _NEXT_PUBLIC_FUTURA: 'https://api.futuratickets.com'
+  _NEXT_PUBLIC_REFACTOR_RESALE_API: 'https://resale-api.futuratickets.com'
+  _NEXT_PUBLIC_BLOB_URL: 'https://futuratickets.blob.core.windows.net/images'
+  _NEXT_PUBLIC_GOOGLE_CLIENT_ID: 'your-google-client-id.apps.googleusercontent.com'
+
+# Artifact Registry images
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:$COMMIT_SHA'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE_NAME}:latest'
+
+# Build options
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+
+# Build timeout (30 minutes)
+timeout: '1800s'

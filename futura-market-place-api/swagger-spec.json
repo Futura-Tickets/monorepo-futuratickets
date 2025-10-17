@@ -1,0 +1,918 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/events": {
+      "get": {
+        "operationId": "EventController_getEvents",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      },
+      "post": {
+        "operationId": "EventController_createEvent",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/all": {
+      "get": {
+        "operationId": "EventController_getAllEvents",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/{eventId}": {
+      "put": {
+        "operationId": "EventController_updateEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      },
+      "delete": {
+        "operationId": "EventController_deleteEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/{eventUrl}": {
+      "get": {
+        "operationId": "EventController_getEventByUrl",
+        "parameters": [
+          {
+            "name": "eventUrl",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/create-order": {
+      "post": {
+        "operationId": "EventController_createOrder",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/coupon/{code}": {
+      "get": {
+        "operationId": "EventController_getCouponInfo",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/promocode/{code}": {
+      "get": {
+        "operationId": "EventController_getPromocodeInfo",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "HealthCheckController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "HealthCheck"
+        ]
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "HealthCheckController_checkReadiness",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {},
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "HealthCheck"
+        ]
+      }
+    },
+    "/health/info": {
+      "get": {
+        "operationId": "HealthCheckController_getSystemInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "HealthCheck"
+        ]
+      }
+    },
+    "/orders/config": {
+      "get": {
+        "description": "Returns the Stripe publishable key for client-side payment processing.",
+        "operationId": "OrdersController_getOrderConfig",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Stripe configuration retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "config": {
+                      "type": "string",
+                      "description": "Stripe publishable key"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get Stripe configuration",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/orders/paymentId/{paymentId}": {
+      "get": {
+        "operationId": "OrdersController_getOrdersByPaymentId",
+        "parameters": [
+          {
+            "name": "paymentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/orders/profile": {
+      "get": {
+        "description": "Retrieve all orders for the authenticated user including ticket details.",
+        "operationId": "OrdersController_getAccountOrders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User orders retrieved successfully."
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token."
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get user orders",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/orders": {
+      "get": {
+        "description": "Retrieve all orders in the system.",
+        "operationId": "OrdersController_getAllOrders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All orders retrieved successfully."
+          }
+        },
+        "summary": "Get all orders",
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/promoters": {
+      "get": {
+        "operationId": "PromoterController_getPromoters",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      },
+      "post": {
+        "operationId": "PromoterController_createPromoter",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      }
+    },
+    "/promoters/{id}": {
+      "get": {
+        "operationId": "PromoterController_getPromoterById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      },
+      "put": {
+        "operationId": "PromoterController_updatePromoter",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      },
+      "delete": {
+        "operationId": "PromoterController_deletePromoter",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      }
+    },
+    "/promoters/{id}/events": {
+      "get": {
+        "operationId": "PromoterController_getPromoterEvents",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Promoter"
+        ]
+      }
+    },
+    "/stripe/config": {
+      "get": {
+        "operationId": "StripeController_getStripeConfig",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Stripe"
+        ]
+      }
+    },
+    "/stripe/webhook": {
+      "post": {
+        "operationId": "StripeController_handleWebhook",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Stripe"
+        ]
+      }
+    },
+    "/metrics": {
+      "get": {
+        "operationId": "MetricsController_handleMetrics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Metrics"
+        ]
+      }
+    },
+    "/accounts/register": {
+      "post": {
+        "operationId": "AccountController_newLogin",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/accounts/login": {
+      "post": {
+        "operationId": "AccountController_accessLogin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/accounts/login-google": {
+      "post": {
+        "operationId": "AccountController_loginGoogle",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/accounts/validate": {
+      "post": {
+        "operationId": "AccountController_validate",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/accounts/profile": {
+      "get": {
+        "operationId": "AccountController_getAccountInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/accounts/update-password": {
+      "patch": {
+        "operationId": "AccountController_updatePassword",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/accounts/update-account": {
+      "patch": {
+        "operationId": "AccountController_updateAccountInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/accounts/recovery-email": {
+      "post": {
+        "operationId": "AccountController_accountRecovery",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/accounts/recovery-password": {
+      "patch": {
+        "operationId": "AccountController_passwordRecovery",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Account"
+        ]
+      }
+    },
+    "/sales/resale/{event}": {
+      "get": {
+        "operationId": "SalesController_getEventResales",
+        "parameters": [
+          {
+            "name": "event",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    },
+    "/sales/event/{_id}": {
+      "get": {
+        "operationId": "SalesController_getEventTotalSales",
+        "parameters": [
+          {
+            "name": "_id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    },
+    "/sales/profile/{clientId}": {
+      "get": {
+        "operationId": "SalesController_getAccountSales",
+        "parameters": [
+          {
+            "name": "clientId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Sales"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "FuturaTickets Marketplace API",
+    "description": "\n## FuturaTickets Marketplace API Documentation\n\nThis API handles the marketplace operations including order processing, payments, and ticket management.\n\n### Getting Started\n\n1. **Authentication**: Most endpoints require a JWT Bearer token. Obtain a token by logging in.\n2. **Authorization**: Click the \"Authorize\" button above and enter your Bearer token.\n3. **Payment Integration**: Uses Stripe for secure payment processing.\n\n### API Features\n\n- **Order Management**: Create and track orders\n- **Payment Processing**: Stripe integration for secure payments\n- **Ticket Sales**: Primary and secondary market sales\n- **Email Notifications**: Automated transactional emails\n- **WebSocket Support**: Real-time order updates\n- **Ticket Transfers**: Transfer tickets between users\n- **Resale Management**: Secondary market functionality\n\n### Payment Flow\n\n1. Client requests Stripe configuration\n2. Create payment intent with order details\n3. Client completes payment with Stripe\n4. Webhook confirms payment\n5. System processes order and creates tickets\n6. Email confirmation sent to customer\n\n### Rate Limits\n\n| Endpoint Type | Requests per Minute |\n|--------------|---------------------|\n| Authentication | 10 |\n| Read Operations | 100 |\n| Write Operations | 50 |\n\n### Error Codes\n\n| Code | Description |\n|------|-------------|\n| 400 | Bad Request - Invalid input |\n| 401 | Unauthorized - Missing or invalid token |\n| 403 | Forbidden - Insufficient permissions |\n| 404 | Not Found - Resource doesn't exist |\n| 429 | Too Many Requests - Rate limit exceeded |\n| 500 | Internal Server Error |\n  ",
+    "version": "1.0.0",
+    "contact": {
+      "name": "FuturaTickets Support",
+      "url": "https://futuratickets.com/support",
+      "email": "support@futuratickets.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "termsOfService": "https://futuratickets.com/terms"
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "User authentication and authorization"
+    },
+    {
+      "name": "Orders",
+      "description": "Order creation and management"
+    },
+    {
+      "name": "Payments",
+      "description": "Payment processing with Stripe"
+    },
+    {
+      "name": "Stripe",
+      "description": "Stripe integration endpoints"
+    },
+    {
+      "name": "Sales",
+      "description": "Ticket sales and transfers"
+    },
+    {
+      "name": "Events",
+      "description": "Event information"
+    },
+    {
+      "name": "Accounts",
+      "description": "User account management"
+    },
+    {
+      "name": "Notifications",
+      "description": "Email and push notifications"
+    },
+    {
+      "name": "Health",
+      "description": "Health check endpoints"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3004",
+      "description": "Local Development"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "JWT-auth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "name": "JWT",
+        "description": "Enter your JWT token obtained from the login endpoint",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "user@futuratickets.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "SecurePassword123",
+            "minLength": 6
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "API Changelog",
+    "url": "https://docs.futuratickets.com/changelog"
+  }
+}

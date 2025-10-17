@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FuturaTickets Blockchain Configuration",
+  "description": "Centralized blockchain configuration for all services in the monorepo",
+  "environments": {
+    "local": {
+      "name": "Hardhat Local",
+      "chainId": 31337,
+      "rpcUrl": "http://127.0.0.1:8545",
+      "factoryAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "deployerAddress": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "blockExplorer": null,
+      "nativeCurrency": {
+        "name": "Ether",
+        "symbol": "ETH",
+        "decimals": 18
+      }
+    },
+    "baseSepolia": {
+      "name": "Base Sepolia Testnet",
+      "chainId": 84532,
+      "rpcUrl": "https://base-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}",
+      "factoryAddress": "${FACTORY_ADDRESS_BASE_SEPOLIA}",
+      "deployerAddress": "${DEPLOYER_ADDRESS}",
+      "blockExplorer": "https://sepolia.basescan.org",
+      "nativeCurrency": {
+        "name": "Ether",
+        "symbol": "ETH",
+        "decimals": 18
+      }
+    },
+    "base": {
+      "name": "Base Mainnet",
+      "chainId": 8453,
+      "rpcUrl": "https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}",
+      "factoryAddress": "${FACTORY_ADDRESS_BASE_MAINNET}",
+      "deployerAddress": "${DEPLOYER_ADDRESS}",
+      "blockExplorer": "https://basescan.org",
+      "nativeCurrency": {
+        "name": "Ether",
+        "symbol": "ETH",
+        "decimals": 18
+      }
+    }
+  },
+  "contracts": {
+    "FuturaEventFactory": {
+      "description": "Factory contract for creating event NFT contracts",
+      "gasEstimate": 2640000
+    },
+    "FuturaEvent": {
+      "description": "Individual event NFT contract with tickets",
+      "gasEstimate": 2120000,
+      "functions": {
+        "mintNFT": {
+          "gasEstimate": 150000
+        },
+        "setNFTPrice": {
+          "gasEstimate": 50000
+        },
+        "transferNFT": {
+          "gasEstimate": 70000
+        },
+        "setTicketStatus": {
+          "gasEstimate": 50000
+        },
+        "cancelResale": {
+          "gasEstimate": 50000
+        }
+      }
+    }
+  },
+  "gasSettings": {
+    "local": {
+      "maxFeePerGas": "auto",
+      "maxPriorityFeePerGas": "auto"
+    },
+    "baseSepolia": {
+      "maxFeePerGas": "50",
+      "maxPriorityFeePerGas": "2"
+    },
+    "base": {
+      "maxFeePerGas": "auto",
+      "maxPriorityFeePerGas": "auto"
+    }
+  },
+  "usage": {
+    "description": "How to use this config in your backend services",
+    "examples": {
+      "node": "const config = require('./blockchain.config.json').environments.local;",
+      "typescript": "import blockchainConfig from './blockchain.config.json';"
+    }
+  }
+}

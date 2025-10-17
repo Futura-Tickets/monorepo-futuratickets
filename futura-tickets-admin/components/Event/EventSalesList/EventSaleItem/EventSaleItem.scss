@@ -1,0 +1,119 @@
+.event-sale-item-container {
+    .event-sale-item-content {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        padding: 0 2rem;
+        height: 80px;
+        font-size: 14px;
+        border-bottom: 1px solid #e4e4e4;
+        .details {
+            width: 75px;
+        }
+        .token-id {
+            width: 75px;
+        }
+        .client {
+            width: 200px;
+        }
+        .email {
+            width: 300px;
+        }
+        .type {
+            width: 120px;
+        }
+        .price {
+            width: 120px;
+        }
+        .status {
+            width: 170px;
+            span {
+                display: flex;
+                justify-content: center;
+                width: 100px;
+            }
+            .minted {
+                background-color: #049b92;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #018a81;
+            }
+            .sale {
+                background-color: #006f94;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #016587;
+            }
+            .transfered {
+                background-color: #555;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #444;
+            }
+            .sold {
+                background-color: #555;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #444;
+            }
+            .closed {
+                background-color: #fe5456;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #ff3e40;
+            }
+            .pending {
+                background-color: #999999;
+                color: #fff;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #8d8d8d;
+            }
+            .processing {
+                background-color: #999999;
+                color: #fff;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #8d8d8d;
+                .anticon {
+                    margin: 0 0 0 9px;
+                }
+            }
+        }
+        .created {
+            width: 180px;
+            .anticon {
+                margin: 0 4px 0 0;
+            }
+        }
+        .view {
+            margin: 0 0 0 auto;
+        }
+    }
+}

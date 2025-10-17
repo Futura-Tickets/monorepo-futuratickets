@@ -1,0 +1,398 @@
+.account-container {
+    display: grid;
+    grid-template-columns: 10rem auto;
+    padding: 10rem;
+    min-height: 100vh;
+    .account-menu {
+        margin: 2.5rem 0;
+        ul {
+            padding: 0px;
+            list-style: none;
+            li {
+                line-height: 42px;
+                font-size: 15px;
+                cursor: pointer;
+                color: #333;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                font-weight: 800;
+                font-style: oblique;
+            }
+        }
+    }
+    .account-content {
+        .tickets-container {
+            .tickets-header {
+                h1 {
+                    font-weight: 800;
+                    letter-spacing: 1px;
+                    font-size: 26px;
+                    margin: 0px 0px 30px 0px;
+                    text-align: center;
+                    text-transform: uppercase;
+                    font-style: oblique;
+                }
+            }
+
+            .orders-list-container {
+                display: flex;
+                flex-direction: column;
+                .orders-list-content {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    gap: 5rem;
+                    margin: 0 auto;
+                }
+            }
+
+            .tickets-list-container {
+                display: flex;
+                flex-direction: column;
+                .tickets-list-content {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 5rem;
+                    margin: 0 auto;
+                }
+            }
+        }
+        .account-form-container {
+            width: 480px;
+            margin: 0 auto;
+            .account-form-header {
+                h1 {
+                    font-weight: 800;
+                    letter-spacing: 1px;
+                    font-size: 26px;
+                    margin: 0px 0px 30px 0px;
+                    text-align: center;
+                    text-transform: uppercase;
+                    font-style: oblique;
+                }
+            }
+            .form-actions {
+                display: flex;
+                justify-content: end;
+                .account-btn {
+                    margin: 0 0 0 auto;
+                    width: 200px;
+                }
+                .cancel-btn {
+                    background: unset;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    text-transform: uppercase;
+                    color: #bebebe;
+                    padding: 20px 54px;
+                    box-shadow: unset;
+                    &:hover{
+                        color: #333;
+                    }
+                }
+            }
+        }
+
+        .account-disconnect {
+            display: flex;
+            justify-content: end;
+            width: 100%;
+            padding: 2.5rem 0px;
+            box-sizing: border-box;
+            .account-btn {
+                width: 200px;
+            }
+        }
+    }
+}
+
+.resale-modal-container {
+    padding: 2.5rem;
+    h1 {
+        font-weight: 800;
+        letter-spacing: 1px;
+        font-size: 26px;
+        margin: 0px 0px 30px 0px;
+        text-align: center;
+        text-transform: uppercase;
+        font-style: oblique;
+        .anticon {
+            margin: 0 1.25rem 0 0;
+        }
+    }
+    p {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 400;
+        min-height: 60px;
+    }
+    .ant-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .ant-input-number {
+        width: 100%;
+    }
+    .max-price {
+        font-size: 10px;
+    }
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.ticket-information-container {
+    padding: 2.5rem;
+    h1 {
+        font-weight: 800;
+        letter-spacing: 1px;
+        font-size: 26px;
+        margin: 0px 0px 30px 0px;
+        text-align: center;
+        text-transform: uppercase;
+        font-style: oblique;
+        .anticon {
+            margin: 0 1.25rem 0 0;
+        }
+    }
+    .ticket-information-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+        width: 90%;
+        margin: 1.25rem auto;
+        li {
+            display: flex;
+            flex-direction: column;
+            label {
+                font-weight: 600;
+                .anticon {
+                    margin: 0 7px 0 0;
+                }
+            }
+        }
+    }
+}
+
+.ticket-container {
+    width: 300px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    overflow: hidden;
+    .ticket-image {
+        width: 300px;
+        height: 200px;
+        background-size: 100%;
+        position: relative;
+        .ticket-qr {
+            width: 180px;
+            height: 180px;
+            position: absolute;
+            bottom: -35px;
+            left: calc(50% - 90px);
+            border: 1px solid #d9d9d9;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 110px;
+            overflow: hidden;
+            color: #d9d9d9;
+            img {
+                width: 100%;
+                border-radius: 8px;
+            }
+        }
+    }
+    .ticket-content {
+        padding: 2.5rem;
+        box-sizing: border-box;
+        height: 350px;
+        position: relative;
+        h2 {
+            text-transform: uppercase;
+            font-size: 21px;
+            font-style: italic;
+            font-weight: 900;
+            text-align: center;
+            margin: 24px 0 4px 0;
+        }
+        .ticket-status {
+            text-transform: uppercase;
+            color: white;
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: 900;
+            text-align: center;
+            margin: 20px 0;
+            div {
+                border-radius: 4px;
+                padding: 10px 10px;
+                width: 80%;
+                margin: 0 auto;
+                font-style: italic;
+            }
+            .pending {
+                background-color: #999999;
+                border: 1px solid #8d8d8d;
+            }
+            .processing {
+                background-color: #999999;
+                border: 1px solid #8d8d8d;
+            }
+            .sale {
+                background-color: #006f94;
+                border: 1px solid #016587;
+            }
+            .transfered {
+                background-color: #333;
+                border: 1px solid #000;
+            }
+            .open {
+                background-color: #00948a;
+                border: 1px solid #018a81;
+            }
+            .closed {
+                background-color: #fe5456;
+                border: 1px solid #ff3e40;
+            }
+            .sold {
+                background-color: #333;
+                border: 1px solid #000;
+            } 
+        }
+        .ticket-type {
+            .regular {
+                border-radius: 4px;
+                padding: 10px 10px;
+                width: 80%;
+                margin: 0 auto;
+                text-transform: uppercase;
+                font-size: 16px;
+                font-style: italic;
+                font-weight: 900;
+                text-align: center;
+                border: 1px solid #000;
+            }
+        }
+        .ticket-date-time {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 10px;
+            font-size: 14px;
+        }
+        .ticket-info {
+            ul {
+                font-size: 16px;
+                li {
+                    line-height: 32px;
+                }
+            }
+        }
+        .ticket-actions {
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            border-top: 1px solid #d9d9d9;
+            width: 300px;
+            left: 0;
+            .ticket-action {
+                width: 33.3%;
+                text-align: center;
+                padding: 1rem 0rem;
+                cursor: pointer;
+                &.disabled {
+                    cursor: not-allowed;
+                    .anticon {
+                        opacity: 0.2;
+                    }
+                }
+                &:first-child {
+                    border-right: 1px solid #d9d9d9;
+                }
+                &:last-child {
+                    border-left: 1px solid #d9d9d9;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .account-container {
+        margin: 0;
+        padding: 0;
+        grid-template-columns: unset;
+        grid-template-rows: 11rem auto;
+        .account-menu {
+            margin: 5rem 0;
+            ul {
+                display: flex;
+                justify-content: space-between;
+                padding: 0 2.5rem;
+                li {
+                    align-items: center;
+                }
+            }
+        }
+        .account-content {
+            width: 100%;
+            padding: 0px;
+            margin: 0px 0px 5rem 0px;
+            min-width: unset;
+            .account-form-container {
+                width: unset;
+                padding: 0 2.5rem;
+            }
+            .tickets-container {
+                .tickets-list-container {
+                    .tickets-list-content {
+                        grid-template-columns: unset;
+                        gap: 2.5rem
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 768px)  and (max-width: 1024px) {
+    .account-container {
+        margin: 0;
+        padding: 0;
+        grid-template-columns: unset;
+        grid-template-rows: 11rem auto;
+        .account-menu {
+            margin: 5rem 0;
+            ul {
+                display: flex;
+                justify-content: space-between;
+                padding: 0 2.5rem;
+                li {
+                    align-items: center;
+                }
+            }
+        }
+        .account-content {
+            width: 100%;
+            padding: 0px;
+            margin: 0px 0px 5rem 0px;
+            min-width: unset;
+            .account-form-container {
+                width: unset;
+                padding: 2.5rem;
+            }
+            .tickets-container {
+                .tickets-list-container {
+                    .tickets-list-content {
+                        grid-template-columns: unset;
+                        gap: 2.5rem
+                    }
+                }
+            }
+        }
+    }
+}

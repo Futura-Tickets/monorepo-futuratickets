@@ -1,0 +1,256 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.events-list-container {
+    border-radius: 8px;
+    border: 1px solid #e4e4e4;
+    overflow: hidden;
+    box-shadow: 0 0 8px #efefef;
+
+    // Mobile: Smaller margin
+    @include mobile-only {
+        margin: $spacing-md;
+    }
+
+    // Tablet and up: Original margin
+    @include tablet {
+        margin: 2.5rem;
+    }
+
+    .events-list-header {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-bottom: 1px solid #e4e4e4;
+        box-sizing: border-box;
+
+        // Mobile: Hide header, will show in cards
+        @include mobile-only {
+            display: none;
+        }
+
+        // Tablet and up: Show header
+        @include tablet {
+            display: flex;
+            padding: 0 2rem;
+            height: 5rem;
+        }
+
+        div {
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #333;
+        }
+        .event-item-select {
+            width: 50px;
+        }
+        .event-item-address {
+            width: 150px;
+
+        }
+    }
+    .events-list-content {
+        display: flex;
+        flex-direction: column;
+        .events-not-found {
+            display: flex;
+            align-items: center;
+            height: 5rem;
+            background: #fff;
+            justify-content: center;
+        }
+    }
+}
+
+.event-item-container {
+    .event-item-content {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        font-size: 14px;
+        border-bottom: 1px solid #e4e4e4;
+        box-sizing: border-box;
+
+        // Mobile: Card layout instead of table row
+        @include mobile-only {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: $spacing-md;
+            min-height: auto;
+            gap: $spacing-sm;
+
+            > div {
+                width: 100% !important;
+                display: flex;
+                justify-content: space-between;
+
+                &::before {
+                    content: attr(data-label);
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    font-size: 10px;
+                    color: #666;
+                    letter-spacing: 1px;
+                }
+            }
+
+            .event-item-select {
+                &::before {
+                    content: '';
+                }
+            }
+        }
+
+        // Tablet and up: Table row layout
+        @include tablet {
+            flex-direction: row;
+            padding: 0 2rem;
+            height: 5rem;
+        }
+
+        .event-item-select {
+            width: 50px;
+        }
+        .event-item-address {
+            @include tablet {
+                width: 150px;
+            }
+
+            .anticon {
+                cursor: pointer;
+                margin: 0 0 0 5px;
+            }
+            .launched {
+                background-color: #006f94;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #016587;
+                width: 70px;
+                text-align: center;
+            }
+            .live {
+                background-color: #049b92;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #018a81;
+                width: 70px;
+                text-align: center;
+            }
+            .hold {
+                background-color: #999999;
+                color: #fff;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #8d8d8d;
+                width: 70px;
+                text-align: center;
+            }
+            .closed {
+                background-color: #fe5456;
+                color: #fff;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #ff3e40;
+                width: 70px;
+                text-align: center;
+            }
+        }
+
+        .event-item-progress {
+            box-sizing: border-box;
+
+            @include mobile-only {
+                padding: 0;
+            }
+
+            @include tablet {
+                padding: 0 2.5rem 0 0;
+                width: 150px;
+            }
+        }
+        .event-item-action {
+            @include mobile-only {
+                margin: $spacing-sm 0 0 0;
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            @include tablet {
+                margin: 0 0 0 auto;
+            }
+
+            span {
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.event-remove-modal-container {
+    .event-remove-modal-content {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+
+        // Mobile: Smaller modal
+        @include mobile-only {
+            min-height: 250px;
+            padding: $spacing-md;
+        }
+
+        // Tablet and up: Original sizing
+        @include tablet {
+            min-height: 340px;
+        }
+
+        h2 {
+            margin: 0 0px 30px 0px;
+        }
+        p {
+            font-size: 16px;
+            margin: 0;
+            text-align: center;
+
+            @include mobile-only {
+                width: 100%;
+            }
+
+            @include tablet {
+                width: 80%;
+            }
+        }
+        .event-remove-modal-action {
+            margin: 30px 0 0 0;
+        }
+    }
+}
+
+.faqs-container {
+  .faq-content {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

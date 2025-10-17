@@ -1,0 +1,54 @@
+.checkout-container {
+    display: flex;
+    justify-content: center;
+    padding: 10rem 5rem 7.5rem 5rem;
+    flex-direction: row;
+    height: 100vh;
+    box-sizing: border-box;
+    .checkout-content {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        width: 30%;
+        padding: 0rem 2.5rem;
+        h1 {
+            font-size: 21px;
+            font-weight: 600;
+            margin: 0 0 2.5rem 0;
+            cursor: pointer;
+            text-align: left;
+            font-family: "Oswald", sans-serif;
+            text-transform: uppercase;
+            color: #333;
+            font-style: oblique;
+        }
+        .cart-items {
+            min-height: 435px;
+            overflow: auto;
+            .cart-item {
+                line-height: 21px;
+                
+            }
+        }
+        .cart-item-container {
+            border-top: 1px solid #333;
+            &:last-child {
+                border-bottom: 1px solid #333;
+            }
+        }
+        :where(.css-dev-only-do-not-override-f7vrd6).ant-form-item {
+            margin-bottom: 10px;
+        }
+        h1 {
+            
+        }
+        .ant-form {
+            width: 100%;
+            .ant-form-item-label {
+                font-weight: 400;
+                letter-spacing: 1px;
+                font-size: 21px;
+            }
+        }
+    }
+}

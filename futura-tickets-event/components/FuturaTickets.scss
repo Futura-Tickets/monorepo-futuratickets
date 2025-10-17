@@ -1,0 +1,19 @@
+.futura-tickets-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 62px;
+    flex-direction: column;
+    .futura-tickets-content {
+        &.error {
+            h1 {
+                font-size: 24px;
+                font-weight: 500;
+            }
+            img {
+                width: 100px;
+            }
+        }
+    }
+}

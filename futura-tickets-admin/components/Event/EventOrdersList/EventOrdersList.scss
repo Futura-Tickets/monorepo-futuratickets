@@ -1,0 +1,70 @@
+.event-orders-list-container {
+    margin: 2.5rem;
+    border-radius: 8px;
+    border: 1px solid #e4e4e4;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 0 8px #efefef;
+    
+    &.fixed {
+        .event-orders-list-header {
+            position: fixed;
+            top: 0;
+            width: calc(100% - 80px);
+            z-index: 5;
+            border-bottom: 1px solid #e4e4e4;
+            border-top: 0;
+        }
+        .event-orders-list-content {
+            padding: 5rem 0 0 0;
+        }
+    }
+    
+    .event-orders-list-header {
+        display: flex;
+        padding: 0 3rem; 
+        height: 5rem;
+        align-items: center;
+        border-bottom: 1px solid #e4e4e4;
+        box-sizing: border-box;
+        
+        div {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .client {
+            width: 250px;
+        }
+        .email {
+            width: 250px;
+        }
+        .tickets {
+            width: 150px;
+        }
+        .amount {
+            width: 150px;
+        }
+        .status {
+            width: 170px;
+        }
+        .created {
+            width: 180px;
+        }
+    }
+    
+    .event-orders-list-content {
+        display: flex;
+        flex-direction: column;
+        
+        .event-orders-not-found {
+            display: flex;
+            align-items: center;
+            height: 5rem;
+            background: #fff;
+            justify-content: center;
+        }
+    }
+}

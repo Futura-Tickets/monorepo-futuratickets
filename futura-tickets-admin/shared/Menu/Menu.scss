@@ -1,0 +1,156 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.menu-container {
+    // Mobile: Hidden by default, overlay when active
+    @include mobile-only {
+        width: 0;
+        transform: translateX(-100%);
+        z-index: $z-index-modal;
+        box-shadow: none;
+
+        &.active {
+            width: 280px;
+            transform: translateX(0);
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+
+            .menu-content {
+                .menu-image {
+                    .futura-logo {
+                        opacity: 0;
+                    }
+                    .futura-logo-large {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+
+    // Tablet and up: Standard sidebar behavior
+    @include tablet {
+        width: 80px;
+        transform: translateX(0);
+        z-index: $z-index-sticky;
+
+        &.active {
+            width: 300px;
+
+            .menu-content {
+                .menu-image {
+                    .futura-logo {
+                        opacity: 0;
+                    }
+                    .futura-logo-large {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+
+    // Common styles for all breakpoints
+    overflow: hidden;
+    height: 100vh;
+    transition: 500ms;
+    position: fixed;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    display: grid;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    border-right: 1px solid #e4e4e4;
+    border-radius: 0px;
+    margin: 0px;
+    background: white;
+    .menu-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        position: relative;
+        width: 300px;
+        .menu-image {
+            display: flex;
+            height: 80px;
+            align-items: center;
+            width: 100%;
+            cursor: pointer;
+            .futura-logo {
+                transition: 500ms;
+                opacity: 1;
+                width: 32px;
+                margin: 0 22px 0 26px;
+            }
+            .futura-logo-large {
+                transition: 500ms;
+                position: absolute;
+                left: calc(50% - 50px);
+                width: 100px;
+                opacity: 0;
+            }
+        }
+        .menu-items {
+            position: absolute;
+            top: 79px;
+            width: 100%;
+            height: calc(100vh - 79px);
+            .menu-item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                letter-spacing: 1px;
+                font-size: 14px;
+                cursor: pointer;
+                color: #8e8e8e;
+                transition: 500ms;
+                text-decoration: none;
+                height: 80px;
+                border-top: 1px solid #fff;
+                border-bottom: 1px solid #fff;
+                &:hover {
+                    color: #049b92;
+                }
+                &.active {
+                    background: #049b92;
+                    color: #fff;
+                    font-weight: 600;
+                    border-top: 1px solid #e4e4e4;
+                    border-bottom: 1px solid #e4e4e4;
+                    box-shadow: inset 0 0 4px #00000042;
+                }
+                .menu-icon {
+                    width: 80px;
+                    height: 80px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    &.image {
+                        display: flex;
+                        width: 42px;
+                        height: 42px;
+                        aspect-ratio: 1 / 1;
+                        border: 1px solid #e4e4e4;
+                        border-radius: 8px;
+                        overflow: hidden;
+                        margin: 0 18px 0 18px;
+                        font-size: 24px;
+                        font-weight: 900;
+                        color: #333;
+                    }
+                }
+                .anticon {
+                    font-size: 18px;
+                }
+                &.account {
+                    position: absolute;
+                    bottom: 0px;
+                    width: 100%;
+                    .account-info {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+}

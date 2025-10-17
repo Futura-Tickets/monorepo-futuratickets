@@ -1,0 +1,13 @@
+.about-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 7.5rem 5rem 7.5rem 5rem;
+    .about-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-width: 500px;
+    }
+}

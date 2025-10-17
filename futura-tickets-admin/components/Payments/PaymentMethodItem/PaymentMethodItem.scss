@@ -1,0 +1,103 @@
+.payment-method-item-container {
+  border-bottom: 1px solid #e4e4e4;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .payment-method-item-content {
+    display: grid;
+    grid-template-columns: 0.9fr 0.9fr 1fr 1fr 1fr 32px; 
+    padding: 16px 24px;
+    align-items: center;
+
+    .type, .name, .number, .expiry, .created {
+      display: flex;
+      align-items: center;
+      color: #333333;
+      font-size: 14px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .view {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      
+      .delete-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 36px;
+        width: 36px;
+        border: none;
+        background: transparent;
+        color: #049b92;
+        
+        &:hover {
+          background-color: #018a81;
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+}
+
+.no-payment-methods{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    color: #999;
+    font-size: 14px;
+}
+
+.delete-payment-method-modal {
+  text-align: center;
+  padding: 20px;
+  
+  .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    margin: 5px 0;
+    color: #333333;
+    font-size: 16px;
+  }
+  
+  .warning-text {
+    color: #049b92;
+    font-weight: 500;
+    margin: 15px 0 20px;
+  }
+  
+  .remove-payment-method-btn {
+    background-color: #049b92;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    font-style: oblique;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 250px;
+    text-transform: uppercase;
+    
+    &:disabled {
+      background-color: #d9d9d9;
+      cursor: not-allowed;
+    }
+    
+    &:not(:disabled):hover {
+      background-color: #018a81;
+    }
+  }
+}

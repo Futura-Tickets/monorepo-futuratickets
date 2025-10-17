@@ -1,0 +1,25 @@
+.root-container {
+  display: grid;
+  grid-template-columns: 80px auto;
+  transition: 500ms;
+  &.active {
+      grid-template-columns: 300px auto;
+  }
+  .root-content {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    display: grid;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    &.loading {
+      display: flex;
+      justify-content: center;
+      box-sizing: border-box;
+      flex-direction: column;
+      align-items: center;
+      padding: 5rem;
+      font-size: 5rem;
+      min-height: 100vh;
+    }
+  }
+}

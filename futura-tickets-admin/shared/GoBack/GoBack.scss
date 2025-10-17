@@ -1,0 +1,16 @@
+.go-back-container {
+    color: #333 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: white;
+    margin: 0 2.5rem 0 0;
+    width: 80px;
+    height: 80px;
+    border-right: 1px solid #e4e4e4;
+    .anticon {
+        margin: 0 7px 0 0;
+    }
+}

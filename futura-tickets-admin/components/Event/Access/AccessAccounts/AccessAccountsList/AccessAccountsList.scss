@@ -1,0 +1,92 @@
+.access-accounts-list-container {
+    width: 100%;
+    .access-accounts-list-content-header {
+        display: flex;
+        padding: 0 25px;
+        height: 5rem;
+        align-items: center;
+        border-top: 1px solid #e4e4e4;
+        border-bottom: 1px solid #e4e4e4;
+        div {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .access-accounts-name {
+            width: 250px;
+        }
+        .access-accounts-address {
+            width: 250px;
+        }
+        .access-accounts-role {
+            font-size: 14px;
+        }
+    }
+    .access-accounts-list-content {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+}
+
+.access-account-item-container {
+    display: flex;
+    height: 5rem;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #e4e4e4;
+    padding: 0 25px;
+    box-sizing: border-box;
+    &:last-child {
+        border-bottom: 0px;
+    }
+    .access-account-item-name {
+        width: 250px;
+    }
+    .access-account-item-email {
+        width: 250px;
+    }
+    .access-account-item-password {
+        width: 250px;
+        .ant-input-password {
+            border: 0;
+            font-size: 16px;
+            padding: 0;
+            caret-color: transparent;
+            box-shadow: none;
+            &:focus {
+                box-shadow: none;
+            }
+        }
+    }
+    .access-account-item-action {
+        width: 16px;
+        margin: 0 0 0 auto;
+        .anticon {
+            cursor: pointer;
+        }
+    }
+}
+
+.access-account-remove-modal-container {
+    .access-account-remove-modal-content {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        min-height: 340px;
+        h2 {
+            margin: 0 0px 30px 0px;
+        }
+        p {
+            font-size: 16px;
+            margin: 0;
+            width: 80%;
+            text-align: center;
+        }
+        .season-remove-modal-action {
+            margin: 30px 0 0 0;
+        }
+    }
+}

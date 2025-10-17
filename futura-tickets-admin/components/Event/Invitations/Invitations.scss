@@ -1,0 +1,90 @@
+
+.root-container {
+  &.active {
+      .invitations-container {
+          .invitations-header {
+              width: calc(100% - 300px);
+          }
+      }
+  }
+}
+
+.invitations-container {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: #fdfdfd;
+  padding: 5rem 0rem 0rem 0rem;
+  .invitations-header {
+    position: fixed;
+    width: calc(100% - 80px);
+    z-index: 5;
+    top: 0;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e4e4e4;
+    background-color: white;
+    box-shadow: 0 0 8px #efefef;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: 500ms;
+      h1 {
+          margin: 0;
+          .anticon {
+              margin: 0px 12px 0 0;
+          }
+      }
+      .invitations-header-actions {
+          display: flex;
+          margin: 0 0 0 auto;
+          .invitations-header-action {
+              color: #999;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 18px;
+              cursor: pointer;
+              width: 80px;
+              height: 80px;
+              box-sizing: border-box;
+              &:hover {
+                  color: #333;
+              }
+          }
+      }
+  }
+  .invitations-content-container {
+      display: grid;
+      grid-template-columns: 12.5rem auto;
+      padding: 5rem 2.5rem 5rem 5rem;
+      grid-gap: 5rem;
+      gap: 5rem;
+      .invitations-menu {
+          ul {
+              position: fixed;
+              top: 195px;
+              margin: 0;
+              line-height: 2.5rem;
+              li {
+                  font-size: 16px;
+                  font-weight: 600;
+                  color: #333;
+                  border-left: 6px solid white;
+                  height: 18px;
+                  padding: 0 0 0 10px;
+                  display: flex;
+                  align-items: center;
+                  margin: 0 0 21px 0;
+                  cursor: pointer;
+                  &.active {
+                      border-left: 6px solid #333;
+                  }
+              }
+          }
+      }
+      .invitations-content {
+          display: grid;
+          gap: 2.5rem;
+      }
+  }
+}

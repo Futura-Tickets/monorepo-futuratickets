@@ -1,0 +1,315 @@
+// ============================================
+// SKELETON LOADING COMPONENT STYLES
+// ============================================
+
+.skeleton {
+    display: inline-block;
+    background: var(--color-gray-200);
+    border-radius: var(--radius-sm);
+    position: relative;
+    overflow: hidden;
+
+    // Base variants
+    &.skeleton-text {
+        height: 16px;
+        margin-bottom: var(--spacing-xs);
+        border-radius: var(--radius-xs);
+    }
+
+    &.skeleton-circular {
+        border-radius: var(--radius-full);
+        width: 40px;
+        height: 40px;
+    }
+
+    &.skeleton-rectangular {
+        border-radius: 0;
+    }
+
+    &.skeleton-rounded {
+        border-radius: var(--radius-md);
+    }
+
+    // Animation: Pulse
+    &.skeleton-pulse {
+        animation: skeleton-pulse 1.5s ease-in-out infinite;
+    }
+
+    // Animation: Wave (Shimmer effect)
+    &.skeleton-wave {
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.6),
+                transparent
+            );
+            animation: skeleton-wave 1.8s infinite;
+        }
+    }
+
+    // No animation
+    &.skeleton-none {
+        animation: none;
+
+        &::after {
+            display: none;
+        }
+    }
+}
+
+// ============================================
+// KEYFRAME ANIMATIONS
+// ============================================
+
+@keyframes skeleton-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
+
+@keyframes skeleton-wave {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+// ============================================
+// PRE-BUILT SKELETON LAYOUTS
+// ============================================
+
+// Skeleton Text Block
+.skeleton-text-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    width: 100%;
+}
+
+// Skeleton Card
+.skeleton-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+
+    .skeleton-card-content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+}
+
+// Skeleton List
+.skeleton-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.skeleton-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+
+    .skeleton-list-item-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+}
+
+// Skeleton Attendant Item (Custom for Access App)
+.skeleton-attendant-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-light);
+    transition: all var(--transition-fast);
+
+    .skeleton-attendant-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+}
+
+// Skeleton Attendants List
+.skeleton-attendants-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+}
+
+// ============================================
+// RESPONSIVE DESIGN
+// ============================================
+
+@media (max-width: 767px) {
+    .skeleton-card {
+        padding: var(--spacing-md);
+    }
+
+    .skeleton-list-item {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .skeleton-attendant-item {
+        padding: var(--spacing-sm) var(--spacing-md);
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+
+    .skeleton-attendants-list {
+        padding: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .skeleton-card {
+        padding: var(--spacing-sm);
+        gap: var(--spacing-sm);
+    }
+
+    .skeleton-list-item {
+        padding: var(--spacing-sm);
+        gap: var(--spacing-sm);
+
+        .skeleton-list-item-content {
+            gap: 4px;
+        }
+    }
+
+    .skeleton-attendant-item {
+        padding: var(--spacing-sm);
+
+        .skeleton-attendant-info {
+            gap: 4px;
+        }
+    }
+}
+
+// ============================================
+// DARK MODE SUPPORT
+// ============================================
+
+@media (prefers-color-scheme: dark) {
+    .skeleton {
+        background: var(--color-gray-700);
+
+        &.skeleton-wave {
+            &::after {
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.1),
+                    transparent
+                );
+            }
+        }
+    }
+
+    .skeleton-card,
+    .skeleton-list-item,
+    .skeleton-attendant-item {
+        background: var(--color-bg-secondary);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .skeleton-attendant-item {
+        border-color: var(--color-border-dark);
+    }
+}
+
+// ============================================
+// ACCESSIBILITY
+// ============================================
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+    .skeleton {
+        animation: none !important;
+
+        &::after {
+            animation: none !important;
+            display: none;
+        }
+    }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+    .skeleton {
+        background: var(--color-gray-400);
+        border: 1px solid var(--color-border-dark);
+    }
+
+    .skeleton-card,
+    .skeleton-list-item,
+    .skeleton-attendant-item {
+        border: 2px solid var(--color-border-dark);
+    }
+}
+
+// ============================================
+// LOADING STATE HELPERS
+// ============================================
+
+// Fade-in animation for when content loads
+@keyframes skeleton-fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.skeleton-container {
+    position: relative;
+
+    &.skeleton-loaded {
+        .skeleton {
+            animation: skeleton-fade-out 0.3s ease-out forwards;
+        }
+    }
+}
+
+// Screen reader text
+.skeleton-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

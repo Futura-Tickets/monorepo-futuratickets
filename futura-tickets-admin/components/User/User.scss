@@ -1,0 +1,166 @@
+.root-container {
+    &.active {
+        .user-container {
+            .user-header {
+                width: calc(100% - 300px);
+            }
+        }
+    }
+}
+
+.user-container {
+    min-height: 100vh;
+    box-sizing: border-box;
+    background: #fdfdfd;
+    padding: 5rem 0rem 0rem 0rem;
+    .user-header {
+        position: fixed;
+        width: calc(100% - 80px);
+        z-index: 5;
+        top: 0;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e4e4e4;
+        background-color: white;
+        box-shadow: 0 0 8px #efefef;
+        box-sizing: border-box;
+        overflow: hidden;
+        h1 {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            .anticon {
+                margin: 0px 12px 0 0;
+            }
+            .copy-address {
+                margin: 0 0 0 15px;
+            }
+        }
+        .user-header-actions {
+            display: flex;
+            margin: 0 0 0 auto;
+            .user-header-action {
+                color: #999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 18px;
+                cursor: pointer;
+                width: 80px;
+                border-left: 1px solid #e4e4e4;
+                height: 80px;
+                box-sizing: border-box;
+                &:hover {
+                    color: #333;
+                }
+                &.active {
+                    background: #fcfcfc;
+                    color: #333;
+                    box-shadow: 0px 0px 4px #ebebeb inset;
+                }
+            }
+        }
+    }
+    .user-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        gap: 2.5rem;
+        margin: 2.5rem;
+        .user-stat {
+            display: flex;
+            flex-direction: column;
+            padding: 2.5rem;
+            justify-content: center;
+            font-size: 28px;
+            box-sizing: border-box;
+            font-weight: 700;
+            color: #333;
+            border: 1px solid #e4e4e4;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 0 8px #efefef;
+            span {
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: 12px;
+                margin: 0 0 3px 0;
+                display: flex;
+                justify-content: space-between;
+                .anticon {
+                    font-size: 17px;
+                }
+            }
+        }
+    }
+    .user-content {
+        .user-details-container {
+            display: grid;
+            grid-template-columns: auto 326px 326px;
+            margin: 2.5rem;
+            border: 1px solid #e4e4e4;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 0 8px #efefef;
+            .user-details {
+                box-sizing: border-box;
+                padding: 5rem 0rem 5rem 5rem;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                gap: 1.25rem;
+                .user-details-item {
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                    label {
+                        font-size: 12px;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                    }
+                    h5 {
+                        font-size: 16px;
+                        font-weight: 200;
+                        margin: 7px 0;
+                    }
+                }
+            }
+            .user-data {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .user-data-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    width: 100%;
+                    aspect-ratio: 1 / 1;
+                    border: 1px solid #e4e4e4;
+                    border-radius: 14px;
+                    box-sizing: border-box;
+                    position: relative;
+                    overflow: hidden;
+                    h5 {
+                        font-size: 24px;
+                        margin: 0 0 30px 0;
+                    }
+                    .label {
+                        position: absolute;
+                        bottom: 0;
+                        height: 3.5rem;
+                        background: #fcfcfc;
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #333;
+                        text-transform: uppercase;
+                        font-weight: 700;
+                        font-size: 13px;
+                        border-top: 1px solid #e4e4e4;
+                    }
+                }
+            }
+        }
+    }
+}

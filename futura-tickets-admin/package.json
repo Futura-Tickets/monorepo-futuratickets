@@ -1,0 +1,33 @@
+{
+  "name": "futura-tickets-admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.5.1",
+    "@hookform/resolvers": "^5.2.2",
+    "@react-oauth/google": "^0.12.1",
+    "@sentry/nextjs": "^10.20.0",
+    "antd": "^5.27.5",
+    "next": "15.0.3",
+    "rc-util": "^5.44.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-google-charts": "^5.2.1",
+    "react-hook-form": "^7.65.0",
+    "sass": "^1.80.6",
+    "socket.io-client": "^4.8.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}

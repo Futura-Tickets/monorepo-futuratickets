@@ -1,0 +1,14 @@
+.pie-chart-container {
+    width: 100%;
+    .pie-chart-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        font-size: 32px;
+        position: relative;
+        top: 0px;
+        z-index: 1;
+        overflow: hidden;
+    }
+}

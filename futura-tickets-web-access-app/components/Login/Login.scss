@@ -1,0 +1,366 @@
+.login-container {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: var(--color-bg-primary);
+
+    .login-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: var(--spacing-xl);
+
+        .ant-form-item-label > label {
+            font-weight: 800;
+            letter-spacing: 1px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-style: oblique;
+            color: var(--color-text-primary);
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 420px;
+            padding: var(--spacing-2xl);
+            background: var(--color-bg-primary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+
+            h1 {
+                letter-spacing: 1.5px;
+                font-size: 22px;
+                margin: 0 0 var(--spacing-2xl) 0;
+                text-align: center;
+                font-weight: 800;
+                text-transform: uppercase;
+                font-style: oblique;
+                color: var(--color-primary);
+                position: relative;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -12px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 60px;
+                    height: 3px;
+                    background: var(--color-primary);
+                    border-radius: var(--radius-sm);
+                }
+            }
+
+            .ant-form-item {
+                margin: var(--spacing-lg) 0 0 0;
+            }
+
+            .ant-input,
+            .ant-input-password {
+                height: 48px;
+                border-radius: var(--radius-md);
+                font-size: 15px;
+
+                &:focus,
+                &:hover {
+                    border-color: var(--color-primary);
+                }
+            }
+
+            .ant-checkbox-wrapper {
+                font-size: 14px;
+                color: var(--color-text-secondary);
+                user-select: none;
+
+                &:hover {
+                    color: var(--color-text-primary);
+                }
+
+                .ant-checkbox-inner {
+                    border-radius: var(--radius-sm);
+                }
+            }
+
+            .form-actions {
+                display: flex;
+                margin: var(--spacing-xl) 0 0 0;
+                justify-content: center;
+                flex-direction: row;
+
+                .login-btn {
+                    width: 100%;
+                    height: 50px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    text-align: center;
+                    box-shadow: var(--shadow-md);
+                    border-radius: var(--radius-md);
+                    letter-spacing: 1px;
+
+                    &:not(:disabled):hover {
+                        transform: translateY(-2px);
+                        box-shadow: var(--shadow-lg);
+                    }
+
+                    &:not(:disabled):active {
+                        transform: translateY(0);
+                    }
+                }
+            }
+        }
+    }
+
+    .login-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: var(--spacing-lg);
+        background: var(--color-bg-secondary);
+        border-top: 1px solid var(--color-border-light);
+
+        img {
+            height: 40px;
+            width: auto;
+            opacity: 0.8;
+            transition: opacity var(--transition-normal);
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+// ============================================
+// TABLET & MOBILE RESPONSIVE
+// ============================================
+
+@media (max-width: 1024px) {
+    .login-container {
+        .login-content {
+            padding: var(--spacing-xl) var(--spacing-lg);
+
+            .login-form {
+                padding: var(--spacing-xl) var(--spacing-lg);
+                box-shadow: var(--shadow-md);
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .login-container {
+        grid-template-rows: 1fr auto;
+        padding: 0;
+
+        .login-content {
+            padding: var(--spacing-lg);
+
+            .login-form {
+                width: 100%;
+                padding: var(--spacing-xl) var(--spacing-lg);
+                box-shadow: none;
+                border-radius: 0;
+
+                h1 {
+                    font-size: 20px;
+                    margin-bottom: var(--spacing-xl);
+                }
+
+                .ant-form-item-label > label {
+                    font-size: 10px;
+                }
+
+                .ant-input,
+                .ant-input-password {
+                    height: 46px;
+                    font-size: 16px; // Prevents zoom on iOS
+                }
+
+                .form-actions {
+                    margin-top: var(--spacing-lg);
+
+                    .login-btn {
+                        height: 48px;
+                        font-size: 15px;
+                    }
+                }
+            }
+        }
+
+        .login-image {
+            padding: var(--spacing-md);
+
+            img {
+                height: 32px;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        .login-content {
+            padding: var(--spacing-md);
+
+            .login-form {
+                padding: var(--spacing-lg) var(--spacing-md);
+
+                h1 {
+                    font-size: 18px;
+                    letter-spacing: 1px;
+                }
+
+                .ant-form-item {
+                    margin: var(--spacing-md) 0 0 0;
+                }
+
+                .ant-input,
+                .ant-input-password {
+                    height: 44px;
+                }
+
+                .ant-checkbox-wrapper {
+                    font-size: 13px;
+                }
+
+                .form-actions {
+                    .login-btn {
+                        height: 46px;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+
+        .login-image {
+            padding: var(--spacing-sm) var(--spacing-md);
+
+            img {
+                height: 28px;
+            }
+        }
+    }
+}
+
+// ============================================
+// LANDSCAPE MODE ON MOBILE
+// ============================================
+
+@media (max-width: 767px) and (orientation: landscape) {
+    .login-container {
+        grid-template-rows: 1fr;
+
+        .login-content {
+            padding: var(--spacing-md);
+
+            .login-form {
+                max-width: 500px;
+                padding: var(--spacing-md);
+
+                h1 {
+                    font-size: 16px;
+                    margin-bottom: var(--spacing-md);
+
+                    &::after {
+                        bottom: -8px;
+                    }
+                }
+
+                .ant-form-item {
+                    margin: var(--spacing-sm) 0 0 0;
+                }
+
+                .ant-input,
+                .ant-input-password {
+                    height: 40px;
+                }
+
+                .form-actions {
+                    margin-top: var(--spacing-md);
+
+                    .login-btn {
+                        height: 42px;
+                    }
+                }
+            }
+        }
+
+        .login-image {
+            display: none;
+        }
+    }
+}
+
+// ============================================
+// DARK MODE SUPPORT
+// ============================================
+
+@media (prefers-color-scheme: dark) {
+    .login-container {
+        background: var(--color-bg-primary);
+
+        .login-content {
+            .login-form {
+                background: var(--color-bg-secondary);
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+                h1 {
+                    color: var(--color-primary-light);
+                }
+
+                .ant-form-item-label > label {
+                    color: var(--color-text-primary);
+                }
+            }
+        }
+
+        .login-image {
+            background: var(--color-bg-secondary);
+            border-top-color: var(--color-border-light);
+
+            img {
+                filter: brightness(1.1);
+            }
+        }
+    }
+}
+
+// ============================================
+// ACCESSIBILITY IMPROVEMENTS
+// ============================================
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+    .login-container {
+        .login-content {
+            .login-form {
+                border: 2px solid var(--color-border-dark);
+
+                h1 {
+                    &::after {
+                        height: 4px;
+                    }
+                }
+
+                .ant-input,
+                .ant-input-password {
+                    border-width: 2px;
+                }
+            }
+        }
+    }
+}
+
+// Focus visible improvements
+.login-form {
+    .ant-input:focus-visible,
+    .ant-checkbox:focus-visible {
+        outline: 3px solid var(--color-primary);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(4, 155, 146, 0.2);
+    }
+}

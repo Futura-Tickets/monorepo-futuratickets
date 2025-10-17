@@ -1,0 +1,119 @@
+.requested-payment-item-container {
+  border-bottom: 1px solid #e4e4e4;
+
+  .requested-payment-item-content {
+    display: grid;
+    grid-template-columns: 0.9fr 0.9fr 1fr 1fr 1fr 32px;
+    padding: 16px 24px;
+    align-items: center;
+
+    .account, .amount, .status, .payment-method, .date {
+      display: flex;
+      align-items: center;
+      color: #333333;
+      font-size: 14px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    
+    .amount {
+      font-weight: 600;
+    }
+
+    .view {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      
+      .delete-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 36px;
+        width: 36px;
+        border: none;
+        background: transparent;
+        color: #049b92;
+        
+        &:hover {
+          background-color: #018a81;
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+}
+
+.delete-payment-request-modal {
+  text-align: center;
+  padding: 20px;
+  
+  .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    margin: 5px 0;
+    color: #333333;
+    font-size: 16px;
+  }
+  
+  .warning-text {
+    color: #049b92;
+    font-weight: 500;
+    margin: 15px 0 20px;
+  }
+  
+  .remove-payment-request-btn {
+    background-color: #049b92;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    font-style: oblique;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 250px;
+    text-transform: uppercase;
+    
+    &:disabled {
+      background-color: #d9d9d9;
+      cursor: not-allowed;
+    }
+    
+    &:not(:disabled):hover {
+      background-color: #018a81;
+    }
+  }
+}
+
+.status-badge {
+  color: #fff;
+  border-radius: 4px;
+  padding: 5px 9px;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  
+  &.pending {
+    background-color: #999999;
+    border: 1px solid #8d8d8d;
+  }
+  
+  &.approved {
+    background-color: #049b92;
+    border: 1px solid #018a81;
+  }
+  
+  &.rejected {
+    background-color: #fe5456;
+    border: 1px solid #ff3e40;
+  }
+}

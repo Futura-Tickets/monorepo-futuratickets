@@ -1,0 +1,66 @@
+.resale-item-container {
+    .resale-item-content {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        padding: 0 20px;
+        height: 80px;
+        font-size: 16px;
+        border: 1px solid #e4e4e4;
+        border-radius: 20px;
+        .qr-code {
+            width: 75px;
+            display: flex;
+            align-items: center;
+            img {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+        .token-id {
+            width: 75px;
+        }
+        .client {
+            width: 250px;
+        }
+        .email {
+            width: 250px;
+        }
+        .type {
+            width: 150px;
+        }
+        .price {
+            width: 150px;
+        }
+        .status {
+            width: 170px;
+            span {
+                display: flex;
+                justify-content: center;
+                width: 100px;
+            }
+            .sale {
+                background-color: #006f94;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #016587;
+            }
+        }
+        .information {
+            width: 240px;
+        }
+        .created {
+            width: 180px;
+        }
+        .view {
+            margin: 0 0 0 auto;
+            .view-details {
+                width: 135px;
+            }
+        }
+    }
+}

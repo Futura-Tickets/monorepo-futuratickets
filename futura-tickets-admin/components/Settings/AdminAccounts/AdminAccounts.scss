@@ -1,0 +1,118 @@
+.admin-accounts-container {
+    width: 100%;
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 0 8px #efefef;
+    .admin-accounts-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 5rem;
+        padding: 0 25px;
+        h1 {
+            .anticon {
+                margin: 0px 12px 0 0;
+            }
+        }
+        .add-account-btn {      
+            color: white;
+            background: #282A2F;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 600;
+            border: 0px;
+            &:hover {
+                color: #efefef;
+            }
+        }
+    }
+    .admin-accounts-content {
+        .admin-accounts-content-header {
+            display: flex;
+            padding: 0 25px;
+            height: 5rem;
+            align-items: center;
+            border-top: 1px solid #e4e4e4;
+            border-bottom: 1px solid #e4e4e4;
+            div {
+                text-transform: uppercase;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: 1px;
+            }
+            .admin-accounts-name {
+                width: 250px;
+            }
+            .admin-accounts-address {
+                width: 250px;
+            }
+            .admin-accounts-role {
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+.admin-account-container {
+    border-bottom: 1px solid #e4e4e4;
+    &:last-child {
+        border-bottom: 0px;
+    }
+    .admin-account-content {
+        display: flex;
+        align-items: center;
+        padding: 0 25px;
+        height: 80px;
+        font-size: 14px;
+        .admin-accounts-name {
+            width: 250px;
+        }
+        .admin-accounts-address {
+            width: 250px;
+            .anticon {
+                cursor: pointer;
+                margin: 0 0 0 5px;
+            }
+        }
+        .admin-accounts-role {
+            font-size: 14px;
+            .role {
+                border-radius: 4px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: bold;
+                box-sizing: border-box;
+            }
+        }
+        .admin-accounts-action {
+            margin: 0 0 0 auto;
+            span {
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.admin-account-remove-modal-container {
+    .admin-account-remove-modal-content {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        min-height: 340px;
+        h2 {
+            margin: 0 0px 30px 0px;
+        }
+        p {
+            font-size: 16px;
+            margin: 0;
+            width: 80%;
+            text-align: center;
+        }
+        .season-remove-modal-action {
+            margin: 30px 0 0 0;
+        }
+    }
+}

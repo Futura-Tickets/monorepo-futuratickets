@@ -1,0 +1,124 @@
+.user-sale-item-container {
+    &:last-child {
+        .event-sale-item-content {
+            border-bottom: 1px solid #e4e4e4;
+        }
+    }
+    .user-sale-item-content {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        padding: 0 2rem;
+        height: 80px;
+        font-size: 14px;
+        border-bottom: 1px solid #e4e4e4;
+        .details {
+            width: 75px;
+        }
+        .event {
+            width: 250px;
+        }
+        .qr-code {
+            width: 75px;
+            display: flex;
+            align-items: center;
+            img {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+        .token-id {
+            width: 75px;
+        }
+        .type {
+            width: 120px;
+        }
+        .price {
+            width: 120px;
+        }
+        .status {
+            width: 170px;
+            span {
+                display: flex;
+                justify-content: center;
+                width: 100px;
+            }
+            .pending {
+                background-color: #999999;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #8d8d8d;
+            }
+            .minted {
+                background-color: #049b92;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #018a81;
+            }
+            .sale {
+                background-color: #006f94;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #016587;
+            }
+            .sold {
+                background-color: #333333;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #000000;
+            }
+            .transfered {
+                background-color: #333333;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #000000;
+            }
+            .processing {
+                background-color: #999;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #8d8d8d;
+            }
+            .closed {
+                background-color: #fe5456;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 9px;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: 1px;
+                border: 1px solid #ff3e40;
+            }
+        }
+        .created {
+            width: 180px;
+        }
+        .view {
+            margin: 0 0 0 auto;
+        }
+    }
+}

@@ -1,0 +1,18 @@
+.line-chart-container {
+    border: 1px solid #e4e4e4;
+    margin: 2.5rem;
+    background: white;
+    border-radius: 8px;
+    .line-chart-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 326px;
+        font-size: 32px;
+        padding: 0 2rem;
+        position: relative;
+        top: 0px;
+        z-index: 1;
+        overflow: hidden;
+    }
+}

@@ -1,0 +1,625 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/accounts/login": {
+      "post": {
+        "description": "Authenticate access control personnel with email and password. Returns account data with JWT token and assigned event details.",
+        "operationId": "AccountController_accessLogin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful. Returns account data with JWT token and event assignment."
+          },
+          "401": {
+            "description": "Invalid credentials or not an ACCESS role user."
+          }
+        },
+        "summary": "Access personnel login",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/accounts/validate": {
+      "post": {
+        "description": "Verify if a JWT token is valid and not expired. Returns decoded token payload if valid.",
+        "operationId": "AccountController_validate",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token is valid. Returns decoded payload."
+          }
+        },
+        "summary": "Validate JWT token",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/events/attendants/{event}": {
+      "get": {
+        "operationId": "EventController_getAttendantsEvent",
+        "parameters": [
+          {
+            "name": "event",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/access": {
+      "patch": {
+        "operationId": "EventController_checkAccessEvent",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateAccessDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/promocodes/{eventId}": {
+      "get": {
+        "operationId": "EventController_getPromocodesByEvent",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/promocodes/create": {
+      "post": {
+        "operationId": "EventController_createPromocode",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/events/promocodes/{eventId}/{code}": {
+      "delete": {
+        "operationId": "EventController_deletePromocodeByCode",
+        "parameters": [
+          {
+            "name": "eventId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Event"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "HealthCheckController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "HealthCheck"
+        ]
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "HealthCheckController_checkReadiness",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {},
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": [
+                          "status"
+                        ],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "HealthCheck"
+        ]
+      }
+    },
+    "/health/info": {
+      "get": {
+        "operationId": "HealthCheckController_getSystemInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "HealthCheck"
+        ]
+      }
+    },
+    "/notifications": {
+      "get": {
+        "operationId": "NotificationsController_getNotifications",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/{id}": {
+      "get": {
+        "operationId": "NotificationsController_getNotification",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "patch": {
+        "operationId": "NotificationsController_updateNotificationStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "delete": {
+        "operationId": "NotificationsController_deleteNotification",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/{id}/read": {
+      "patch": {
+        "operationId": "NotificationsController_markAsRead",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/read": {
+      "patch": {
+        "operationId": "NotificationsController_markAllAsRead",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/notifications/user/{userId}/unread/count": {
+      "get": {
+        "operationId": "NotificationsController_countUnreadNotifications",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "FuturaTickets Access Control API",
+    "description": "\n## FuturaTickets Access Control API Documentation\n\nThis API manages ticket validation, access control, and check-in operations for events.\n\n### Getting Started\n\n1. **Authentication**: Endpoints require JWT Bearer token for ACCESS role users.\n2. **Authorization**: Click the \"Authorize\" button above and enter your Bearer token.\n3. **Roles**:\n   - ACCESS: Venue access control personnel\n   - PROMOTER: Event organizers\n   - ADMIN: System administrators\n\n### API Features\n\n- **Ticket Validation**: Scan and validate QR codes\n- **Check-in Management**: Track attendee entry\n- **Access Control**: Grant or deny venue access\n- **Real-time Notifications**: WebSocket updates for live monitoring\n- **Attendee Lists**: View all attendees for an event\n- **Promo Codes**: Manage promotional codes and invitations\n- **Access Logs**: Complete audit trail of all access attempts\n\n### Access Validation Flow\n\n1. ACCESS personnel scans ticket QR code\n2. System validates ticket status (OPEN, CLOSED, EXPIRED, etc.)\n3. System checks event assignment matches personnel\n4. Access granted or denied based on validation\n5. Ticket status updated (OPEN → CLOSED)\n6. Real-time notification sent to promoter\n7. Access history logged\n\n### Ticket Statuses\n\n- **OPEN**: Valid ticket, ready for check-in\n- **CLOSED**: Already used (check-in completed)\n- **SALE**: Ticket listed for resale\n- **EXPIRED**: Event date passed\n- **TRANSFERED**: Ownership transferred\n\n### Rate Limits\n\n| Endpoint Type | Requests per Minute |\n|--------------|---------------------|\n| Authentication | 10 |\n| Validation | 200 |\n| Read Operations | 100 |\n\n### Error Codes\n\n| Code | Description |\n|------|-------------|\n| 400 | Bad Request - Invalid input |\n| 401 | Unauthorized - Missing or invalid token |\n| 403 | Forbidden - Insufficient permissions |\n| 404 | Not Found - Resource doesn't exist |\n| 429 | Too Many Requests - Rate limit exceeded |\n| 500 | Internal Server Error |\n  ",
+    "version": "1.0.0",
+    "contact": {
+      "name": "FuturaTickets Support",
+      "url": "https://futuratickets.com/support",
+      "email": "support@futuratickets.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "termsOfService": "https://futuratickets.com/terms"
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Login and token validation for access personnel"
+    },
+    {
+      "name": "Access Control",
+      "description": "Ticket validation and check-in operations"
+    },
+    {
+      "name": "Events",
+      "description": "Event information and attendee management"
+    },
+    {
+      "name": "Promo Codes",
+      "description": "Promotional code management"
+    },
+    {
+      "name": "Accounts",
+      "description": "Access personnel account management"
+    },
+    {
+      "name": "Notifications",
+      "description": "Real-time access notifications"
+    },
+    {
+      "name": "Health",
+      "description": "Health check endpoints"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3005",
+      "description": "Local Development"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "JWT-auth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "name": "JWT",
+        "description": "Enter your JWT token obtained from the login endpoint",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Access personnel email address",
+            "example": "access@futuratickets.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Access personnel password",
+            "example": "SecurePassword123",
+            "minLength": 6
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "ValidateTokenDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "JWT token to validate",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "ValidateAccessDto": {
+        "type": "object",
+        "properties": {
+          "sale": {
+            "type": "string",
+            "description": "Sale ID (ticket ID) to validate",
+            "example": "507f1f77bcf86cd799439011"
+          }
+        },
+        "required": [
+          "sale"
+        ]
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "API Changelog",
+    "url": "https://docs.futuratickets.com/changelog"
+  }
+}
