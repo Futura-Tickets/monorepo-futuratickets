@@ -12,12 +12,24 @@
 
 ## 📚 Documentación Principal
 
-| Documento | Descripción |
-|-----------|-------------|
-| **[ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)** | Arquitectura completa del ecosistema (16 repositorios) |
-| **[PLAN_DE_SPRINTS.md](./PLAN_DE_SPRINTS.md)** | Plan de desarrollo (14 sprints, 28 semanas) |
-| **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** | Guía completa de configuración y deployment |
-| **[DEPLOYMENT_COMPLETE.md](./DEPLOYMENT_COMPLETE.md)** | Documentación operacional y troubleshooting |
+### 🚀 Para Empezar
+
+| Documento | Descripción | Prioridad |
+|-----------|-------------|-----------|
+| **⚡ [QUICK_START.md](./QUICK_START.md)** | **Inicio rápido en 5 minutos** | 🔴 START HERE |
+| **[CONTRIBUTING.md](./CONTRIBUTING.md)** | **Guía completa de contribución** | 🔴 Essential |
+| **[DEV_REFERENCE.md](./DEV_REFERENCE.md)** | **Tarjeta de referencia rápida** | 🟡 Daily Use |
+
+### 📖 Arquitectura & Setup
+
+| Documento | Descripción | Prioridad |
+|-----------|-------------|-----------|
+| **[ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)** | Arquitectura completa del ecosistema | 🟢 Reference |
+| **[DEV_SETUP.md](./DEV_SETUP.md)** | Guía completa de desarrollo local | 🟢 Reference |
+| **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** | Configuración y deployment | 🟢 Reference |
+| **[DEPLOYMENT_COMPLETE.md](./DEPLOYMENT_COMPLETE.md)** | Documentación operacional | 🟢 Reference |
+| **[SECURITY.md](./SECURITY.md)** | Vulnerabilidades y remediation plan | 🟡 Security |
+| **[PLAN_DE_SPRINTS.md](./PLAN_DE_SPRINTS.md)** | Plan de desarrollo (14 sprints) | 🔵 Planning |
 
 ---
 
@@ -38,7 +50,7 @@ Promotores ───────────► tickets-admin ──────
                         (Next.js 15)               (NestJS 10)
                                                         │
 Personal ACCESS ───────► access-app ─────────────► access-api
-                        (Expo 52)                  (NestJS 11)
+                        (Expo 52)                  (NestJS 10)
                                                         │
                                                         ▼
                                                    MongoDB Atlas
@@ -78,9 +90,9 @@ Personal ACCESS ───────► access-app ─────────�
 
 | Repositorio | Propósito | Tech Stack | Puerto | Estado |
 |-------------|-----------|------------|--------|--------|
-| **futura-tickets-admin-api** | CRUD eventos, Analytics, CronJobs | NestJS 10 + MongoDB + Stripe | 3000 | ✅ Activo |
-| **futura-market-place-api** | Pagos, Órdenes, Emails | NestJS 10 + MongoDB + Stripe | 3000 | ✅ Activo |
-| **futura-access-api** | Validación tickets, Check-in | NestJS 11 + MongoDB + WebSocket | 3000 | ✅ Activo |
+| **futura-tickets-admin-api** | CRUD eventos, Analytics, CronJobs | NestJS 10 + MongoDB + Stripe | 3002 | ✅ Activo |
+| **futura-market-place-api** | Pagos, Órdenes, Emails | NestJS 10 + MongoDB + Stripe | 3004 | ✅ Activo |
+| **futura-access-api** | Validación tickets, Check-in | NestJS 10 + MongoDB + WebSocket | 3005 | ✅ Activo |
 | **futura-tickets-rest-api** | API REST genérica | NestJS + MongoDB | 3000 | ⚠️ Verificar uso |
 
 ### Blockchain (Solidity)
@@ -99,6 +111,36 @@ Personal ACCESS ───────► access-app ─────────�
 ---
 
 ## 🚀 Quick Start
+
+### Para Desarrolladores (5 minutos)
+
+```bash
+# 1. Usar Node version correcta
+nvm use  # Node 22.17.0
+
+# 2. Instalar dependencias
+make install  # o: npm install --legacy-peer-deps
+
+# 3. (Opcional) Activar git hooks
+make setup:hooks
+
+# 4. Configurar environment
+cp .env.example .env
+# Editar .env con tus credenciales
+
+# 5. Iniciar todo
+make dev-all  # o: ./start-all-dev.sh
+
+# 6. Verificar que funciona
+make health-check
+```
+
+**📖 Guías completas:**
+- [QUICK_START.md](./QUICK_START.md) - Inicio detallado
+- [CONTRIBUTING.md](./CONTRIBUTING.md) - Workflow completo
+- [DEV_REFERENCE.md](./DEV_REFERENCE.md) - Referencia rápida
+
+---
 
 ### Git Workflow & Branching
 
@@ -135,7 +177,10 @@ Este proyecto usa una estrategia de branching profesional con soporte para Git W
 git clone https://github.com/futuratickets/FuturaTickets_Full_Repo.git
 cd FuturaTickets_Full_Repo
 
-# 2. Instalar dependencias de un proyecto específico
+# 2. Instalar dependencias con workspaces
+npm run bootstrap
+
+# (opcional) Instalar solo un proyecto
 cd futura-market-place-v2
 npm install
 
@@ -204,7 +249,8 @@ Ver [SETUP_GUIDE.md](./SETUP_GUIDE.md) para instrucciones detalladas de configur
 - **Stripe Elements** - Payment UI
 
 ### Backend
-- **NestJS 10/11** - Node.js framework enterprise-grade
+- **Node.js 22.17.0** - Runtime (version controlada con .nvmrc)
+- **NestJS 10** - Node.js framework enterprise-grade (v10 standardized across all APIs)
 - **MongoDB + Mongoose** - Base de datos NoSQL
 - **Stripe API** - Procesamiento de pagos
 - **Bull + Redis** - Job queues
@@ -217,17 +263,25 @@ Ver [SETUP_GUIDE.md](./SETUP_GUIDE.md) para instrucciones detalladas de configur
 - **OpenZeppelin** - Contract libraries (ERC-721)
 - **ethers.js / viem** - Ethereum libraries
 
-### DevOps & Monitoring
+### DevOps & CI/CD
 - **Docker** - Containerización
 - **Kubernetes** - Orchestration (K8s 1.28+)
-- **GitHub Actions** - CI/CD automation
+- **GitHub Actions** - CI/CD automation (Node 22.17.0, lint, test, build, security audit)
+- **Makefile** - Developer experience automation (30+ comandos)
+- **Git Hooks** - Pre-commit validation (secrets, linting, file size)
+- **npm workspaces** - Monorepo dependency management
+
+### Monitoring & Observability
 - **Prometheus** - Metrics collection
 - **Grafana** - Metrics visualization
 - **AlertManager** - Alert routing
 - **Sentry** - Error tracking
 - **MongoDB Atlas** - Base de datos en cloud
+
+### Infrastructure
 - **Azure Blob Storage** - Almacenamiento de imágenes
 - **Azure Web PubSub** - WebSocket escalable
+- **Redis** - Caching y job queues
 
 ---
 
@@ -351,31 +405,103 @@ Ver [PLAN_DE_SPRINTS.md](./PLAN_DE_SPRINTS.md) completo.
 
 ---
 
+## ⚙️ Decisiones Técnicas Importantes
+
+### NestJS v10 Standardization (2025-10-17)
+
+**Decisión:** Todas las backend APIs usan **NestJS v10** para consistencia en el monorepo.
+
+**Contexto:**
+- Monorepo npm workspaces con hoisting de dependencias
+- Admin API y Marketplace API ya en v10
+- Access API originalmente en v11 causaba conflictos de tipos TypeScript
+
+**Problema identificado:**
+```
+Error TS2322: Type 'DynamicModule' from '@nestjs/common@9.4.3' (root hoisted)
+is not assignable to type 'DynamicModule' from '@nestjs/common@11.x' (Access API local)
+```
+
+**Solución aplicada:**
+- Downgrade Access API: v11 → v10
+- Eliminación de `@nestjs/config` extraneous del root
+- Configuración `.npmrc` con `legacy-peer-deps=true`
+- Resultado: 0 errores de compilación, 3/3 APIs funcionando
+
+**Beneficios:**
+- ✅ Compatibilidad de tipos en todo el monorepo
+- ✅ No más conflictos de hoisting
+- ✅ Instalaciones más rápidas (peer deps ya resueltos)
+- ✅ Fácil migración futura a v11 (sincronizada)
+
+**Documentación completa:** Ver `BACKEND_APIs_STATUS.md`
+
+**Scripts de desarrollo:**
+```bash
+# Iniciar todas las APIs
+./start-all-backends.sh
+
+# Verificar estado
+./healthcheck-backends.sh
+```
+
+---
+
 ## 🤝 Contribuir
 
-Por favor lee [CONTRIBUTING.md](./CONTRIBUTING.md) para detalles sobre nuestro código de conducta y el proceso para enviar pull requests.
+**📖 Lee primero:** [CONTRIBUTING.md](./CONTRIBUTING.md) - Guía completa de contribución
 
-### Workflow de Contribución
+### Workflow Rápido
 
-1. Fork el proyecto
-2. Crea tu feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'feat: Add some AmazingFeature'`)
-4. Push al branch (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+```bash
+# 1. Crear feature branch
+git checkout dev
+git pull origin dev
+git checkout -b feature/nombre-descriptivo
+
+# 2. Desarrollar
+make dev-all
+# ... código ...
+
+# 3. Verificar calidad
+make lint-fix
+make test
+make health-check
+
+# 4. Commit (Conventional Commits)
+git commit -m "feat: descripción clara del cambio"
+
+# 5. Push y crear PR
+git push origin feature/nombre-descriptivo
+gh pr create
+```
 
 ### Convenciones de Commits
 
 Usamos [Conventional Commits](https://www.conventionalcommits.org/):
 
-```
+```bash
 feat: nueva funcionalidad
 fix: corrección de bug
 docs: cambios en documentación
-style: formateo, punto y coma faltante, etc.
 refactor: refactorización de código
 test: agregar tests
 chore: actualizar dependencias, etc.
+perf: mejoras de performance
+ci: cambios en CI/CD
 ```
+
+### Comandos Útiles
+
+| Comando | Descripción |
+|---------|-------------|
+| `make help` | Ver todos los comandos disponibles |
+| `make lint-fix` | Auto-corregir errores de linting |
+| `make test` | Ejecutar tests |
+| `make security-audit` | Auditar vulnerabilidades |
+| `npm run setup:hooks` | Instalar git hooks |
+
+**Cheat sheet:** [DEV_REFERENCE.md](./DEV_REFERENCE.md)
 
 ---
 
@@ -424,6 +550,6 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ---
 
-**Última actualización:** 2025-10-16
+**Última actualización:** 2025-10-17
 
-**Versión:** 2.0.0 - Production Ready
+**Versión:** 2.1.0 - Developer Experience & CI/CD Improvements

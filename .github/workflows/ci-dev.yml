@@ -7,7 +7,7 @@ on:
     branches: [dev]
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '22.17.0'
 
 jobs:
   lint-admin-api:

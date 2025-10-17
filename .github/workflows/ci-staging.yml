@@ -7,7 +7,7 @@ on:
     branches: [staging]
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '22.17.0'
 
 jobs:
   lint-and-build:
