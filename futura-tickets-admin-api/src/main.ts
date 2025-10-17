@@ -54,9 +54,25 @@ async function bootstrap() {
     : [
         'http://localhost:3000',
         'http://localhost:3001',
-        'http://localhost:3002',
         'http://localhost:3003',
+        'http://localhost:3006',
       ];
+
+  // Production CORS warning
+  if (process.env.NODE_ENV === 'production' && !process.env.CORS_ORIGINS) {
+    logger.error(
+      '⚠️  SECURITY WARNING: CORS_ORIGINS not configured in production!',
+      'Bootstrap',
+    );
+    logger.error(
+      '⚠️  Set CORS_ORIGINS environment variable with allowed production origins.',
+      'Bootstrap',
+    );
+    logger.error(
+      '⚠️  Example: CORS_ORIGINS=https://admin.futuratickets.com,https://futuratickets.com',
+      'Bootstrap',
+    );
+  }
 
   app.enableCors({
     origin: corsOrigins,
@@ -64,6 +80,8 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'stripe-signature'],
   });
+
+  logger.log(`🔒 CORS enabled for origins: ${corsOrigins.join(', ')}`, 'Bootstrap');
 
   // Enable global validation with class-validator
   app.useGlobalPipes(
