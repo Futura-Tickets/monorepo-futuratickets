@@ -12,6 +12,8 @@
     "paths": {
       "src/*": ["src/*"]
     },
+    "rootDir": ".",
+    "moduleResolution": "node",
     "incremental": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
