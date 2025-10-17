@@ -44,6 +44,11 @@
   },
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "src-hexagonal/**/*"
   ]
 }
+// Note: src-hexagonal excluded temporarily due to path mapping issues
+// The hexagonal architecture refactoring uses absolute imports that require
+// additional build tooling (tsconfig-paths) to work properly in NestJS
+// Re-enable when refactoring is complete or build system is updated

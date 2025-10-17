@@ -1603,85 +1603,6 @@
         ]
       }
     },
-    "/api/sales/{id}": {
-      "get": {
-        "operationId": "SalesController_getSale",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Sales"
-        ]
-      }
-    },
-    "/api/sales/{id}/resale": {
-      "patch": {
-        "operationId": "SalesController_putForResale",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PutForResaleDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Sales"
-        ]
-      }
-    },
-    "/api/sales/{id}/validate": {
-      "post": {
-        "operationId": "SalesController_validateEntry",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Sales"
-        ]
-      }
-    },
     "/": {
       "get": {
         "operationId": "AppController_getHello",
@@ -1901,10 +1822,6 @@
           "email",
           "password"
         ]
-      },
-      "PutForResaleDto": {
-        "type": "object",
-        "properties": {}
       }
     }
   },
