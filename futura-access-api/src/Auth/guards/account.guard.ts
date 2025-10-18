@@ -49,9 +49,8 @@ export class AccountGuard implements CanActivate {
       }
 
       // Wrap other errors in UnauthorizedException
-      throw new UnauthorizedException(
-        error.message || 'Invalid or expired token',
-      );
+      const errorMessage = error instanceof Error ? error.message : 'Invalid or expired token';
+      throw new UnauthorizedException(errorMessage);
     }
   }
 }
