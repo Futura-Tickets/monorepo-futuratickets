@@ -143,7 +143,7 @@ export default function WishlistPage() {
                     {event.ticketLots && event.ticketLots.length > 0 && (
                       <div className="flex items-center justify-between">
                         <span className="text-lg font-bold text-futura-teal">
-                          From €{event.ticketLots[0].price}
+                          From EUR{event.ticketLots[0].price}
                         </span>
                         <Button
                           size="sm"

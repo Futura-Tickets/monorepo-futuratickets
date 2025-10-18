@@ -187,8 +187,9 @@ export class AccountService {
       // EMIT NEW USER
       const newAccount = await this.createAccount(createAccount);
 
+      // SECURITY FIX: Send secure password setup email (no plaintext password)
       // Temporarily using direct email send instead of queue
-      await this.mailService.sendAccountConfirmation(newAccount, password);
+      await this.mailService.sendAccountConfirmation(newAccount);
 
       return newAccount;
     } catch (error) {

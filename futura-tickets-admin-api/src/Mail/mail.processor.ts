@@ -38,7 +38,7 @@ export class NewAccountMailProcessor {
 
   @Process({ concurrency: 10 })
   async transcode(job: Job<{ newAcccount: Account; password: string }>, done: any): Promise<void> {
-    await this.mailService.sendAccountConfirmation(job.data.newAcccount, job.data.password);
+    await this.mailService.sendAccountConfirmation(job.data.newAcccount);
     done(null);
   }
 

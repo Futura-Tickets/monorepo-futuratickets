@@ -184,3 +184,9 @@ get-pip.py
 
 # Development process IDs
 .dev-pids
+
+# E2E Testing
+playwright-report/
+test-results/
+*.trace.zip
+k8s/alertmanager/webhook-secret.yaml

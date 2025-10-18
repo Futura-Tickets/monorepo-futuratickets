@@ -27,8 +27,7 @@ export class HttpLoggerInterceptor implements NestInterceptor {
       next
         .handle()
         // @ts-expect-error - RxJS Observable type from different package location
-        .pipe(
-          tap({
+        .pipe(tap({
             next: () => {
               const duration = Date.now() - startTime;
               const { statusCode } = response;

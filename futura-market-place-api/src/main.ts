@@ -1,3 +1,10 @@
+// New Relic APM - MUST be first import!
+// Only load in production or when explicitly enabled
+if (process.env.NODE_ENV === 'production' || process.env.ENABLE_NEW_RELIC === 'true') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('newrelic');
+}
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';

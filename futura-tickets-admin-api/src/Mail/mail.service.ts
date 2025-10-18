@@ -1391,7 +1391,13 @@ export class MailService {
       });
   }
 
-  public async sendAccountConfirmation(accountConfirmation: Account, password: string): Promise<void> {
+  /**
+   * SECURITY FIX: Sends account confirmation email with secure password setup link
+   * Previously sent plaintext password in email (CRITICAL vulnerability)
+   * Now generates a secure token for password setup with 24-hour expiration
+   */
+  public async sendAccountConfirmation(accountConfirmation: Account): Promise<void> {
+    // Generate account access token
     const registerToken = await this.authService.registerToken({
       account: accountConfirmation._id,
       name: accountConfirmation.name,
@@ -1402,25 +1408,132 @@ export class MailService {
       address: accountConfirmation.address,
     });
 
+    // Generate password setup token with 24-hour expiration
+    const setupPasswordToken = await this.authService.registerToken({
+      account: accountConfirmation._id,
+      email: accountConfirmation.email,
+      type: 'password-setup',
+      expiresIn: '24h'
+    });
+
+    const setupPasswordUrl = `${this.marketPlaceUrl}/set-password?token=${setupPasswordToken}`;
+
     const template = `
-        <html>
+        <!doctype html>
+        <html lang="en">
             <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width,initial-scale=1">
-                <meta name="x-apple-disable-message-reformatting">
-                <title></title>
-                <style>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <title>Futura Tickets - Account Confirmation</title>
+                <style media="all" type="text/css">
+                    body {
+                        margin: 0;
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                            'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                            sans-serif;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        color: #000;
+                        background-color: #f6f8fc;
+                    }
+                    .main {
+                        max-width: 600px;
+                        width: 100%;
+                        margin: 0 auto;
+                        background-color: white;
+                    }
+                    .content {
+                        padding: 50px;
+                    }
+                    h1 {
+                        font-size: 24px;
+                        margin: 0 0 20px 0;
+                        font-family: Arial, sans-serif;
+                        color: #333;
+                    }
+                    p {
+                        margin: 0 0 15px 0;
+                        font-size: 16px;
+                        line-height: 24px;
+                        font-family: Arial, sans-serif;
+                        color: #555;
+                    }
+                    .info-box {
+                        background: #f8f8f8;
+                        padding: 20px;
+                        border-radius: 4px;
+                        margin: 20px 0;
+                    }
+                    .btn {
+                        display: inline-block;
+                        text-transform: uppercase;
+                        font-style: oblique;
+                        text-align: center;
+                        font-size: 18px;
+                        background: #00948a;
+                        border-radius: 8px;
+                        padding: 15px 30px;
+                        font-weight: 600;
+                        text-decoration: none;
+                        color: white !important;
+                        margin: 20px 0;
+                    }
+                    .warning {
+                        background: #fff3cd;
+                        border-left: 4px solid #ffc107;
+                        padding: 15px;
+                        margin: 20px 0;
+                        font-size: 14px;
+                    }
+                    .footer {
+                        padding: 30px 50px;
+                        background-color: #00948a;
+                        color: white;
+                        text-align: center;
+                    }
                 </style>
             </head>
             <body>
-                <h1 style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;">Account Confirmation</h1>
-                <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">
-                    <ul>
-                        <li>User: ${accountConfirmation.email}</li>
-                        <li>Password: ${password}</li>
-                    </ul>
-                </p>
-                <a href="${this.marketPlaceUrl}/account?token=${registerToken}" class="check-tickets-btn" target="_blank">Check Account</a>
+                <table class="main">
+                    <tr>
+                        <td class="content">
+                            <h1>Welcome to Futura Tickets!</h1>
+                            <p>Your account has been successfully created.</p>
+
+                            <div class="info-box">
+                                <strong>Account Email:</strong> ${accountConfirmation.email}
+                            </div>
+
+                            <p>To complete your account setup, please set your password by clicking the button below:</p>
+
+                            <div style="text-align: center;">
+                                <a href="${setupPasswordUrl}" class="btn" target="_blank">Set My Password</a>
+                            </div>
+
+                            <div class="warning">
+                                <strong>⏰ Important:</strong> This password setup link will expire in 24 hours.
+                                If it expires, you can request a new one from the login page.
+                            </div>
+
+                            <p style="font-size: 14px; color: #777;">
+                                If you didn't create an account with Futura Tickets, please ignore this email.
+                            </p>
+
+                            <hr style="border: 0; border-top: 1px solid #ddd; margin: 30px 0;">
+
+                            <p style="font-size: 14px; color: #777;">
+                                Or copy and paste this link into your browser:<br>
+                                <a href="${setupPasswordUrl}" style="color: #00948a; word-break: break-all;">${setupPasswordUrl}</a>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="footer">
+                            <p style="margin: 0; color: white;">Need help?</p>
+                            <p style="margin: 5px 0 0; color: white;">support@futuratickets.com</p>
+                        </td>
+                    </tr>
+                </table>
             </body>
         </html>`;
 
@@ -1428,14 +1541,14 @@ export class MailService {
       .sendMail({
         to: accountConfirmation.email,
         from: 'Futura Tickets <noreply@futuratickets.com>', // sender address
-        subject: `Futura Tickets - Account Confirmation`, // Subject line
+        subject: `Futura Tickets - Complete Your Account Setup`, // Subject line
         html: template, // HTML body content
       })
       .then(() => {
-        console.log('Account confirmation sent!');
+        console.log('Account confirmation email sent with password setup link!');
       })
       .catch((err) => {
-        console.log(err);
+        console.log('Error sending account confirmation email:', err);
         console.log('error!');
       });
   }
@@ -1486,7 +1599,23 @@ export class MailService {
       });
   }
 
+  /**
+   * SECURITY FIX: Send account verification email with proper marketplace URL
+   * Previously had hardcoded localhost URL (HIGH-priority security issue)
+   * Now uses environment-configured marketplace URL with verification token
+   */
   public async verifyAccount(account: Account): Promise<void> {
+    // Generate verification token
+    const verificationToken = await this.authService.registerToken({
+      account: account._id,
+      name: account.name,
+      lastName: account.lastName,
+      promoter: account.promoter,
+      role: account.role,
+      email: account.email,
+      address: account.address,
+    });
+
     const template = `
       <html>
         <head>
@@ -1502,7 +1631,7 @@ export class MailService {
           <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">
             Click on the link to verify your account.
           </p>
-          <a href="http://localhost:3002/" style="font-size: 18px;">Verify account</a>
+          <a href="${this.marketPlaceUrl}/verify-account?token=${verificationToken}" style="font-size: 18px;">Verify account</a>
         </body>
       </html>`;
 

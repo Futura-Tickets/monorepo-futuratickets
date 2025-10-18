@@ -28,7 +28,8 @@
   "devDependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
-    "@playwright/test": "^1.56.0"
+    "@playwright/test": "^1.56.0",
+    "migrate-mongo": "^12.1.3"
   },
   "scripts": {
     "bootstrap": "npm install --workspaces --if-present",
@@ -50,6 +51,19 @@
     "test": "npm run test --workspaces --if-present",
     "test:cov": "npm run test:cov --workspaces --if-present",
     "test:watch": "npm run test:watch --workspaces --if-present",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:marketplace": "playwright test e2e/marketplace",
+    "test:e2e:admin": "playwright test e2e/admin",
+    "test:e2e:access": "playwright test e2e/access",
+    "migrate:status": "migrate-mongo status",
+    "migrate:up": "migrate-mongo up",
+    "migrate:down": "migrate-mongo down",
+    "migrate:create": "migrate-mongo create",
+    "migrate:list": "migrate-mongo status",
     "clean": "rm -rf node_modules package-lock.json && npm run clean --workspaces --if-present",
     "clean:install": "npm run clean && npm install --legacy-peer-deps",
     "security:audit": "npm audit --audit-level=moderate",

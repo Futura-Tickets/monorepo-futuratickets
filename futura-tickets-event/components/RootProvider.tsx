@@ -17,8 +17,8 @@ import Footer from './shared/Footer/Footer';
 const RootProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <GlobalStateProvider>
-      <GoogleOAuthProvider clientId="15290406881-f57qpfo1qu9sc9or1osn5dtq74ir25gs.apps.googleusercontent.com">
-        <Suspense>  
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
+        <Suspense>
           <FuturaTickets>
             <Header/>
               {children}

@@ -1,0 +1,192 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    name: E2E Tests - ${{ matrix.project }}
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.17.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci --legacy-peer-deps
+          npx playwright install --with-deps ${{ matrix.project }}
+
+      - name: Setup MongoDB
+        uses: supercharge/mongodb-github-action@1.10.0
+        with:
+          mongodb-version: '6.0'
+
+      - name: Create .env files for testing
+        run: |
+          # Admin API
+          cat > futura-tickets-admin-api/.env << EOF
+          MONGO_URL=mongodb://localhost:27017/futura-tickets-test
+          JWT_SECRET=test-secret-key-for-ci
+          JWT_EXPIRES_IN=7d
+          STRIPE_SECRET_KEY=${{ secrets.STRIPE_TEST_SECRET_KEY }}
+          STRIPE_PUBLIC_KEY=${{ secrets.STRIPE_TEST_PUBLIC_KEY }}
+          STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_TEST_WEBHOOK_SECRET }}
+          CORS_ORIGIN=http://localhost:3000,http://localhost:3001
+          EOF
+
+          # Marketplace API
+          cat > futura-market-place-api/.env << EOF
+          MONGO_URL=mongodb://localhost:27017/futura-marketplace-test
+          JWT_SECRET=test-secret-key-for-ci
+          STRIPE_SECRET_KEY=${{ secrets.STRIPE_TEST_SECRET_KEY }}
+          EOF
+
+          # Access API
+          cat > futura-access-api/.env << EOF
+          MONGO_URL=mongodb://localhost:27017/futura-access-test
+          JWT_SECRET=test-secret-key-for-ci
+          EOF
+
+          # Frontend env vars
+          cat > futura-market-place-v2/.env.local << EOF
+          NEXT_PUBLIC_API_URL=http://localhost:3004
+          NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.STRIPE_TEST_PUBLIC_KEY }}
+          EOF
+
+          cat > futura-tickets-admin/.env.local << EOF
+          NEXT_PUBLIC_API_URL=http://localhost:3002
+          EOF
+
+      - name: Build all services
+        run: npm run build
+        continue-on-error: true
+
+      - name: Start services in background
+        run: |
+          # Start backend APIs
+          npm run dev:admin-api &
+          npm run dev:marketplace-api &
+          npm run dev:access-api &
+
+          # Start frontend apps
+          npm run dev:admin-web &
+          npm run dev:marketplace-web &
+
+          # Wait for services to be ready
+          sleep 30
+
+      - name: Health check services
+        run: |
+          # Check if services are responding
+          curl --retry 10 --retry-delay 5 --retry-all-errors http://localhost:3002/health || echo "Admin API not ready"
+          curl --retry 10 --retry-delay 5 --retry-all-errors http://localhost:3004/health || echo "Marketplace API not ready"
+          curl --retry 10 --retry-delay 5 --retry-all-errors http://localhost:3005/health || echo "Access API not ready"
+          curl --retry 10 --retry-delay 5 --retry-all-errors http://localhost:3000 || echo "Marketplace Web not ready"
+          curl --retry 10 --retry-delay 5 --retry-all-errors http://localhost:3001 || echo "Admin Web not ready"
+
+      - name: Run E2E tests
+        run: npm run test:e2e -- --project=${{ matrix.project }}
+        env:
+          PLAYWRIGHT_BASE_URL: http://localhost:3000
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+      - name: Upload trace on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-trace-${{ matrix.project }}
+          path: test-results/**/*-retry*/trace.zip
+          retention-days: 7
+
+  e2e-report:
+    name: Generate E2E Report
+    needs: e2e-tests
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.17.0'
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-results
+
+      - name: Install Playwright
+        run: npm install -D @playwright/test@1.56.0
+
+      - name: Merge reports
+        run: |
+          npx playwright merge-reports ./all-results/playwright-results-* \
+            --reporter html,json \
+            --output merged-report
+
+      - name: Upload merged report
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-merged-report
+          path: merged-report/
+          retention-days: 30
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const resultsPath = 'merged-report/results.json';
+
+            if (fs.existsSync(resultsPath)) {
+              const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+              const { stats } = results;
+
+              const comment = `## E2E Test Results
+
+              - **Total**: ${stats.total}
+              - **Passed**: ✅ ${stats.passed}
+              - **Failed**: ❌ ${stats.failed}
+              - **Skipped**: ⏭️ ${stats.skipped}
+              - **Duration**: ⏱️ ${(stats.duration / 1000).toFixed(2)}s
+
+              [View full report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+              `;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }

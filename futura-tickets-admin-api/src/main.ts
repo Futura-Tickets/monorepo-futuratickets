@@ -1,3 +1,15 @@
+// New Relic APM - MUST be first import!
+// Only load in production or when explicitly enabled
+if (process.env.NODE_ENV === 'production' || process.env.ENABLE_NEW_RELIC === 'true') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('newrelic');
+}
+
+// Sentry Error Tracking - TEMPORARILY DISABLED due to API breaking changes in v10.20.0
+// TODO: Migrate to new Sentry API when time permits
+// import { initializeSentry } from './config/sentry.config';
+// initializeSentry();
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -14,6 +26,10 @@ import { validateEnv } from './config/env.validation';
 // LOGGER
 import { LoggerService } from './Logger/logger.service';
 import { HttpLoggerInterceptor } from './Logger/http-logger.interceptor';
+
+// FILTERS
+// TEMPORARILY DISABLED: Sentry has breaking changes in v10.20.0
+// import { SentryExceptionFilter } from './common/filters/sentry-exception.filter';
 
 async function bootstrap() {
   // Validate environment variables before starting the app
@@ -38,6 +54,10 @@ async function bootstrap() {
   // Setup HTTP logging interceptor
   // @ts-expect-error - RxJS type mismatch in monorepo structure
   app.useGlobalInterceptors(new HttpLoggerInterceptor(logger));
+
+  // Setup global exception filter (Sentry integration)
+  // TEMPORARILY DISABLED: Sentry breaking changes in v10.20.0
+  // app.useGlobalFilters(new SentryExceptionFilter());
 
   // CORS Configuration
   // Reads allowed origins from environment variable CORS_ORIGINS
