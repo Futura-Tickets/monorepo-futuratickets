@@ -36,6 +36,7 @@ async function bootstrap() {
   logger.log('🚀 Application starting...', 'Bootstrap');
 
   // Setup HTTP logging interceptor
+  // @ts-expect-error - RxJS type mismatch in monorepo structure
   app.useGlobalInterceptors(new HttpLoggerInterceptor(logger));
 
   // CORS Configuration

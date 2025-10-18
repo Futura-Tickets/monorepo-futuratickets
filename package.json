@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "@nestjs/common": "^10.0.0",
-    "@nestjs/testing": "^10.0.0"
+    "@nestjs/testing": "^10.0.0",
+    "@playwright/test": "^1.56.0"
   },
   "scripts": {
     "bootstrap": "npm install --workspaces --if-present",

@@ -6,6 +6,7 @@ import { StorageService } from './storage.service';
 export class StorageFileInterceptor implements NestInterceptor {
   constructor(private readonly storageService: StorageService) {}
 
+  // @ts-expect-error - RxJS version mismatch in monorepo (local vs root node_modules)
   async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
     const file = request.file;
@@ -29,7 +30,7 @@ export class StorageFileInterceptor implements NestInterceptor {
       request.fileName = filename;
 
       // Type assertion to handle RxJS version mismatch in monorepo
-      return next.handle() as Observable<any>;
+      return next.handle() as unknown as Observable<any>;
     } catch (error) {
       throw new BadRequestException(`File upload failed: ${error.message}`);
     }
