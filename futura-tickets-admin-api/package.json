@@ -118,7 +118,7 @@
         }
       }]
     },
-    "setupFilesAfterEnv": ["<rootDir>/../test/setup.ts"],
+    "setupFiles": ["<rootDir>/../test/setup.ts"],
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!**/*.interface.ts",
