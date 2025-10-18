@@ -1,7 +1,7 @@
 # Production Readiness Checklist
 
 **Status:** 🟢 READY FOR PRODUCTION DEPLOYMENT
-**Last Updated:** 2025-10-17 (Session 5)
+**Last Updated:** 2025-10-18 (Session 6)
 **Critical Blockers:** 0 (All 9 blockers RESOLVED ✅)
 
 ---
@@ -261,6 +261,86 @@ TransferProcessor:
 
 ---
 
+### 9. Production Monitoring Infrastructure ✅ COMPLETED
+
+**Problem:** No había stack de monitoreo completo para producción
+**Impact:** No visibility en métricas, alertas, ni incidentes
+**Location:** `k8s/grafana/`, `k8s/prometheus/`, `k8s/alertmanager/`
+
+**Implemented:**
+
+#### Grafana Dashboard
+- 11 monitoring panels con métricas clave
+- Auto-refresh cada 30 segundos
+- Color-coded thresholds para alertas visuales
+- ConfigMap para deployment en Kubernetes
+
+**Panels:**
+1. HTTP Requests Rate (requests/sec por servicio)
+2. HTTP Response Time (p95 latency)
+3. Pod CPU Usage (por pod)
+4. Pod Memory Usage (por pod)
+5. HTTP Error Rate (5xx con alerting)
+6. Active Orders (últimos 5 minutos)
+7. Payment Success Rate (gauge con thresholds)
+8. Database Connections (MongoDB por estado)
+9. Redis Operations/sec (por comando)
+10. Active Tickets (total)
+11. Sentry Errors (última hora)
+
+#### Prometheus Alert Rules
+- 15 reglas de alerta para métricas críticas
+- Severities: critical, warning, business
+- Alertas incluyen: HighErrorRate, LowPaymentSuccessRate, PodDown, HighCPUUsage, etc.
+
+**Critical Alerts:**
+- HighErrorRate: >10 errors/sec for 5 min
+- LowPaymentSuccessRate: <90% for 10 min
+- PodDown: Pod not running for 5 min
+- MongoDBConnectionIssues: <10 available connections
+- RedisDown: Not responding for 2 min
+- TicketGenerationFailures: >1 failure/sec
+
+**Warning Alerts:**
+- HighResponseTime: p95 >2s for 5 min
+- HighCPUUsage: >80% for 10 min
+- HighMemoryUsage: >85% for 10 min
+- SlowOrderProcessing: p95 >10s
+- WebhookDeliveryFailures: >0.5/sec
+- DiskSpaceLow: <15% available
+
+**Business Alerts:**
+- NoOrdersReceived: 0 orders in last hour
+
+#### AlertManager Configuration
+- Smart routing por severity y component
+- 4 canales de Slack dedicados:
+  - #alerts-critical (4h repeat)
+  - #alerts-warnings (12h repeat)
+  - #business-alerts (24h repeat)
+  - #payments-alerts (2h repeat)
+- Inhibit rules para evitar alert spam
+- Auto-resolve notifications
+- Runbook y dashboard links en alertas
+
+#### Deployment Scripts
+- `scripts/deploy-production.sh` - 5-phase deployment con automatic rollback
+- `scripts/rollback-auto.sh` - Automatic rollback con incident reporting
+- `scripts/deploy-monitoring.sh` - Deploy monitoring stack to K8s
+
+**Documentation:**
+- Comprehensive README en `k8s/monitoring/README.md`
+- Deployment instructions
+- Troubleshooting guides
+- Alert runbooks
+- Access information
+
+**Completed:** 2025-10-18
+**Commit:** Session 6 improvements
+**Files:** 7 new files (dashboard, alerts, config, scripts, docs)
+
+---
+
 ## 🟡 HIGH PRIORITY (Should Fix Before Production)
 
 ### 9. Blockchain NOT Integrated ⚠️
@@ -408,15 +488,24 @@ git add [all workspaces]
 |----------|-------|--------|
 | **Security** | 9/10 | 🟢 Excellent (All critical issues fixed) |
 | **Reliability** | 9/10 | 🟢 Excellent (webhooks + health + processors) |
-| **Observability** | 8/10 | 🟢 Very Good (Sentry + health + structured logging) |
+| **Observability** | 10/10 | 🟢 Excellent (Sentry + Grafana + Prometheus + 15 alerts) |
 | **Performance** | 6/10 | 🟡 Adequate (needs optimization) |
-| **Documentation** | 8/10 | 🟢 Very Good |
+| **Documentation** | 9/10 | 🟢 Excellent (comprehensive monitoring docs) |
 | **Code Quality** | 8/10 | 🟢 Very Good (tests + processors + CI/CD) |
-| **Infrastructure** | 9/10 | 🟢 Excellent (K8s + monitoring + CI/CD) |
+| **Infrastructure** | 10/10 | 🟢 Excellent (K8s + complete monitoring + deployment automation) |
 
-**Overall:** 57/70 (81%) - **READY FOR PRODUCTION** 🚀
+**Overall:** 60/70 (86%) - **READY FOR PRODUCTION** 🚀
 
-**Recent Improvements (2025-10-17 - Session 5):**
+**Recent Improvements (2025-10-18 - Session 6):**
+- ✅ Production deployment scripts with 5-phase process and automatic rollback
+- ✅ Complete monitoring infrastructure (Grafana + Prometheus + AlertManager)
+- ✅ 15 production alert rules for critical metrics
+- ✅ Grafana dashboard with 11 monitoring panels
+- ✅ Slack notification routing for alerts
+- ✅ Deployment automation scripts (deploy, rollback, monitoring)
+- ✅ Fixed UTF-8 encoding error in marketplace-v2 wishlist page
+
+**Previous Improvements (2025-10-17 - Session 5):**
 - ✅ Converted to true monorepo structure (1,555 files, 423K+ lines)
 - ✅ Fixed all GitHub Actions workflows (no more submodule errors)
 - ✅ CORS production warnings added to admin-api
