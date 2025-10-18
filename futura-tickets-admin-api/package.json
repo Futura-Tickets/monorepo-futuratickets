@@ -118,6 +118,9 @@
         }
       }]
     },
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    },
     "setupFiles": ["<rootDir>/../jest.setup.ts"],
     "collectCoverageFrom": [
       "**/*.(t|j)s",
