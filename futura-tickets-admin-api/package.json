@@ -119,7 +119,9 @@
       }]
     },
     "moduleNameMapper": {
-      "^src/(.*)$": "<rootDir>/$1"
+      "^src/(.*)$": "<rootDir>/$1",
+      "^rxjs/operators$": "<rootDir>/../node_modules/rxjs/dist/cjs/operators/index.js",
+      "^rxjs$": "<rootDir>/../node_modules/rxjs/dist/cjs/index.js"
     },
     "setupFiles": ["<rootDir>/../jest.setup.ts"],
     "collectCoverageFrom": [
