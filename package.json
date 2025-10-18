@@ -21,6 +21,9 @@
     "futura-tickets-web-access-app",
     "integrations-scripts"
   ],
+  "devDependencies": {
+    "reflect-metadata": "^0.2.2"
+  },
   "scripts": {
     "bootstrap": "npm install --workspaces --if-present",
     "install:all": "npm install --legacy-peer-deps",
