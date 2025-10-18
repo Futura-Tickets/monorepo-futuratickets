@@ -144,8 +144,8 @@ export class TicketSoldMailProcessor {
   ) {}
 
   @Process({ concurrency: 10 })
-  async transcode(job: Job<{ createdTicket: CreatedTicket; account: Account }>, done: any): Promise<void> {
-    await this.mailService.sendTicketSoldConfirmation(job.data.createdTicket, job.data.account);
+  async transcode(job: Job<{ createdTicket: CreatedTicket; price?: number }>, done: any): Promise<void> {
+    await this.mailService.sendTicketSoldConfirmation(job.data.createdTicket, job.data.price);
     done(null);
   };
 
