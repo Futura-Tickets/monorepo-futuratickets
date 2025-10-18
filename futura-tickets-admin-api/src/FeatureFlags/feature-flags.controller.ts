@@ -1,21 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  HttpCode,
-  HttpStatus,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import {
-  FeatureFlagsService,
-  CreateFeatureFlagDto,
-  UpdateFeatureFlagDto,
-} from './feature-flags.service';
+import { FeatureFlagsService, CreateFeatureFlagDto, UpdateFeatureFlagDto } from './feature-flags.service';
 import { FeatureFlag } from './feature-flag.schema';
 
 /**
@@ -69,10 +54,7 @@ export class FeatureFlagsController {
   @ApiOperation({ summary: 'Update feature flag' })
   @ApiResponse({ status: 200, description: 'Feature flag updated successfully' })
   @ApiResponse({ status: 404, description: 'Feature flag not found' })
-  async update(
-    @Param('key') key: string,
-    @Body() dto: UpdateFeatureFlagDto,
-  ): Promise<FeatureFlag> {
+  async update(@Param('key') key: string, @Body() dto: UpdateFeatureFlagDto): Promise<FeatureFlag> {
     return this.featureFlagsService.update(key, dto);
   }
 

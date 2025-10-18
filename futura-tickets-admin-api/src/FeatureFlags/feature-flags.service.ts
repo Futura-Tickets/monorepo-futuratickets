@@ -88,9 +88,7 @@ export class FeatureFlagsService {
       }
 
       // Update evaluation stats (async, non-blocking)
-      this.updateEvaluationStats(key).catch((err) =>
-        this.logger.error(`Failed to update stats for ${key}:`, err),
-      );
+      this.updateEvaluationStats(key).catch((err) => this.logger.error(`Failed to update stats for ${key}:`, err));
 
       return true;
     } catch (error) {
@@ -102,10 +100,7 @@ export class FeatureFlagsService {
   /**
    * Evaluate targeting rules
    */
-  private evaluateTargeting(
-    rules: any[],
-    context: FeatureFlagContext,
-  ): boolean {
+  private evaluateTargeting(rules: any[], context: FeatureFlagContext): boolean {
     for (const rule of rules) {
       switch (rule.type) {
         case 'user':
@@ -190,15 +185,8 @@ export class FeatureFlagsService {
   /**
    * Update feature flag
    */
-  async update(
-    key: string,
-    dto: UpdateFeatureFlagDto,
-  ): Promise<FeatureFlag> {
-    const flag = await this.featureFlagModel.findOneAndUpdate(
-      { key },
-      { $set: dto },
-      { new: true },
-    );
+  async update(key: string, dto: UpdateFeatureFlagDto): Promise<FeatureFlag> {
+    const flag = await this.featureFlagModel.findOneAndUpdate({ key }, { $set: dto }, { new: true });
 
     if (!flag) {
       throw new NotFoundException(`Feature flag not found: ${key}`);
@@ -337,8 +325,6 @@ export class FeatureFlagsService {
       this.invalidateCache(flag.key);
     }
 
-    this.logger.log(
-      `Scheduled flags processed: ${flagsToEnable.length} enabled, ${flagsToDisable.length} disabled`,
-    );
+    this.logger.log(`Scheduled flags processed: ${flagsToEnable.length} enabled, ${flagsToDisable.length} disabled`);
   }
 }

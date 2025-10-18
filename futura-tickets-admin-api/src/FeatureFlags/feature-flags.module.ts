@@ -6,11 +6,7 @@ import { FeatureFlagsController } from './feature-flags.controller';
 import { FeatureFlagGuard } from './feature-flag.guard';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: FeatureFlag.name, schema: FeatureFlagSchema },
-    ]),
-  ],
+  imports: [MongooseModule.forFeature([{ name: FeatureFlag.name, schema: FeatureFlagSchema }])],
   controllers: [FeatureFlagsController],
   providers: [FeatureFlagsService, FeatureFlagGuard],
   exports: [FeatureFlagsService], // Export for use in other modules

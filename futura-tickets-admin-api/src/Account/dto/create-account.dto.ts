@@ -3,7 +3,17 @@
  * Validation for account creation
  */
 
-import { IsEmail, IsString, IsOptional, MinLength, MaxLength, Matches, IsEnum, IsBoolean } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  IsOptional,
+  MinLength,
+  MaxLength,
+  Matches,
+  IsEnum,
+  IsBoolean,
+  IsStrongPassword,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum AccountRole {
@@ -22,12 +32,24 @@ export class CreateAccountDto {
   email: string;
 
   @ApiProperty({
-    description: 'Account password (min 6 characters)',
-    example: 'SecurePass123',
-    minLength: 6,
+    description: 'Account password (min 12 characters, must include uppercase, lowercase, number, and symbol)',
+    example: 'SecurePass123!',
+    minLength: 12,
   })
   @IsString({ message: 'La contraseña debe ser una cadena de texto' })
-  @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
+  @MinLength(12, { message: 'La contraseña debe tener al menos 12 caracteres' })
+  @IsStrongPassword(
+    {
+      minLength: 12,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    },
+    {
+      message: 'La contraseña debe tener al menos 12 caracteres e incluir: mayúsculas, minúsculas, números y símbolos',
+    },
+  )
   password: string;
 
   @ApiProperty({

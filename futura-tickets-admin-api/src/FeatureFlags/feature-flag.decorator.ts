@@ -21,10 +21,7 @@ import { FeatureFlagGuard, FEATURE_FLAG_KEY } from './feature-flag.guard';
  * export class BetaFeaturesController { ... }
  */
 export const FeatureFlag = (flagKey: string) => {
-  return applyDecorators(
-    SetMetadata(FEATURE_FLAG_KEY, flagKey),
-    UseGuards(FeatureFlagGuard),
-  );
+  return applyDecorators(SetMetadata(FEATURE_FLAG_KEY, flagKey), UseGuards(FeatureFlagGuard));
 };
 
 /**

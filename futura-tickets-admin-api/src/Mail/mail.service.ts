@@ -1413,7 +1413,7 @@ export class MailService {
       account: accountConfirmation._id,
       email: accountConfirmation.email,
       type: 'password-setup',
-      expiresIn: '24h'
+      expiresIn: '24h',
     });
 
     const setupPasswordUrl = `${this.marketPlaceUrl}/set-password?token=${setupPasswordToken}`;

@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 
 // SERVICES
 import { AuthService } from '../services/auth.service';
@@ -19,9 +14,7 @@ export class AccountGuard implements CanActivate {
       // Extract and validate authorization header
       const authHeader = request.headers.authorization;
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new UnauthorizedException(
-          'Missing or invalid authorization header',
-        );
+        throw new UnauthorizedException('Missing or invalid authorization header');
       }
 
       const token = authHeader.slice(7);
@@ -49,9 +42,7 @@ export class AccountGuard implements CanActivate {
       }
 
       // Wrap other errors in UnauthorizedException
-      throw new UnauthorizedException(
-        error.message || 'Invalid or expired token',
-      );
+      throw new UnauthorizedException(error.message || 'Invalid or expired token');
     }
   }
 }
