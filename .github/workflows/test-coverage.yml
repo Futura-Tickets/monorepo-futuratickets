@@ -42,10 +42,8 @@ jobs:
         with:
           node-version: '22.17.0'
           cache: 'npm'
-          cache-dependency-path: futura-tickets-admin-api/package-lock.json
 
       - name: Install dependencies
-        working-directory: ./futura-tickets-admin-api
         run: npm ci
 
       - name: Run tests with coverage
@@ -100,10 +98,8 @@ jobs:
         with:
           node-version: '22.17.0'
           cache: 'npm'
-          cache-dependency-path: futura-market-place-api/package-lock.json
 
       - name: Install dependencies
-        working-directory: ./futura-market-place-api
         run: npm ci
 
       - name: Run tests with coverage
@@ -149,10 +145,8 @@ jobs:
         with:
           node-version: '22.17.0'
           cache: 'npm'
-          cache-dependency-path: futura-access-api/package-lock.json
 
       - name: Install dependencies
-        working-directory: ./futura-access-api
         run: npm ci
 
       - name: Run tests with coverage
