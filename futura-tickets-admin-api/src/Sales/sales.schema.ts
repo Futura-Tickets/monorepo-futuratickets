@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 
 // INTERFACES
 import { Resale, SaleHistory, BlockchainInfo } from './sales.interface';
-import { TicketStatus } from 'src/shared/interface';
+import { TicketStatus } from '../shared/interface';
 
 @Schema({
   timestamps: true,

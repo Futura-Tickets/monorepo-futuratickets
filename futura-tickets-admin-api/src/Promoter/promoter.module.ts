@@ -14,8 +14,8 @@ import {
 } from './promoter.schema';
 
 // MODULES
-import { AccountModule } from 'src/Account/account.module';
-import { AuthModule } from 'src/Auth/auth.module';
+import { AccountModule } from '../Account/account.module';
+import { AuthModule } from '../Auth/auth.module';
 
 // SERVICES
 import { PromoterService } from './promoter.service';

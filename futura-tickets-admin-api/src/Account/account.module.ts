@@ -10,9 +10,9 @@ import { AccountController } from './account.controller';
 import { Account, AccountSchema } from './account.schema';
 
 // MODULES
-import { AuthModule } from 'src/Auth/auth.module';
-import { MailModule } from 'src/Mail/mail.module';
-import { ProviderModule } from 'src/Provider/provider.module';
+import { AuthModule } from '../Auth/auth.module';
+import { MailModule } from '../Mail/mail.module';
+import { ProviderModule } from '../Provider/provider.module';
 
 // SERVICES
 import {

@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 
 // MODULES
-import { EventModule } from 'src/Event/event.module';
-import { SalesModule } from 'src/Sales/sales.module';
+import { EventModule } from '../Event/event.module';
+import { SalesModule } from '../Sales/sales.module';
 
 // SERVICES
 import { CronJobsService } from './cron-jobs.service';

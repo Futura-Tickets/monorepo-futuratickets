@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 
 // SERVICE
-import { PromoterService } from 'src/Promoter/promoter.service';
+import { PromoterService } from '../Promoter/promoter.service';
 
 // INTERFACES
 import { PromoterMsg } from './qrcode.interface';

@@ -28,18 +28,18 @@ import { UserEventController } from './user-event.controller';
 
 // MODULES
 import { AbstractionModule } from '../Abstraction/abstraction.module'; // Using stub module
-import { AccountModule } from 'src/Account/account.module';
-import { AuthModule } from 'src/Auth/auth.module';
-import { MailModule } from 'src/Mail/mail.module';
-import { OrdersModule } from 'src/Orders/orders.module';
-import { PromoterModule } from 'src/Promoter/promoter.module';
-import { ProviderModule } from 'src/Provider/provider.module';
-import { NotificationsModule } from 'src/Notifications/notifications.module';
-import { SalesModule } from 'src/Sales/sales.module';
-import { SocketModule } from 'src/Socket/socket.module';
-import { StripeModule } from 'src/Stripe/stripe.module';
-import { WalletModule } from 'src/Wallet/wallet.module';
-// import { BlockchainModule } from 'src/Blockchain/blockchain.module'; // Temporarily disabled
+import { AccountModule } from '../Account/account.module';
+import { AuthModule } from '../Auth/auth.module';
+import { MailModule } from '../Mail/mail.module';
+import { OrdersModule } from '../Orders/orders.module';
+import { PromoterModule } from '../Promoter/promoter.module';
+import { ProviderModule } from '../Provider/provider.module';
+import { NotificationsModule } from '../Notifications/notifications.module';
+import { SalesModule } from '../Sales/sales.module';
+import { SocketModule } from '../Socket/socket.module';
+import { StripeModule } from '../Stripe/stripe.module';
+import { WalletModule } from '../Wallet/wallet.module';
+// import { BlockchainModule } from '../Blockchain/blockchain.module'; // Temporarily disabled
 
 // QUEUES
 // Processors temporarily disabled - Bull/Redis not available

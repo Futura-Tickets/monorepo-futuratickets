@@ -1,14 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 
 // DECORATORS
-import { Auth } from 'src/Auth/auth.decorator';
+import { Auth } from '../Auth/auth.decorator';
 
 // SERVICES
 import { OrdersService } from './orders.service';
-import { UserPipeService } from 'src/Account/account.service';
+import { UserPipeService } from '../Account/account.service';
 
 // INTERFACES
-import { Account } from 'src/Account/account.interface';
+import { Account } from '../Account/account.interface';
 import { Order } from './orders.interface';
 
 @Controller('orders')

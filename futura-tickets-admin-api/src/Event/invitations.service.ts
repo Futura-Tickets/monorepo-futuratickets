@@ -15,7 +15,7 @@ import {
 } from './event.schema';
 
 // INTERFACES
-import { Coupon, Promocode } from 'src/shared/interface';
+import { Coupon, Promocode } from '../shared/interface';
 
 @Injectable()
 export class InvitationsService {

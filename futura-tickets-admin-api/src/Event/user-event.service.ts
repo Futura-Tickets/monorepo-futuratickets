@@ -26,18 +26,18 @@ import {
   AbstractionService,
   FuturaAccountClient,
 } from '../Abstraction/abstraction.service';
-import { AccountService } from 'src/Account/account.service';
-import { OrdersService } from 'src/Orders/orders.service';
-import { MailService } from 'src/Mail/mail.service';
-import { NotificationService } from 'src/Notifications/notifications.service';
-import { PromoterService } from 'src/Promoter/promoter.service';
-import { ProviderService } from 'src/Provider/provider.service';
-import { SalesService } from 'src/Sales/sales.service';
-import { SocketService } from 'src/Socket/socket.service';
-import { StripeService } from 'src/Stripe/stripe.service';
+import { AccountService } from '../Account/account.service';
+import { OrdersService } from '../Orders/orders.service';
+import { MailService } from '../Mail/mail.service';
+import { NotificationService } from '../Notifications/notifications.service';
+import { PromoterService } from '../Promoter/promoter.service';
+import { ProviderService } from '../Provider/provider.service';
+import { SalesService } from '../Sales/sales.service';
+import { SocketService } from '../Socket/socket.service';
+import { StripeService } from '../Stripe/stripe.service';
 
 // INTERFACES
-import { Account } from 'src/Account/account.interface';
+import { Account } from '../Account/account.interface';
 import {
   Event,
   EventStatus,
@@ -49,14 +49,14 @@ import {
   TransferToUpdate,
   UpdateEvent,
 } from '../shared/interface';
-import { TransferFromEmail, TransferToEmail } from 'src/Mail/mail.interface';
-import { CreateOrder, Item, OrderStatus } from 'src/Orders/orders.interface';
+import { TransferFromEmail, TransferToEmail } from '../Mail/mail.interface';
+import { CreateOrder, Item, OrderStatus } from '../Orders/orders.interface';
 import {
   CreateSale,
   Sale,
   SaleHistory,
   TransferAccount,
-} from 'src/Sales/sales.interface';
+} from '../Sales/sales.interface';
 
 @Injectable()
 export class UserEventService {

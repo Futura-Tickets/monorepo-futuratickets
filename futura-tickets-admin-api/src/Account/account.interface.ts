@@ -1,4 +1,4 @@
-import { Event } from 'src/shared/interface';
+import { Event } from '../shared/interface';
 
 export enum Roles {
   ACCESS = 'ACCESS',

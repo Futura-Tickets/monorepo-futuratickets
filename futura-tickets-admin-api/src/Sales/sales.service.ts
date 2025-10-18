@@ -17,12 +17,12 @@ import {
   AbstractionService,
   FuturaAccountClient,
 } from '../Abstraction/abstraction.service'; // Temporarily using stub
-import { ProviderService } from 'src/Provider/provider.service';
+import { ProviderService } from '../Provider/provider.service';
 
 // INTERFACES
-import { Account } from 'src/Account/account.interface';
+import { Account } from '../Account/account.interface';
 import { CreateSale, Sale, SaleHistory, UpdateSale } from './sales.interface';
-import { TicketStatus } from 'src/shared/interface';
+import { TicketStatus } from '../shared/interface';
 
 // ABI
 import * as EventAbi from '../abis/Event.json';

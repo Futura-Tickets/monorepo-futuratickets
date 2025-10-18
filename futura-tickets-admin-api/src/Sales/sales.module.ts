@@ -10,11 +10,11 @@ import { SalesController } from './sales.controller';
 
 // MODULES
 import { AbstractionModule } from '../Abstraction/abstraction.module'; // Using stub module
-import { AccountModule } from 'src/Account/account.module';
-import { AuthModule } from 'src/Auth/auth.module';
-import { MailModule } from 'src/Mail/mail.module';
-import { ProviderModule } from 'src/Provider/provider.module';
-import { QrCodeModule } from 'src/QrCode/qrcode.module';
+import { AccountModule } from '../Account/account.module';
+import { AuthModule } from '../Auth/auth.module';
+import { MailModule } from '../Mail/mail.module';
+import { ProviderModule } from '../Provider/provider.module';
+import { QrCodeModule } from '../QrCode/qrcode.module';
 
 // SERVICES
 import { SalesService } from './sales.service';

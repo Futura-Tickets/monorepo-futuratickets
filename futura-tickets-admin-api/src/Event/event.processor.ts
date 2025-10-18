@@ -11,13 +11,13 @@ import { AdminEventService } from './admin-event.service';
 import { UserEventService } from './user-event.service';
 
 // INTERFACES
-import { EmitOrder } from 'src/Sales/sales.interface';
+import { EmitOrder } from '../Sales/sales.interface';
 import {
   ConfirmTransferTicket,
   MintTicket,
   TransferResaleTicket,
   TransferTicket,
-} from 'src/shared/interface';
+} from '../shared/interface';
 
 @Processor('create-order')
 export class CreateTicketProcessor {

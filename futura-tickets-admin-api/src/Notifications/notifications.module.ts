@@ -9,11 +9,11 @@ import { NotificationsController } from './notifications.controller';
 import { Notification, NotificationSchema } from './notifications.schema';
 
 // MODULES
-import { AuthModule } from 'src/Auth/auth.module';
+import { AuthModule } from '../Auth/auth.module';
 
 // SERVICES
 import { NotificationService } from './notifications.service';
-import { AccountModule } from 'src/Account/account.module';
+import { AccountModule } from '../Account/account.module';
 
 @Module({
   imports: [

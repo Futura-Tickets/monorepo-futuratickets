@@ -16,8 +16,8 @@ import {
 import { AccountSchema } from '../Account/account.schema';
 
 // MODULES
-import { AuthModule } from 'src/Auth/auth.module';
-import { AccountModule } from 'src/Account/account.module';
+import { AuthModule } from '../Auth/auth.module';
+import { AccountModule } from '../Account/account.module';
 
 // SERVICES
 import { PaymentsService } from './payments.service';

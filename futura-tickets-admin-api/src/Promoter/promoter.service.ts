@@ -16,10 +16,10 @@ import {
 } from './promoter.schema';
 
 // SERVICES
-import { AuthService } from 'src/Auth/services/auth.service';
+import { AuthService } from '../Auth/services/auth.service';
 
 // INTERFACES
-import { Account, PromoterClient } from 'src/Account/account.interface';
+import { Account, PromoterClient } from '../Account/account.interface';
 import { APISettings, CreatePromoter, Promoter } from './promoter.interface';
 
 @Injectable()

@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 
 // MODULES
-import { AuthModule } from 'src/Auth/auth.module';
+import { AuthModule } from '../Auth/auth.module';
 
 // SERVICES
 import { MailService } from './mail.service';

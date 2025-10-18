@@ -2,14 +2,14 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 
 // SERVICES
 import { PaymentsService } from './payments.service';
-import { PromoterPipeService } from 'src/Account/account.service';
+import { PromoterPipeService } from '../Account/account.service';
 
 // INTERFACES
-import { Account } from 'src/Account/account.interface';
+import { Account } from '../Account/account.interface';
 import { CreatePayment, Payment } from './payments.interface';
 
 // DECORATORS
-import { Auth } from 'src/Auth/auth.decorator';
+import { Auth } from '../Auth/auth.decorator';
 
 @Controller('payments')
 export class PaymentsController {

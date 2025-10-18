@@ -16,20 +16,20 @@ import { DeleteResult, Model } from 'mongoose';
 import { Event as EventSchema, EventDocument } from './event.schema';
 
 // SERVICES
-import { ProviderService } from 'src/Provider/provider.service';
+import { ProviderService } from '../Provider/provider.service';
 import {
   AbstractionService,
   FuturaAccountClient,
 } from '../Abstraction/abstraction.service';
-import { AccountService } from 'src/Account/account.service';
-import { OrdersService } from 'src/Orders/orders.service';
-import { MailService } from 'src/Mail/mail.service';
-import { NotificationService } from 'src/Notifications/notifications.service';
-import { PromoterService } from 'src/Promoter/promoter.service';
-import { SalesService } from 'src/Sales/sales.service';
-import { SocketService } from 'src/Socket/socket.service';
-import { StripeService } from 'src/Stripe/stripe.service';
-import { WalletService } from 'src/Wallet/wallet.service';
+import { AccountService } from '../Account/account.service';
+import { OrdersService } from '../Orders/orders.service';
+import { MailService } from '../Mail/mail.service';
+import { NotificationService } from '../Notifications/notifications.service';
+import { PromoterService } from '../Promoter/promoter.service';
+import { SalesService } from '../Sales/sales.service';
+import { SocketService } from '../Socket/socket.service';
+import { StripeService } from '../Stripe/stripe.service';
+import { WalletService } from '../Wallet/wallet.service';
 
 // INTERFACES
 import {
@@ -44,21 +44,21 @@ import {
   TransferResaleTicket,
   EditEvent,
 } from '../shared/interface';
-import { Account } from 'src/Account/account.interface';
+import { Account } from '../Account/account.interface';
 import {
   CreateSale,
   EmitAccess,
   EmitOrder,
   Sale,
   TransferAccount,
-} from 'src/Sales/sales.interface';
+} from '../Sales/sales.interface';
 import {
   CreateInvitation,
   CreateOrder,
   Item,
   Order,
   OrderStatus,
-} from 'src/Orders/orders.interface';
+} from '../Orders/orders.interface';
 
 // ABI
 import * as EventFactoryAbi from '../abis/EventFactory.json';

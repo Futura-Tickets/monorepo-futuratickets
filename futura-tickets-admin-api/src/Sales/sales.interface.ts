@@ -1,5 +1,5 @@
-import { Item, OrderStatus } from 'src/Orders/orders.interface';
-import { TicketActivity, TicketStatus } from 'src/shared/interface';
+import { Item, OrderStatus } from '../Orders/orders.interface';
+import { TicketActivity, TicketStatus } from '../shared/interface';
 
 export interface Sale {
   _id: string;

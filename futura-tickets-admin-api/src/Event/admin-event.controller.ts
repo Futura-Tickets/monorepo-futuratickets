@@ -24,19 +24,19 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { DeleteResult } from 'mongoose';
 
 // DECORATORS
-import { Auth } from 'src/Auth/auth.decorator';
+import { Auth } from '../Auth/auth.decorator';
 
 // SERVICES
 import { AdminEventService } from './admin-event.service';
 import {
   AccessPipeService,
   PromoterPipeService,
-} from 'src/Account/account.service';
+} from '../Account/account.service';
 import { InvitationsService } from './invitations.service';
 
 // INTERFACES
-import { Account } from 'src/Account/account.interface';
-import { Sale } from 'src/Sales/sales.interface';
+import { Account } from '../Account/account.interface';
+import { Sale } from '../Sales/sales.interface';
 import {
   Event,
   CreateEvent,
@@ -45,7 +45,7 @@ import {
   EditEvent,
   Promocode,
 } from '../shared/interface';
-import { CreateInvitation, Order } from 'src/Orders/orders.interface';
+import { CreateInvitation, Order } from '../Orders/orders.interface';
 
 interface RequestWithRawBody extends Request {
   rawBody: Buffer;

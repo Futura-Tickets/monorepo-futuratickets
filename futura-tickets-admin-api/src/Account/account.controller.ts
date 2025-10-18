@@ -23,7 +23,7 @@ import {
 import { DeleteResult } from 'mongoose';
 
 // DECORATORS
-import { Auth } from 'src/Auth/auth.decorator';
+import { Auth } from '../Auth/auth.decorator';
 
 // SERVICES
 import {
@@ -45,7 +45,7 @@ import {
 } from './account.interface';
 
 // DTOS
-import { LoginDto } from 'src/common/dto';
+import { LoginDto } from '../common/dto';
 
 @ApiTags('Accounts')
 @Controller('accounts')

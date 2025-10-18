@@ -9,13 +9,13 @@ import { ConfigService } from '@nestjs/config';
 import { MailerService } from '@nestjs-modules/mailer';
 
 // SERVICES
-import { AuthService } from 'src/Auth/services/auth.service';
+import { AuthService } from '../Auth/services/auth.service';
 
 // INTERFACES
-import { Account } from 'src/Account/account.interface';
-import { CreatedTicket, Event } from 'src/shared/interface';
-import { Order } from 'src/Orders/orders.interface';
-import { Sale } from 'src/Sales/sales.interface';
+import { Account } from '../Account/account.interface';
+import { CreatedTicket, Event } from '../shared/interface';
+import { Order } from '../Orders/orders.interface';
+import { Sale } from '../Sales/sales.interface';
 import { TransferFromEmail, TransferToEmail } from './mail.interface';
 
 @Injectable()

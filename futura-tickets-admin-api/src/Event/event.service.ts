@@ -8,7 +8,7 @@ import { Model } from 'mongoose';
 import { Event as EventSchema, EventDocument } from './event.schema';
 
 // INTERFACES
-import { Event, EventStatus } from 'src/shared/interface';
+import { Event, EventStatus } from '../shared/interface';
 
 @Injectable()
 export class EventService {

@@ -1,14 +1,14 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 
 // DECORATORS
-import { Auth } from 'src/Auth/auth.decorator';
+import { Auth } from '../Auth/auth.decorator';
 
 // SERVICES
-import { PromoterPipeService } from 'src/Account/account.service';
+import { PromoterPipeService } from '../Account/account.service';
 import { PromoterService } from './promoter.service';
 
 // INTERFACES
-import { Account, PromoterClient } from 'src/Account/account.interface';
+import { Account, PromoterClient } from '../Account/account.interface';
 import { APISettings } from './promoter.interface';
 
 @Controller('promoters')

@@ -1,7 +1,7 @@
-import { Account } from 'src/Account/account.interface';
-import { TransferFromEmail, TransferToEmail } from 'src/Mail/mail.interface';
-import { Order } from 'src/Orders/orders.interface';
-import { Sale, SaleHistory, TransferAccount } from 'src/Sales/sales.interface';
+import { Account } from '../Account/account.interface';
+import { TransferFromEmail, TransferToEmail } from '../Mail/mail.interface';
+import { Order } from '../Orders/orders.interface';
+import { Sale, SaleHistory, TransferAccount } from '../Sales/sales.interface';
 
 export interface Event {
   _id: string;

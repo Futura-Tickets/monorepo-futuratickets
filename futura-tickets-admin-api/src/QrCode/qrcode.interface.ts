@@ -1,4 +1,4 @@
-import { TicketStatus } from 'src/shared/interface';
+import { TicketStatus } from '../shared/interface';
 
 export interface PromoterMsg {
   event: string;

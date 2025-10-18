@@ -1,4 +1,4 @@
-import { Account } from 'src/Account/account.interface';
+import { Account } from '../Account/account.interface';
 
 export interface TransferFromEmail {
   account: Account;

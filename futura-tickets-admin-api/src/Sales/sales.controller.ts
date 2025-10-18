@@ -8,17 +8,17 @@ import {
 } from '@nestjs/common';
 
 // DECORATOR
-import { Auth } from 'src/Auth/auth.decorator';
+import { Auth } from '../Auth/auth.decorator';
 
 // SERVICES
-import { PromoterPipeService } from 'src/Account/account.service';
-import { QrCodeService } from 'src/QrCode/qrcode.service';
+import { PromoterPipeService } from '../Account/account.service';
+import { QrCodeService } from '../QrCode/qrcode.service';
 import { SalesService } from './sales.service';
 
 // INTERFACES
-import { Account } from 'src/Account/account.interface';
+import { Account } from '../Account/account.interface';
 import { Sale } from './sales.interface';
-import { PromoterMsg } from 'src/QrCode/qrcode.interface';
+import { PromoterMsg } from '../QrCode/qrcode.interface';
 
 @Controller('sales')
 export class SalesController {

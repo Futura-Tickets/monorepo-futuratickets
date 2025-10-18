@@ -10,11 +10,11 @@ import { Job } from 'bull';
 import { MailService } from './mail.service';
 
 // INTERFACES
-import { Account } from 'src/Account/account.interface';
-import { CreatedTicket } from 'src/shared/interface';
-import { Order } from 'src/Orders/orders.interface';
+import { Account } from '../Account/account.interface';
+import { CreatedTicket } from '../shared/interface';
+import { Order } from '../Orders/orders.interface';
 import { TransferFromEmail, TransferToEmail } from './mail.interface';
-import { Sale } from 'src/Sales/sales.interface';
+import { Sale } from '../Sales/sales.interface';
 
 @Processor('new-order-mail')
 export class NewOrderMailProcessor {

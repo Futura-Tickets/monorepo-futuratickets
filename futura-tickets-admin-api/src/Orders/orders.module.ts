@@ -9,11 +9,11 @@ import { Orders, OrdersSchema } from './orders.schema';
 import { BullModule } from '@nestjs/bull';
 
 // MODULES
-import { AccountModule } from 'src/Account/account.module';
-import { AuthModule } from 'src/Auth/auth.module';
-import { MailModule } from 'src/Mail/mail.module';
-import { SocketModule } from 'src/Socket/socket.module';
-import { StripeModule } from 'src/Stripe/stripe.module';
+import { AccountModule } from '../Account/account.module';
+import { AuthModule } from '../Auth/auth.module';
+import { MailModule } from '../Mail/mail.module';
+import { SocketModule } from '../Socket/socket.module';
+import { StripeModule } from '../Stripe/stripe.module';
 
 // CONTROLLERS
 import { OrdersController } from './orders.controller';
@@ -21,7 +21,7 @@ import { OrdersController } from './orders.controller';
 // SERVICES
 import { OrdersService } from './orders.service';
 import { AdminOrdersController } from './admin-orders.controller';
-import { SalesModule } from 'src/Sales/sales.module';
+import { SalesModule } from '../Sales/sales.module';
 
 @Module({
   imports: [

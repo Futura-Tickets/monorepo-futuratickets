@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 
 // SERVICES
-import { EventService } from 'src/Event/event.service';
-import { SaleHistory } from 'src/Sales/sales.interface';
-import { SalesService } from 'src/Sales/sales.service';
+import { EventService } from '../Event/event.service';
+import { SaleHistory } from '../Sales/sales.interface';
+import { SalesService } from '../Sales/sales.service';
 
 // INTERFACES
 import {
   EventStatus,
   TicketActivity,
   TicketStatus,
-} from 'src/shared/interface';
+} from '../shared/interface';
 
 @Injectable()
 export class CronJobsService {

@@ -8,8 +8,8 @@ import { Model } from 'mongoose';
 import { Orders as OrdersSchema, OrdersDocument } from './orders.schema';
 
 // SERVICES
-import { MailService } from 'src/Mail/mail.service';
-import { StripeService } from 'src/Stripe/stripe.service';
+import { MailService } from '../Mail/mail.service';
+import { StripeService } from '../Stripe/stripe.service';
 
 // INTERFACES
 import { CreateOrder, Order, UpdateOrder } from './orders.interface';

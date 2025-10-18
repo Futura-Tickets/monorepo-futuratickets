@@ -1,15 +1,15 @@
 import { Body, Controller, Patch } from '@nestjs/common';
 
 // DECORATORS
-import { Auth } from 'src/Auth/auth.decorator';
+import { Auth } from '../Auth/auth.decorator';
 
 // SERVICES
 import { UserEventService } from './user-event.service';
-import { UserPipeService } from 'src/Account/account.service';
+import { UserPipeService } from '../Account/account.service';
 
 // INTERFACES
-import { Account } from 'src/Account/account.interface';
-import { TransferToTicket } from 'src/shared/interface';
+import { Account } from '../Account/account.interface';
+import { TransferToTicket } from '../shared/interface';
 
 @Controller('/user/events')
 export class UserEventController {

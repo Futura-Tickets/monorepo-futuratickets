@@ -6,10 +6,10 @@ import { Server, Socket } from 'socket.io';
 import { useAzureSocketIO } from '@azure/web-pubsub-socket.io';
 
 // SERVICES
-import { AuthService } from 'src/Auth/services/auth.service';
+import { AuthService } from '../Auth/services/auth.service';
 
 // INTERFACES
-import { EmitAccess, EmitOrder } from 'src/Sales/sales.interface';
+import { EmitAccess, EmitOrder } from '../Sales/sales.interface';
 
 @Injectable()
 export class SocketService {

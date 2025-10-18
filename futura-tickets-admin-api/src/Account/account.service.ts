@@ -19,8 +19,8 @@ import { Account as AccountModel, AccountDocument } from './account.schema';
 
 // SERVICES
 // import { AbstractionService } from '../Abstraction/abstraction.service'; // Temporarily disabled
-import { AuthService } from 'src/Auth/services/auth.service';
-import { MailService } from 'src/Mail/mail.service';
+import { AuthService } from '../Auth/services/auth.service';
+import { MailService } from '../Mail/mail.service';
 
 // UTILS
 import {
