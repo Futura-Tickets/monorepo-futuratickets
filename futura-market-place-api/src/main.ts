@@ -9,6 +9,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { setupSwagger, getSwaggerConfigForEnvironment } from './config/swagger.config';
 import { initializeSentry } from './config/sentry.config';
@@ -38,6 +39,34 @@ async function bootstrap() {
   // Get logger service instance for use in bootstrap
   const logger = app.get(LoggerService);
   logger.log('🚀 Application starting...', 'Bootstrap');
+
+  // SECURITY FIX (HIGH-4): Configure Helmet.js for security headers
+  // Helmet helps secure Express apps by setting HTTP headers
+  // Note: Configured to work with Stripe webhooks and Sentry
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"], // unsafe-inline needed for Swagger UI
+          scriptSrc: ["'self'"],
+          imgSrc: ["'self'", 'data:', 'https:', 'blob:'], // Allow images from Azure Blob Storage
+          connectSrc: ["'self'", 'https://api.stripe.com', 'https://*.sentry.io'], // Allow Stripe and Sentry
+          fontSrc: ["'self'", 'data:'],
+          objectSrc: ["'none'"],
+          mediaSrc: ["'self'"],
+          frameSrc: ["'none'"],
+        },
+      },
+      crossOriginEmbedderPolicy: false, // Disabled to allow Swagger UI and Stripe to work
+      hsts: {
+        maxAge: 31536000, // 1 year
+        includeSubDomains: true,
+        preload: true,
+      },
+    }),
+  );
+  logger.log('🔒 Security headers configured with Helmet.js', 'Bootstrap');
 
   // CORS Configuration
   // Reads allowed origins from environment variable CORS_ORIGINS

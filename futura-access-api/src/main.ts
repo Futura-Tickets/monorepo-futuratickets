@@ -8,6 +8,7 @@ if (process.env.NODE_ENV === 'production' || process.env.ENABLE_NEW_RELIC === 't
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { setupSwagger, getSwaggerConfigForEnvironment } from './config/swagger.config';
 
@@ -25,6 +26,33 @@ async function bootstrap() {
   const logger = app.get(LoggerService);
   logger.log('🚀 Application starting...', 'Bootstrap');
 
+  // SECURITY FIX (HIGH-4): Configure Helmet.js for security headers
+  // Helmet helps secure Express apps by setting HTTP headers
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"], // unsafe-inline needed for Swagger UI
+          scriptSrc: ["'self'"],
+          imgSrc: ["'self'", 'data:', 'https:', 'blob:'], // Allow images from Azure Blob Storage
+          connectSrc: ["'self'"],
+          fontSrc: ["'self'", 'data:'],
+          objectSrc: ["'none'"],
+          mediaSrc: ["'self'"],
+          frameSrc: ["'none'"],
+        },
+      },
+      crossOriginEmbedderPolicy: false, // Disabled to allow Swagger UI to work
+      hsts: {
+        maxAge: 31536000, // 1 year
+        includeSubDomains: true,
+        preload: true,
+      },
+    }),
+  );
+  logger.log('🔒 Security headers configured with Helmet.js', 'Bootstrap');
+
   // CORS Configuration
   // Reads allowed origins from environment variable CORS_ORIGINS
   // Format: comma-separated list of URLs (e.g., "http://localhost:3001,http://localhost:3002")
@@ -41,7 +69,9 @@ async function bootstrap() {
   });
 
   // Setup HTTP logging interceptor
-  app.useGlobalInterceptors(new HttpLoggerInterceptor(logger));
+  // TEMPORARILY DISABLED: RxJS type conflicts in monorepo causing compilation loop
+  // TODO: Fix RxJS monorepo architecture or use different logging approach
+  // app.useGlobalInterceptors(new HttpLoggerInterceptor(logger));
 
   // Enable global validation with class-validator
   app.useGlobalPipes(
