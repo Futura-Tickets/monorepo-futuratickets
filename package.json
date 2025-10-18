@@ -22,7 +22,8 @@
     "integrations-scripts"
   ],
   "devDependencies": {
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
   },
   "scripts": {
     "bootstrap": "npm install --workspaces --if-present",
