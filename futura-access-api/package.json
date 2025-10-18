@@ -98,9 +98,7 @@
       "node_modules/(?!@faker-js)"
     ],
     "moduleNameMapper": {
-      "^src/(.*)$": "<rootDir>/$1",
-      "^rxjs/operators$": "<rootDir>/../../node_modules/rxjs/dist/cjs/operators/index.js",
-      "^rxjs$": "<rootDir>/../../node_modules/rxjs/dist/cjs/index.js"
+      "^src/(.*)$": "<rootDir>/$1"
     },
     "setupFiles": ["<rootDir>/../jest.setup.ts"],
     "collectCoverageFrom": [
