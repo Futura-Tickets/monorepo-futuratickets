@@ -97,7 +97,7 @@
     "transformIgnorePatterns": [
       "node_modules/(?!@faker-js)"
     ],
-    "setupFiles": ["<rootDir>/../test/setup.ts"],
+    "setupFiles": ["<rootDir>/../jest.setup.ts"],
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!**/*.interface.ts",
