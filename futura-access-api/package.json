@@ -99,6 +99,7 @@
     "transformIgnorePatterns": [
       "node_modules/(?!@faker-js)"
     ],
+    "setupFilesAfterEnv": ["<rootDir>/../test/setup.ts"],
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!**/*.interface.ts",
@@ -116,9 +117,6 @@
         "lines": 70,
         "statements": 70
       }
-    },
-    "moduleNameMapper": {
-      "^src/(.*)$": "<rootDir>/$1"
     }
   }
 }
