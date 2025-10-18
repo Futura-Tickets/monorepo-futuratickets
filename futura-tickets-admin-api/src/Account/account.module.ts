@@ -15,20 +15,14 @@ import { MailModule } from '../Mail/mail.module';
 import { ProviderModule } from '../Provider/provider.module';
 
 // SERVICES
-import {
-  AccountService,
-  PromoterPipeService,
-  UserPipeService,
-} from './account.service';
+import { AccountService, PromoterPipeService, UserPipeService } from './account.service';
 
 @Module({
   imports: [
     // AbstractionModule, // Temporarily disabled
     AuthModule,
     ConfigModule,
-    MongooseModule.forFeature([
-      { name: Account.name, schema: AccountSchema, collection: 'accounts' },
-    ]),
+    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema, collection: 'accounts' }]),
     ProviderModule,
     MailModule,
   ],

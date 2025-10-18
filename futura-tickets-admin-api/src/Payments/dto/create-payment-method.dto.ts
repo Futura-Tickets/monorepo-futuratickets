@@ -3,15 +3,7 @@
  * Validation for payment method creation
  */
 
-import {
-  IsString,
-  IsEnum,
-  IsOptional,
-  MinLength,
-  MaxLength,
-  Matches,
-  IsBoolean,
-} from 'class-validator';
+import { IsString, IsEnum, IsOptional, MinLength, MaxLength, Matches, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum PaymentMethodType {

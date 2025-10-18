@@ -16,9 +16,7 @@ export class NotificationsController {
   constructor(private notificationService: NotificationService) {}
 
   @Get()
-  async getNotifications(
-    @Auth(PromoterPipeService) promoter: Account,
-  ): Promise<Notification[]> {
+  async getNotifications(@Auth(PromoterPipeService) promoter: Account): Promise<Notification[]> {
     return await this.notificationService.getNotifications(promoter.promoter!);
   }
 
@@ -27,10 +25,7 @@ export class NotificationsController {
     @Auth(PromoterPipeService) promoter: Account,
     @Param('id') id: string,
   ): Promise<Notification | null> {
-    return await this.notificationService.getNotification(
-      id,
-      promoter.promoter!,
-    );
+    return await this.notificationService.getNotification(id, promoter.promoter!);
   }
 
   @Get('/order/:orderId')
@@ -38,10 +33,7 @@ export class NotificationsController {
     @Auth(PromoterPipeService) promoter: Account,
     @Param('orderId') orderId: string,
   ): Promise<Notification | null> {
-    return await this.notificationService.getNotificationByOrderId(
-      orderId,
-      promoter.promoter!,
-    );
+    return await this.notificationService.getNotificationByOrderId(orderId, promoter.promoter!);
   }
 
   @Get('/client/:clientId')
@@ -49,10 +41,7 @@ export class NotificationsController {
     @Auth(PromoterPipeService) promoter: Account,
     @Param('clientId') clientId: string,
   ): Promise<Notification | null> {
-    return await this.notificationService.getNotificationByClientId(
-      clientId,
-      promoter.promoter!,
-    );
+    return await this.notificationService.getNotificationByClientId(clientId, promoter.promoter!);
   }
 
   @Patch('/:id/read')
@@ -60,21 +49,12 @@ export class NotificationsController {
     @Auth(PromoterPipeService) promoter: Account,
     @Param('id') id: string,
   ): Promise<Notification | null> {
-    return await this.notificationService.markAsRead(
-      id,
-      promoter.promoter!,
-      promoter._id,
-    );
+    return await this.notificationService.markAsRead(id, promoter.promoter!, promoter._id);
   }
 
   @Patch('/read')
-  async markAllAsRead(
-    @Auth(PromoterPipeService) promoter: Account,
-  ): Promise<{ success: boolean }> {
-    const result = await this.notificationService.markAllAsRead(
-      promoter.promoter!,
-      promoter._id,
-    );
+  async markAllAsRead(@Auth(PromoterPipeService) promoter: Account): Promise<{ success: boolean }> {
+    const result = await this.notificationService.markAllAsRead(promoter.promoter!, promoter._id);
     return { success: result };
   }
 
@@ -83,10 +63,7 @@ export class NotificationsController {
     @Auth(PromoterPipeService) promoter: Account,
     @Param('userId') userId: string,
   ): Promise<{ count: number }> {
-    const count = await this.notificationService.countUnreadNotifications(
-      userId,
-      promoter.promoter!,
-    );
+    const count = await this.notificationService.countUnreadNotifications(userId, promoter.promoter!);
     return { count };
   }
 
@@ -95,10 +72,7 @@ export class NotificationsController {
     @Auth(PromoterPipeService) promoter: Account,
     @Param('id') id: string,
   ): Promise<{ success: boolean }> {
-    const result = await this.notificationService.deleteNotification(
-      id,
-      promoter.promoter!,
-    );
+    const result = await this.notificationService.deleteNotification(id, promoter.promoter!);
     return { success: !!result };
   }
 }

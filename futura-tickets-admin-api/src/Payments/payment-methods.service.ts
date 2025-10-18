@@ -8,10 +8,7 @@ import { Model } from 'mongoose';
 import { PaymentMethod, PaymentMethodDocument } from './payments.schema';
 
 // INTERFACES
-import {
-  CreatePaymentMethod,
-  PaymentMethod as IPaymentMethod,
-} from './payments.interface';
+import { CreatePaymentMethod, PaymentMethod as IPaymentMethod } from './payments.interface';
 
 @Injectable()
 export class PaymentMethodsService {
@@ -32,15 +29,10 @@ export class PaymentMethodsService {
   }
 
   public async getPaymentMethods(promoter: string): Promise<IPaymentMethod[]> {
-    return await this.paymentMethodModel
-      .find({ promoter })
-      .sort({ createdAt: -1 });
+    return await this.paymentMethodModel.find({ promoter }).sort({ createdAt: -1 });
   }
 
-  public async getPaymentMethod(
-    paymentMethodId: string,
-    promoter: string,
-  ): Promise<IPaymentMethod | null> {
+  public async getPaymentMethod(paymentMethodId: string, promoter: string): Promise<IPaymentMethod | null> {
     try {
       return await this.paymentMethodModel.findOne({
         _id: paymentMethodId,
@@ -51,10 +43,7 @@ export class PaymentMethodsService {
     }
   }
 
-  public async deletePaymentMethod(
-    paymentMethodId: string,
-    promoter: string,
-  ): Promise<boolean> {
+  public async deletePaymentMethod(paymentMethodId: string, promoter: string): Promise<boolean> {
     try {
       const result = await this.paymentMethodModel.deleteOne({
         _id: paymentMethodId,

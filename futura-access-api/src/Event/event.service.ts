@@ -12,12 +12,7 @@ import { SalesService } from 'src/Sales/sales.service';
 import { SocketService } from 'src/Socket/socket.service';
 
 // INTERFACES
-import {
-  Account,
-  Event,
-  TicketActivity,
-  TicketStatus,
-} from 'src/shared/interface';
+import { Account, Event, TicketActivity, TicketStatus } from 'src/shared/interface';
 import { EmitAccess, Sale } from 'src/Sales/sales.interface';
 
 @Injectable()
@@ -35,47 +30,39 @@ export class EventService {
   public async getAttendants(): Promise<Event[]> {
     return this.eventModel.find();
   }
-  public async getAttendantsEvent(
-    promoter: string,
-    event: string,
-  ): Promise<Sale[]> {
-    const attendantsEvent = await this.eventModel
-      .findOne({ _id: event, promoter })
-      .populate({
-        path: 'orders',
-        model: 'Orders',
-        select: { sales: 1 },
-        populate: {
-          path: 'sales',
-          model: 'Sales',
-          select: {
-            client: 1,
-            type: 1,
-            price: 1,
-            status: 1,
-          },
-          match: {
-            $or: [
-              {
-                status: TicketStatus.OPEN,
-              },
-              {
-                status: TicketStatus.CLOSED,
-              },
-            ],
-          },
-          populate: {
-            path: 'client',
-            model: 'Account',
-            select: { name: 1, lastName: 1, email: 1 },
-          },
+  public async getAttendantsEvent(promoter: string, event: string): Promise<Sale[]> {
+    const attendantsEvent = await this.eventModel.findOne({ _id: event, promoter }).populate({
+      path: 'orders',
+      model: 'Orders',
+      select: { sales: 1 },
+      populate: {
+        path: 'sales',
+        model: 'Sales',
+        select: {
+          client: 1,
+          type: 1,
+          price: 1,
+          status: 1,
         },
-      });
+        match: {
+          $or: [
+            {
+              status: TicketStatus.OPEN,
+            },
+            {
+              status: TicketStatus.CLOSED,
+            },
+          ],
+        },
+        populate: {
+          path: 'client',
+          model: 'Account',
+          select: { name: 1, lastName: 1, email: 1 },
+        },
+      },
+    });
 
-    if (attendantsEvent)
-      return attendantsEvent.orders.flatMap(
-        (order: any) => order.sales as unknown as Sale[],
-      );
+    if (attendantsEvent) return attendantsEvent.orders.flatMap((order: any) => order.sales as unknown as Sale[]);
     return [];
   }
 
@@ -91,8 +78,7 @@ export class EventService {
     price?: number;
   }> {
     const saleFound = await this.salesService.checkTicketStatus(promoter, sale);
-    if (!saleFound)
-      return { access: 'ACCESS DENIED', reason: 'TICKET NOT FOUND' };
+    if (!saleFound) return { access: 'ACCESS DENIED', reason: 'TICKET NOT FOUND' };
 
     const client = saleFound.client as unknown as Account;
     const accessDate = new Date();

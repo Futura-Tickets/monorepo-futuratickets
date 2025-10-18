@@ -1,0 +1,201 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alert-rules
+  namespace: futuratickets
+  labels:
+    app: prometheus
+    component: alert-rules
+data:
+  futuratickets-alerts.yml: |
+    groups:
+      - name: futuratickets_production_alerts
+        interval: 30s
+        rules:
+          # High Error Rate Alert
+          - alert: HighErrorRate
+            expr: |
+              sum(rate(http_requests_total{namespace="futuratickets",status=~"5.."}[5m])) by (service) > 10
+            for: 5m
+            labels:
+              severity: critical
+              component: api
+            annotations:
+              summary: "High 5xx error rate detected on {{ $labels.service }}"
+              description: "{{ $labels.service }} is experiencing {{ $value }} errors/sec (threshold: 10 errors/sec)"
+              dashboard: "https://grafana.futuratickets.com/d/overview"
+
+          # Low Payment Success Rate
+          - alert: LowPaymentSuccessRate
+            expr: |
+              (sum(rate(payment_success_total{namespace="futuratickets"}[5m])) / sum(rate(payment_total{namespace="futuratickets"}[5m])) * 100) < 90
+            for: 10m
+            labels:
+              severity: critical
+              component: payments
+            annotations:
+              summary: "Payment success rate below 90%"
+              description: "Payment success rate is {{ $value | humanize }}% (threshold: 90%)"
+              runbook: "https://docs.futuratickets.com/runbooks/payment-failures"
+
+          # High Response Time
+          - alert: HighResponseTime
+            expr: |
+              histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace="futuratickets"}[5m])) by (service, le)) > 2
+            for: 5m
+            labels:
+              severity: warning
+              component: performance
+            annotations:
+              summary: "High response time on {{ $labels.service }}"
+              description: "{{ $labels.service }} p95 response time is {{ $value }}s (threshold: 2s)"
+
+          # Pod Down
+          - alert: PodDown
+            expr: |
+              kube_pod_status_phase{namespace="futuratickets",phase!="Running"} == 1
+            for: 5m
+            labels:
+              severity: critical
+              component: infrastructure
+            annotations:
+              summary: "Pod {{ $labels.pod }} is not running"
+              description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has been in {{ $labels.phase }} state for more than 5 minutes"
+
+          # High CPU Usage
+          - alert: HighCPUUsage
+            expr: |
+              sum(rate(container_cpu_usage_seconds_total{namespace="futuratickets",container!=""}[5m])) by (pod) > 0.8
+            for: 10m
+            labels:
+              severity: warning
+              component: resources
+            annotations:
+              summary: "High CPU usage on {{ $labels.pod }}"
+              description: "{{ $labels.pod }} is using {{ $value | humanizePercentage }} CPU (threshold: 80%)"
+
+          # High Memory Usage
+          - alert: HighMemoryUsage
+            expr: |
+              sum(container_memory_working_set_bytes{namespace="futuratickets",container!=""}) by (pod) /
+              sum(container_spec_memory_limit_bytes{namespace="futuratickets",container!=""}) by (pod) > 0.85
+            for: 10m
+            labels:
+              severity: warning
+              component: resources
+            annotations:
+              summary: "High memory usage on {{ $labels.pod }}"
+              description: "{{ $labels.pod }} is using {{ $value | humanizePercentage }} of memory limit (threshold: 85%)"
+
+          # MongoDB Connection Issues
+          - alert: MongoDBConnectionIssues
+            expr: |
+              mongodb_connections{namespace="futuratickets",state="available"} < 10
+            for: 5m
+            labels:
+              severity: critical
+              component: database
+            annotations:
+              summary: "Low MongoDB available connections"
+              description: "Only {{ $value }} available MongoDB connections (threshold: 10)"
+
+          # Redis Connection Issues
+          - alert: RedisDown
+            expr: |
+              redis_up{namespace="futuratickets"} == 0
+            for: 2m
+            labels:
+              severity: critical
+              component: cache
+            annotations:
+              summary: "Redis is down"
+              description: "Redis instance in {{ $labels.namespace }} is not responding"
+
+          # Deployment Rollout Stuck
+          - alert: DeploymentRolloutStuck
+            expr: |
+              kube_deployment_status_condition{namespace="futuratickets",condition="Progressing",status="false"} == 1
+            for: 15m
+            labels:
+              severity: critical
+              component: deployment
+            annotations:
+              summary: "Deployment {{ $labels.deployment }} rollout is stuck"
+              description: "Deployment {{ $labels.deployment }} has not made progress for 15 minutes"
+              action: "Check: kubectl rollout status deployment/{{ $labels.deployment }} -n futuratickets"
+
+          # High Sentry Error Count
+          - alert: HighSentryErrorCount
+            expr: |
+              increase(sentry_errors_total{namespace="futuratickets"}[1h]) > 50
+            for: 5m
+            labels:
+              severity: warning
+              component: monitoring
+            annotations:
+              summary: "High error count in Sentry"
+              description: "{{ $value }} errors logged to Sentry in the last hour (threshold: 50)"
+              dashboard: "https://sentry.io/organizations/futuratickets"
+
+          # Excessive Order Processing Time
+          - alert: SlowOrderProcessing
+            expr: |
+              histogram_quantile(0.95, sum(rate(order_processing_duration_seconds_bucket{namespace="futuratickets"}[5m])) by (le)) > 10
+            for: 10m
+            labels:
+              severity: warning
+              component: orders
+            annotations:
+              summary: "Order processing is slow"
+              description: "Order processing p95 time is {{ $value }}s (threshold: 10s)"
+
+          # Ticket Generation Failures
+          - alert: TicketGenerationFailures
+            expr: |
+              rate(ticket_generation_failures_total{namespace="futuratickets"}[5m]) > 1
+            for: 5m
+            labels:
+              severity: critical
+              component: tickets
+            annotations:
+              summary: "High ticket generation failure rate"
+              description: "{{ $value }} ticket generation failures per second (threshold: 1/sec)"
+              runbook: "https://docs.futuratickets.com/runbooks/ticket-generation"
+
+          # Webhook Delivery Failures
+          - alert: WebhookDeliveryFailures
+            expr: |
+              rate(stripe_webhook_failures_total{namespace="futuratickets"}[5m]) > 0.5
+            for: 10m
+            labels:
+              severity: warning
+              component: integrations
+            annotations:
+              summary: "Stripe webhook delivery failures"
+              description: "{{ $value }} webhook failures per second (threshold: 0.5/sec)"
+
+          # Disk Space Low
+          - alert: DiskSpaceLow
+            expr: |
+              (node_filesystem_avail_bytes{namespace="futuratickets",mountpoint="/"} /
+               node_filesystem_size_bytes{namespace="futuratickets",mountpoint="/"}) < 0.15
+            for: 10m
+            labels:
+              severity: warning
+              component: infrastructure
+            annotations:
+              summary: "Low disk space on node {{ $labels.instance }}"
+              description: "Only {{ $value | humanizePercentage }} disk space available (threshold: 15%)"
+
+          # No Orders in Last Hour (Business Metric)
+          - alert: NoOrdersReceived
+            expr: |
+              increase(orders_created_total{namespace="futuratickets"}[1h]) == 0
+            for: 1h
+            labels:
+              severity: warning
+              component: business
+            annotations:
+              summary: "No orders received in the last hour"
+              description: "Zero orders have been created in the last hour - possible issue with checkout flow"
+              action: "Check payment gateway status and application health"

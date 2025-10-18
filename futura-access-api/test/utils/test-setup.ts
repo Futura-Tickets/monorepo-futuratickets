@@ -369,9 +369,7 @@ export class MockSaleFactory {
    * Create multiple sales
    */
   static createSales(count: number, overrides: Partial<any> = {}): any[] {
-    return Array.from({ length: count }, () =>
-      MockSaleFactory.createSale(overrides),
-    );
+    return Array.from({ length: count }, () => MockSaleFactory.createSale(overrides));
   }
 }
 
@@ -484,9 +482,7 @@ export async function createTestModule(
  * Create Test Application
  * Helper to create full NestJS application for E2E tests
  */
-export async function createTestApp(
-  moduleRef: TestingModule,
-): Promise<INestApplication> {
+export async function createTestApp(moduleRef: TestingModule): Promise<INestApplication> {
   const app = moduleRef.createNestApplication();
 
   // Apply global pipes (same as production)

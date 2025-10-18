@@ -1,23 +1,5 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Header,
-  StreamableFile,
-  HttpStatus,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiBody,
-  ApiParam,
-} from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Header, StreamableFile, HttpStatus } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger';
 
 // MONGO
 import { DeleteResult } from 'mongoose';
@@ -26,12 +8,7 @@ import { DeleteResult } from 'mongoose';
 import { Auth } from '../Auth/auth.decorator';
 
 // SERVICES
-import {
-  AccountService,
-  AdminPipeService,
-  PromoterPipeService,
-  UserPipeService,
-} from './account.service';
+import { AccountService, AdminPipeService, PromoterPipeService, UserPipeService } from './account.service';
 
 // INTERFACES
 import {
@@ -66,9 +43,7 @@ export class AccountController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized - Invalid or missing token.',
   })
-  async getAdminAccounts(
-    @Auth(PromoterPipeService) promoter: Account,
-  ): Promise<Account[]> {
+  async getAdminAccounts(@Auth(PromoterPipeService) promoter: Account): Promise<Account[]> {
     return await this.accountService.getAdminAccounts(promoter.promoter!);
   }
 
@@ -76,8 +51,7 @@ export class AccountController {
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Get access accounts for event',
-    description:
-      'Retrieve all access control accounts assigned to a specific event.',
+    description: 'Retrieve all access control accounts assigned to a specific event.',
   })
   @ApiParam({
     name: 'event',
@@ -96,18 +70,14 @@ export class AccountController {
     @Auth(PromoterPipeService) promoter: Account,
     @Param('event') event: string,
   ): Promise<Account[]> {
-    return await this.accountService.getEventAccessAccounts(
-      promoter.promoter!,
-      event,
-    );
+    return await this.accountService.getEventAccessAccounts(promoter.promoter!, event);
   }
 
   @Delete('/admin/:account')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Delete admin account',
-    description:
-      'Delete an admin account by ID. Requires promoter authentication.',
+    description: 'Delete an admin account by ID. Requires promoter authentication.',
   })
   @ApiParam({
     name: 'account',
@@ -130,17 +100,13 @@ export class AccountController {
     @Auth(PromoterPipeService) promoter: Account,
     @Param('account') account: string,
   ): Promise<DeleteResult> {
-    return await this.accountService.deleteAdminAccount(
-      promoter.promoter!,
-      account,
-    );
+    return await this.accountService.deleteAdminAccount(promoter.promoter!, account);
   }
 
   @Post('/create')
   @ApiOperation({
     summary: 'Create new account',
-    description:
-      'Create a new user account. Public endpoint for user registration.',
+    description: 'Create a new user account. Public endpoint for user registration.',
   })
   @ApiBody({
     schema: {
@@ -172,9 +138,7 @@ export class AccountController {
     status: HttpStatus.CONFLICT,
     description: 'Email already exists.',
   })
-  async createAccount(
-    @Body('createAccount') createAccount: CreateAccount,
-  ): Promise<Account> {
+  async createAccount(@Body('createAccount') createAccount: CreateAccount): Promise<Account> {
     return await this.accountService.createAccount(createAccount);
   }
 
@@ -199,10 +163,7 @@ export class AccountController {
     @Auth(AdminPipeService) admin: Account,
     @Body('createPromoterAccount') createPromoterAccount: CreateAccount,
   ): Promise<Account> {
-    return await this.accountService.createPromoterAccount(
-      createPromoterAccount,
-      admin.promoter!,
-    );
+    return await this.accountService.createPromoterAccount(createPromoterAccount, admin.promoter!);
   }
 
   @Post('/create-access')
@@ -210,17 +171,13 @@ export class AccountController {
     @Auth(AdminPipeService) admin: Account,
     @Body('createAccessAccount') createAccessAccount: CreateAccess,
   ): Promise<Account> {
-    return await this.accountService.createAccessAccount(
-      createAccessAccount,
-      admin.promoter!,
-    );
+    return await this.accountService.createAccessAccount(createAccessAccount, admin.promoter!);
   }
 
   @Post('/login')
   @ApiOperation({
     summary: 'User login',
-    description:
-      'Authenticate a user with email and password. Returns user data with JWT token.',
+    description: 'Authenticate a user with email and password. Returns user data with JWT token.',
   })
   @ApiBody({ type: LoginDto })
   @ApiResponse({
@@ -242,9 +199,7 @@ export class AccountController {
 
   @Post('/access/login')
   async accessLogin(@Body() loginDto: LoginDto): Promise<Account> {
-    return await this.accountService.accessLogin(
-      loginDto as unknown as LoginAccount,
-    );
+    return await this.accountService.accessLogin(loginDto as unknown as LoginAccount);
   }
 
   @Post('/validate')
@@ -255,24 +210,16 @@ export class AccountController {
   }
 
   @Get('/address/:address')
-  async getAccountByAddress(
-    @Param('address') address: string,
-  ): Promise<Account | null> {
+  async getAccountByAddress(@Param('address') address: string): Promise<Account | null> {
     return await this.accountService.getAccountByAddress(address);
   }
 
   @Get('export/all')
   @Header('Content-Type', 'text/csv')
-  @Header(
-    'Content-Disposition',
-    `attachment; filename=event-all-accounts-${new Date().toISOString()}.csv`,
-  )
-  async exportAllClients(
-    @Auth(PromoterPipeService) promoter: Account,
-  ): Promise<StreamableFile> {
+  @Header('Content-Disposition', `attachment; filename=event-all-accounts-${new Date().toISOString()}.csv`)
+  async exportAllClients(@Auth(PromoterPipeService) promoter: Account): Promise<StreamableFile> {
     try {
-      const csvStream =
-        await this.accountService.generateAllClientsCsvWithPromoter(promoter);
+      const csvStream = await this.accountService.generateAllClientsCsvWithPromoter(promoter);
       return new StreamableFile(csvStream);
     } catch (err) {
       console.log('Error exporting event info');

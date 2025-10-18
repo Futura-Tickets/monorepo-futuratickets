@@ -6,12 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PromoterController } from './promoter.controller';
 
 // MONGOOSE
-import {
-  Promoter,
-  PromoterClient,
-  PromoterSchema,
-  PromoterClientSchema,
-} from './promoter.schema';
+import { Promoter, PromoterClient, PromoterSchema, PromoterClientSchema } from './promoter.schema';
 
 // MODULES
 import { AccountModule } from '../Account/account.module';
@@ -25,9 +20,7 @@ import { PromoterService } from './promoter.service';
     AccountModule,
     AuthModule,
     ConfigModule,
-    MongooseModule.forFeature([
-      { name: Promoter.name, schema: PromoterSchema, collection: 'promoters' },
-    ]),
+    MongooseModule.forFeature([{ name: Promoter.name, schema: PromoterSchema, collection: 'promoters' }]),
     MongooseModule.forFeature([
       {
         name: PromoterClient.name,

@@ -42,9 +42,7 @@ import { SalesModule } from '../Sales/sales.module';
     BullModule.registerQueue({ name: 'transfer-ticket' }),
     ConfigModule,
     MailModule,
-    MongooseModule.forFeature([
-      { name: Orders.name, schema: OrdersSchema, collection: 'orders' },
-    ]),
+    MongooseModule.forFeature([{ name: Orders.name, schema: OrdersSchema, collection: 'orders' }]),
     SalesModule,
     SocketModule,
     StripeModule,

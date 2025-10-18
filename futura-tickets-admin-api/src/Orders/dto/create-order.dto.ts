@@ -3,17 +3,7 @@
  * Validation for order creation
  */
 
-import {
-  IsString,
-  IsNumber,
-  IsArray,
-  ValidateNested,
-  Min,
-  Max,
-  IsOptional,
-  IsEmail,
-  IsMongoId,
-} from 'class-validator';
+import { IsString, IsNumber, IsArray, ValidateNested, Min, Max, IsOptional, IsEmail, IsMongoId } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 

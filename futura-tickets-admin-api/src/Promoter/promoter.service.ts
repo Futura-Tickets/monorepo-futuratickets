@@ -47,44 +47,27 @@ export class PromoterService {
     return await this.promoterModel.create(createPromoter);
   }
 
-  public async updatePromoterApiSettings(
-    promoter: string,
-    apiEnabled: boolean,
-  ): Promise<APISettings> {
+  public async updatePromoterApiSettings(promoter: string, apiEnabled: boolean): Promise<APISettings> {
     if (apiEnabled) {
       const apiKey = this.authService.encrypt(promoter.toString());
-      await this.promoterModel.updateOne(
-        { _id: promoter },
-        { api: { isApiEnabled: true, apiKey } },
-      );
+      await this.promoterModel.updateOne({ _id: promoter }, { api: { isApiEnabled: true, apiKey } });
       return { isApiEnabled: true, apiKey };
     }
-    await this.promoterModel.updateOne(
-      { _id: promoter },
-      { api: { isApiEnabled: false, apiKey: null } },
-    );
+    await this.promoterModel.updateOne({ _id: promoter }, { api: { isApiEnabled: false, apiKey: null } });
     return { isApiEnabled: false, apiKey: '' };
   }
 
-  public async getPromoterApiSettings(
-    promoter: string,
-  ): Promise<APISettings | void> {
+  public async getPromoterApiSettings(promoter: string): Promise<APISettings | void> {
     const foundPromoter = await this.promoterModel.findById({ _id: promoter });
     if (foundPromoter) return foundPromoter.api;
     return;
   }
 
-  public async getPromoterPrivateKeyById(
-    promoter: string,
-  ): Promise<Promoter | null> {
-    return await this.promoterModel
-      .findById(promoter)
-      .select({ _id: 1, address: 1, key: 1 });
+  public async getPromoterPrivateKeyById(promoter: string): Promise<Promoter | null> {
+    return await this.promoterModel.findById(promoter).select({ _id: 1, address: 1, key: 1 });
   }
 
-  public async getPromoterByAddress(
-    promoterAddress: string,
-  ): Promise<Promoter | null> {
+  public async getPromoterByAddress(promoterAddress: string): Promise<Promoter | null> {
     return await this.promoterModel
       .findOne({ address: promoterAddress })
       .select({ name: 1, address: 1, image: 1, icon: 1 });
@@ -126,59 +109,51 @@ export class PromoterService {
     return [];
   }
 
-  public async getPromoterClient(
-    promoter: string,
-    client: string,
-  ): Promise<PromoterClient | null> {
-    return await this.promoterClientModel
-      .findOne({ promoter, client })
-      .populate({
-        path: 'client',
-        model: 'Account',
-        select: {
-          name: 1,
-          lastName: 1,
-          email: 1,
-          phone: 1,
-          orders: 1,
-          birthdate: 1,
-          createdAt: 1,
-        },
-        populate: {
-          path: 'orders',
-          model: 'Orders',
-          options: {
-            sort: {
-              createdAt: 'desc',
-            },
+  public async getPromoterClient(promoter: string, client: string): Promise<PromoterClient | null> {
+    return await this.promoterClientModel.findOne({ promoter, client }).populate({
+      path: 'client',
+      model: 'Account',
+      select: {
+        name: 1,
+        lastName: 1,
+        email: 1,
+        phone: 1,
+        orders: 1,
+        birthdate: 1,
+        createdAt: 1,
+      },
+      populate: {
+        path: 'orders',
+        model: 'Orders',
+        options: {
+          sort: {
+            createdAt: 'desc',
           },
-          populate: [
-            {
+        },
+        populate: [
+          {
+            path: 'event',
+            model: 'Event',
+          },
+          {
+            path: 'sales',
+            model: 'Sales',
+            options: {
+              sort: {
+                createdAt: 'desc',
+              },
+            },
+            populate: {
               path: 'event',
               model: 'Event',
             },
-            {
-              path: 'sales',
-              model: 'Sales',
-              options: {
-                sort: {
-                  createdAt: 'desc',
-                },
-              },
-              populate: {
-                path: 'event',
-                model: 'Event',
-              },
-            },
-          ],
-        },
-      });
+          },
+        ],
+      },
+    });
   }
 
-  public async addUserToPromoter(
-    promoter: string,
-    client: string,
-  ): Promise<void> {
+  public async addUserToPromoter(promoter: string, client: string): Promise<void> {
     try {
       const promoterFound = await this.promoterClientModel.findOne({
         promoter,

@@ -3,12 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
 // MONGOOSE
-import {
-  Promoter,
-  PromoterClient,
-  PromoterSchema,
-  PromoterClientSchema,
-} from './promoter.schema';
+import { Promoter, PromoterClient, PromoterSchema, PromoterClientSchema } from './promoter.schema';
 
 // MODULES
 import { AccountModule } from 'src/Account/account.module';
@@ -19,9 +14,7 @@ import { AuthModule } from 'src/Auth/auth.module';
     AccountModule,
     AuthModule,
     ConfigModule,
-    MongooseModule.forFeature([
-      { name: Promoter.name, schema: PromoterSchema, collection: 'promoters' },
-    ]),
+    MongooseModule.forFeature([{ name: Promoter.name, schema: PromoterSchema, collection: 'promoters' }]),
     MongooseModule.forFeature([
       {
         name: PromoterClient.name,

@@ -46,20 +46,28 @@ npm test  # 18/18 passing ✅
 ### 🌐 Deploy a Testnet/Mainnet
 
 ```bash
-# 1. Configurar .env con tus API keys
+# 1. Ver instrucciones completas de deployment
+cat READY_TO_DEPLOY.md
+
+# 2. Validar que todo está listo
+./scripts/pre-deployment-check.sh
+
+# 3. Configurar .env con tus credenciales
 cp .env.example .env
-nano .env  # Agregar ALCHEMY_API_KEY, DEPLOYER_PRIVATE_KEY, etc.
+nano .env  # Agregar ALCHEMY_API_KEY, DEPLOYER_PRIVATE_KEY, BASESCAN_API_KEY
 
-# 2. Build completo (compile + export ABIs + sync a backends)
-npm run build
+# 4. Obtener testnet ETH (0.05-0.1 ETH)
+# https://faucet.quicknode.com/base/sepolia
 
-# 3. Deploy a Base Sepolia
-npm run deploy:baseSepolia -- --tags factory
+# 5. Deploy a Base Sepolia
+npm run deploy:baseSepolia
 
 # ABIs se sincronizan automáticamente a todos los backends ✅
 ```
 
-**📖 Ver:** [`QUICK_START.md`](./QUICK_START.md) para deployment completo
+**📖 Ver:**
+- [`READY_TO_DEPLOY.md`](./READY_TO_DEPLOY.md) - Instrucciones finales (START HERE)
+- [`DEPLOYMENT_GUIDE.md`](./DEPLOYMENT_GUIDE.md) - Guía completa paso a paso
 
 ---
 
@@ -316,7 +324,10 @@ npm run test:security  # 31/31 tests passing ✅
 | Documento | Descripción |
 |-----------|-------------|
 | **[README.md](./README.md)** | Este archivo - Overview completo del proyecto |
+| **[READY_TO_DEPLOY.md](./READY_TO_DEPLOY.md)** | ⭐ Instrucciones finales de deployment (START HERE) 🚀 |
+| **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** | Guía completa paso a paso para deployment 📋 |
 | **[QUICK_START_DEV.md](./QUICK_START_DEV.md)** | Setup desarrollo local en 2 minutos ⚡ |
+| **[GAS_OPTIMIZATIONS.md](./GAS_OPTIMIZATIONS.md)** | Análisis completo de optimizaciones de gas ⛽ |
 | **[TERMINAL_BLOCKCHAIN.md](./TERMINAL_BLOCKCHAIN.md)** | Documentación completa de la terminal 📚 |
 | **[OPERATIONAL_TOOLS.md](./OPERATIONAL_TOOLS.md)** | Guía completa herramientas operacionales 🛠️ |
 | **[SECURITY.md](./SECURITY.md)** | Política de seguridad y reporte de vulnerabilidades 🔐 |
@@ -602,9 +613,27 @@ Si encuentras problemas:
 ---
 
 **Desarrollado por**: FuturaTickets Team
-**Versión**: 2.0.2
+**Versión**: 2.0.3 ✅
 **Última actualización**: 2025-10-17
-**Auditoría**: ✅ Completada (82.19% coverage, 49/49 tests passing)
-**Node Status**: 🟢 Running (`npm run healthcheck`)
+**Status**: 🟢 **PRODUCTION READY FOR TESTNET**
+
+**Code Quality:**
+- ✅ Solhint Warnings: 0/0 (100% - todos eliminados)
+- ✅ Tests: 49/49 passing (31 security + 18 functional)
+- ✅ Coverage: 81.33% statements
+- ✅ Gas Optimized: ~50 gas saved per revert
+- ✅ Custom Errors: 18/18 implemented
+- ✅ Named Imports: 7/7 optimized
+
+**Deployment Status:**
+- ✅ Infrastructure: Ready
+- ✅ Documentation: Complete (9 files)
+- ✅ ABIs: Synced to 4 backends
+- ⏳ Testnet Deployment: Pending credentials only
+
+**Next Steps:**
+1. Configure wallet → See `READY_TO_DEPLOY.md`
+2. Get testnet ETH → https://faucet.quicknode.com/base/sepolia
+3. Deploy → `npm run deploy:baseSepolia`
 
 🎫 **Convirtiendo tickets en NFTs, una entrada a la vez** 🔗

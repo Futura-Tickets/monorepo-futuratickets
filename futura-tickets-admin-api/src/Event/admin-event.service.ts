@@ -17,10 +17,7 @@ import { Event as EventSchema, EventDocument } from './event.schema';
 
 // SERVICES
 import { ProviderService } from '../Provider/provider.service';
-import {
-  AbstractionService,
-  FuturaAccountClient,
-} from '../Abstraction/abstraction.service';
+import { AbstractionService, FuturaAccountClient } from '../Abstraction/abstraction.service';
 import { AccountService } from '../Account/account.service';
 import { OrdersService } from '../Orders/orders.service';
 import { MailService } from '../Mail/mail.service';
@@ -45,20 +42,8 @@ import {
   EditEvent,
 } from '../shared/interface';
 import { Account } from '../Account/account.interface';
-import {
-  CreateSale,
-  EmitAccess,
-  EmitOrder,
-  Sale,
-  TransferAccount,
-} from '../Sales/sales.interface';
-import {
-  CreateInvitation,
-  CreateOrder,
-  Item,
-  Order,
-  OrderStatus,
-} from '../Orders/orders.interface';
+import { CreateSale, EmitAccess, EmitOrder, Sale, TransferAccount } from '../Sales/sales.interface';
+import { CreateInvitation, CreateOrder, Item, Order, OrderStatus } from '../Orders/orders.interface';
 
 // ABI
 import * as EventFactoryAbi from '../abis/EventFactory.json';
@@ -147,17 +132,11 @@ export class AdminEventService {
       .sort({ createdAt: 'desc' });
   }
 
-  public async deleteEvent(
-    event: string,
-    promoter: string,
-  ): Promise<DeleteResult> {
+  public async deleteEvent(event: string, promoter: string): Promise<DeleteResult> {
     return await this.eventModel.deleteOne({ event, promoter });
   }
 
-  public async getEvent(
-    promoter: string,
-    event: string,
-  ): Promise<Event | null> {
+  public async getEvent(promoter: string, event: string): Promise<Event | null> {
     return await this.eventModel.findOne({ _id: event, promoter }).populate([
       {
         path: 'orders',
@@ -197,24 +176,17 @@ export class AdminEventService {
     ]);
   }
 
-  public async createEvent(
-    event: CreateEvent,
-    promoter: string,
-  ): Promise<Event | undefined> {
+  public async createEvent(event: CreateEvent, promoter: string): Promise<Event | undefined> {
     const createdEvent = await this.eventModel.create({ ...event, promoter });
     if (!createdEvent.isBlockchain) return createdEvent;
 
-    const promoterAccount =
-      await this.promoterService.getPromoterPrivateKeyById(promoter);
+    const promoterAccount = await this.promoterService.getPromoterPrivateKeyById(promoter);
     if (!promoterAccount) {
       console.log('Promoter account not found!');
       return;
     }
 
-    const smartAcountClient =
-      await this.abstractionService.getSmartAccountClient(
-        promoterAccount.key as `0x${string}`,
-      );
+    const smartAcountClient = await this.abstractionService.getSmartAccountClient(promoterAccount.key as `0x${string}`);
     const tx = await this.createNftEvent(smartAcountClient, createdEvent.name);
 
     const provider = this.providerService.getProvider();
@@ -229,14 +201,8 @@ export class AdminEventService {
       contract.queryFilter('FuturaEventCreated').then((data) => {
         data.filter((log) => {
           if (log.blockNumber == transactionReceipt?.blockNumber) {
-            const iface = new Interface([
-              'event FuturaEventCreated(address indexed _address)',
-            ]);
-            const decodeResult = iface.decodeEventLog(
-              'FuturaEventCreated',
-              log.data,
-              log.topics,
-            );
+            const iface = new Interface(['event FuturaEventCreated(address indexed _address)']);
+            const decodeResult = iface.decodeEventLog('FuturaEventCreated', log.data, log.topics);
 
             resolve({
               blockNumber: transactionReceipt.blockNumber,
@@ -262,55 +228,29 @@ export class AdminEventService {
     return createdEvent;
   }
 
-  public async editEvent(
-    promoter: string,
-    event: string,
-    editEvent: EditEvent,
-  ): Promise<Event | null> {
-    return await this.eventModel.findOneAndUpdate(
-      { _id: event, promoter },
-      editEvent,
-      { new: true },
-    );
+  public async editEvent(promoter: string, event: string, editEvent: EditEvent): Promise<Event | null> {
+    return await this.eventModel.findOneAndUpdate({ _id: event, promoter }, editEvent, { new: true });
   }
 
-  public async updateEvent(
-    eventId: string,
-    promoter: string,
-    event: UpdateEvent,
-  ): Promise<void | null> {
-    return await this.eventModel.findOneAndUpdate(
-      { _id: eventId, promoter },
-      event,
-    );
+  public async updateEvent(eventId: string, promoter: string, event: UpdateEvent): Promise<void | null> {
+    return await this.eventModel.findOneAndUpdate({ _id: eventId, promoter }, event);
   }
 
-  public async updateResaleEvent(
-    promoter: string,
-    eventId: string,
-    resaleStatus: boolean,
-  ): Promise<void | null> {
+  public async updateResaleEvent(promoter: string, eventId: string, resaleStatus: boolean): Promise<void | null> {
     return await this.eventModel.findOneAndUpdate(
       { _id: eventId, promoter },
       { $set: { 'resale.isActive': resaleStatus } },
     );
   }
 
-  private async createNftEvent(
-    smartAccountClient: FuturaAccountClient,
-    eventName: string,
-  ): Promise<`0x${string}`> {
+  private async createNftEvent(smartAccountClient: FuturaAccountClient, eventName: string): Promise<`0x${string}`> {
     const callData = encodeFunctionData({
       abi: EventFactoryAbi.abi,
       functionName: 'createNew',
       args: [smartAccountClient?.account?.address, eventName],
     });
 
-    return this.abstractionService.sendTransaction(
-      smartAccountClient,
-      this.eventFactoryAddress,
-      callData,
-    );
+    return this.abstractionService.sendTransaction(smartAccountClient, this.eventFactoryAddress, callData);
   }
 
   public async createNftTicket(
@@ -327,11 +267,7 @@ export class AdminEventService {
       args: [price, clientAddress, ticketRoyalty, timeStamp],
     });
 
-    return this.abstractionService.sendTransaction(
-      smartAccountClient,
-      eventAddress,
-      callData,
-    );
+    return this.abstractionService.sendTransaction(smartAccountClient, eventAddress, callData);
   }
 
   public async transferNftTicket(
@@ -346,11 +282,7 @@ export class AdminEventService {
       args: [tokenId, clientAddress],
     });
 
-    return this.abstractionService.sendTransaction(
-      smartAccountClient,
-      eventAddress,
-      callData,
-    );
+    return this.abstractionService.sendTransaction(smartAccountClient, eventAddress, callData);
   }
 
   public async generateTicketQrCode(hash: string): Promise<string> {
@@ -383,9 +315,7 @@ export class AdminEventService {
       for (let i = 0; i < orderSales.length; i++) {
         const createdSaleId = orderSales[i]._id.toString();
 
-        const qrCode = await QRCode.toDataURL(
-          `${this.dashboardUrl}/verify/${createdSaleId.toString()}`,
-        );
+        const qrCode = await QRCode.toDataURL(`${this.dashboardUrl}/verify/${createdSaleId.toString()}`);
         await this.salesService.updateSale(createdSaleId.toString(), {
           qrCode,
           history: [
@@ -428,11 +358,9 @@ export class AdminEventService {
         createdTickets.push(createdTicket);
 
         // Temporarily calling mintTicket directly instead of queue
-        !createdTicket.isResale &&
-          ticketQueues.push(this.mintTicket(createdTicket));
+        !createdTicket.isResale && ticketQueues.push(this.mintTicket(createdTicket));
         // Temporarily calling transferResaleTicket directly instead of queue
-        createdTicket.isResale &&
-          transferQueues.push(this.transferResaleTicket(createdTicket));
+        createdTicket.isResale && transferQueues.push(this.transferResaleTicket(createdTicket));
       }
 
       await this.ordersService.updateOrderPaymentId(paymentId, {
@@ -465,33 +393,25 @@ export class AdminEventService {
 
       // Check if blockchain is enabled for this event
       if (event.isBlockchain && event.address) {
-        console.log(
-          `🔗 Minting NFT for event "${event.name}" at ${event.address}`,
-        );
+        console.log(`🔗 Minting NFT for event "${event.name}" at ${event.address}`);
 
         try {
           // Get or create user wallet using WalletService
-          const wallet = await this.walletService.getOrCreateUserWallet(
-            mintTicket.client._id!.toString(),
-          );
+          const wallet = await this.walletService.getOrCreateUserWallet(mintTicket.client._id!.toString());
 
           console.log(`👛 User wallet: ${wallet.address}`);
 
           // Get Smart Account Client from user's private key
-          const smartAccountClient =
-            await this.abstractionService.getSmartAccountClient(
-              wallet.privateKey as `0x${string}`,
-            );
+          const smartAccountClient = await this.abstractionService.getSmartAccountClient(
+            wallet.privateKey as `0x${string}`,
+          );
 
           const smartAddress = smartAccountClient.account.address;
           console.log(`🔐 Smart Account: ${smartAddress}`);
 
           // Update user's smartAddress if not set
           if (!wallet.smartAddress) {
-            await this.walletService.updateSmartAddress(
-              mintTicket.client._id!.toString(),
-              smartAddress,
-            );
+            await this.walletService.updateSmartAddress(mintTicket.client._id!.toString(), smartAddress);
           }
 
           // Encode mintNFT call using viem
@@ -539,21 +459,14 @@ export class AdminEventService {
             status: TicketStatus.OPEN,
           });
 
-          console.log(
-            `✅ Sale ${mintTicket.sale} updated with blockchain info`,
-          );
+          console.log(`✅ Sale ${mintTicket.sale} updated with blockchain info`);
 
           // Emit socket event
-          this.socketService.emitTicketMinted(
-            mintTicket.promoter,
-            mintTicket.order,
-          );
+          this.socketService.emitTicketMinted(mintTicket.promoter, mintTicket.order);
 
           // Note: tokenId will be automatically filled by BlockchainService
           // when it catches the TokenMinted event
-          console.log(
-            '⏳ Waiting for blockchain confirmation (via BlockchainService)...',
-          );
+          console.log('⏳ Waiting for blockchain confirmation (via BlockchainService)...');
 
           return;
         } catch (blockchainError) {
@@ -581,10 +494,7 @@ export class AdminEventService {
         status: TicketStatus.OPEN,
       });
 
-      this.socketService.emitTicketMinted(
-        mintTicket.promoter,
-        mintTicket.order,
-      );
+      this.socketService.emitTicketMinted(mintTicket.promoter, mintTicket.order);
 
       console.log(`✅ Regular ticket created: ${mintTicket.sale}`);
     } catch (error) {
@@ -608,9 +518,7 @@ export class AdminEventService {
     }
   }
 
-  public async transferResaleTicket(
-    transferResaleTicket: TransferResaleTicket,
-  ): Promise<EmitOrder | void> {
+  public async transferResaleTicket(transferResaleTicket: TransferResaleTicket): Promise<EmitOrder | void> {
     const ticketToTransfer = await this.salesService.getSale(
       transferResaleTicket.promoter,
       transferResaleTicket.isResale!,
@@ -620,12 +528,8 @@ export class AdminEventService {
       return;
     }
 
-    const owner = await this.accountService.getAccountPrivateKeyById(
-      ticketToTransfer.client,
-    );
-    const client = await this.accountService.getAccountPrivateKeyById(
-      transferResaleTicket.client._id,
-    );
+    const owner = await this.accountService.getAccountPrivateKeyById(ticketToTransfer.client);
+    const client = await this.accountService.getAccountPrivateKeyById(transferResaleTicket.client._id);
 
     const from: TransferAccount = {
       _id: owner!._id,
@@ -668,14 +572,8 @@ export class AdminEventService {
       status: TicketStatus.PROCESSING,
     });
 
-    const ownerSmartAcountClient =
-      await this.abstractionService.getSmartAccountClient(
-        owner?.key as `0x${string}`,
-      );
-    const clientSmartAccountClient =
-      await this.abstractionService.getSmartAccountClient(
-        client?.key as `0x${string}`,
-      );
+    const ownerSmartAcountClient = await this.abstractionService.getSmartAccountClient(owner?.key as `0x${string}`);
+    const clientSmartAccountClient = await this.abstractionService.getSmartAccountClient(client?.key as `0x${string}`);
 
     const createTicketTx = await this.transferNftTicket(
       ownerSmartAcountClient,
@@ -686,10 +584,7 @@ export class AdminEventService {
 
     console.log('Ticket transfer transaction done!');
     const provider = this.providerService.getProvider();
-    const createTicketReceipt = await provider.waitForTransaction(
-      createTicketTx,
-      1,
-    );
+    const createTicketReceipt = await provider.waitForTransaction(createTicketTx, 1);
 
     const contract = new ethers.Contract(
       transferResaleTicket.event.address,
@@ -704,30 +599,24 @@ export class AdminEventService {
       to: string;
       tokenId: number;
     } = await new Promise((resolve) => {
-      contract
-        .queryFilter('Transfer', createTicketReceipt?.blockNumber)
-        .then((data) => {
-          data.filter((log: ethers.Log | ethers.EventLog) => {
-            const iface = new Interface([
-              'event Transfer(address indexed from, address indexed to, uint256 indexed value)',
-            ]);
-            const decodeResult = iface.decodeEventLog(
-              'Transfer',
-              log.data,
-              log.topics,
-            );
+      contract.queryFilter('Transfer', createTicketReceipt?.blockNumber).then((data) => {
+        data.filter((log: ethers.Log | ethers.EventLog) => {
+          const iface = new Interface([
+            'event Transfer(address indexed from, address indexed to, uint256 indexed value)',
+          ]);
+          const decodeResult = iface.decodeEventLog('Transfer', log.data, log.topics);
 
-            if (Number(decodeResult[2]) == ticketToTransfer.tokenId) {
-              resolve({
-                blockNumber: createTicketReceipt!.blockNumber,
-                hash: createTicketReceipt!.hash,
-                from: decodeResult[0],
-                to: decodeResult[1],
-                tokenId: Number(decodeResult[2]),
-              });
-            }
-          });
+          if (Number(decodeResult[2]) == ticketToTransfer.tokenId) {
+            resolve({
+              blockNumber: createTicketReceipt!.blockNumber,
+              hash: createTicketReceipt!.hash,
+              from: decodeResult[0],
+              to: decodeResult[1],
+              tokenId: Number(decodeResult[2]),
+            });
+          }
         });
+      });
     });
 
     const ticketToTransferUpdated = await this.salesService.getSale(
@@ -773,23 +662,14 @@ export class AdminEventService {
       status: TicketStatus.OPEN,
     });
 
-    this.socketService.emitTicketMinted(
-      transferResaleTicket.promoter,
-      transferResaleTicket.order,
-    );
+    this.socketService.emitTicketMinted(transferResaleTicket.promoter, transferResaleTicket.order);
   }
 
-  public async getInvitationsByEventId(
-    event: string,
-    promoter: string,
-  ): Promise<Sale[]> {
+  public async getInvitationsByEventId(event: string, promoter: string): Promise<Sale[]> {
     return await this.salesService.getInvitationsByEventId(event, promoter);
   }
 
-  public async createInvitation(
-    promoter: string,
-    createInvitation: CreateInvitation,
-  ): Promise<Order | void> {
+  public async createInvitation(promoter: string, createInvitation: CreateInvitation): Promise<Order | void> {
     const event = await this.getEventById(createInvitation.event);
     if (!event) {
       console.log('Event not found!');
@@ -830,9 +710,7 @@ export class AdminEventService {
       status: OrderStatus.SUCCEEDED,
     };
 
-    const createdInvitationOrder = await this.ordersService.createOrder(
-      createInvitationOrder,
-    );
+    const createdInvitationOrder = await this.ordersService.createOrder(createInvitationOrder);
     if (!createdInvitationOrder) {
       console.log('Error creating invitation order!');
       return;
@@ -863,34 +741,18 @@ export class AdminEventService {
       }
     });
 
-    const createdSales = await this.salesService.createSales(
-      createInvitationSales,
-    );
+    const createdSales = await this.salesService.createSales(createInvitationSales);
 
     await this.ordersService.updateOrderById(createdInvitationOrder._id, {
       sales: createdSales.map((createdSale: Sale) => createdSale._id),
     });
-    await this.accountService.addOrderToAccount(
-      account._id,
-      createdInvitationOrder._id,
-    );
-    await this.addOrderToEvent(
-      createInvitation.event!,
-      createdInvitationOrder._id,
-    );
-    await this.promoterService.addUserToPromoter(
-      createdInvitationOrder.promoter,
-      account._id,
-    );
+    await this.accountService.addOrderToAccount(account._id, createdInvitationOrder._id);
+    await this.addOrderToEvent(createInvitation.event!, createdInvitationOrder._id);
+    await this.promoterService.addUserToPromoter(createdInvitationOrder.promoter, account._id);
 
-    this.socketService.emitOrderCreated(
-      event.promoter,
-      createdInvitationOrder._id,
-    );
+    this.socketService.emitOrderCreated(event.promoter, createdInvitationOrder._id);
 
-    const invitationOrder = await this.ordersService.getOrderById(
-      createdInvitationOrder._id,
-    );
+    const invitationOrder = await this.ordersService.getOrderById(createdInvitationOrder._id);
     if (!invitationOrder) {
       console.log('No invitation order found!');
       return;
@@ -908,9 +770,7 @@ export class AdminEventService {
     for (let i = 0; i < orderSales.length; i++) {
       const createdSaleId = orderSales[i]._id.toString();
 
-      const qrCode = await QRCode.toDataURL(
-        `${orderEvent.url}/verify/${createdSaleId.toString()}`,
-      );
+      const qrCode = await QRCode.toDataURL(`${orderEvent.url}/verify/${createdSaleId.toString()}`);
       await this.salesService.updateSale(createdSaleId.toString(), { qrCode });
 
       const createdTicket: CreatedTicket = {
@@ -945,10 +805,7 @@ export class AdminEventService {
     return await this.eventModel.findOne({ _id: event });
   }
 
-  public async handleStripeEvent(
-    payload: Buffer,
-    signature: string,
-  ): Promise<void> {
+  public async handleStripeEvent(payload: Buffer, signature: string): Promise<void> {
     const stripeEvent = this.stripeService.registerEvents(payload, signature);
     if (stripeEvent.type.toString() == 'payment_intent.succeeded') {
       console.log('Request: ' + stripeEvent.data.object['id']);
@@ -958,10 +815,7 @@ export class AdminEventService {
     }
   }
 
-  public async getAccessEvent(
-    promoter: string,
-    event: string,
-  ): Promise<Event | null> {
+  public async getAccessEvent(promoter: string, event: string): Promise<Event | null> {
     return await this.eventModel.findOne({ _id: event, promoter }).populate({
       path: 'orders',
       model: 'Orders',
@@ -998,10 +852,7 @@ export class AdminEventService {
     });
   }
 
-  public async getResaleEvent(
-    promoter: string,
-    event: string,
-  ): Promise<Event | null> {
+  public async getResaleEvent(promoter: string, event: string): Promise<Event | null> {
     return await this.eventModel.findOne({ _id: event, promoter }).populate({
       path: 'orders',
       model: 'Orders',
@@ -1031,47 +882,39 @@ export class AdminEventService {
     });
   }
 
-  public async getAttendantsEvent(
-    promoter: string,
-    event: string,
-  ): Promise<Sale[]> {
-    const attendantsEvent = await this.eventModel
-      .findOne({ _id: event, promoter })
-      .populate({
-        path: 'orders',
-        model: 'Orders',
-        select: { sales: 1 },
-        populate: {
-          path: 'sales',
-          model: 'Sales',
-          select: {
-            client: 1,
-            type: 1,
-            price: 1,
-            status: 1,
-          },
-          match: {
-            $or: [
-              {
-                status: TicketStatus.OPEN,
-              },
-              {
-                status: TicketStatus.CLOSED,
-              },
-            ],
-          },
-          populate: {
-            path: 'client',
-            model: 'Account',
-            select: { name: 1, lastName: 1, email: 1, birthdate: 1 },
-          },
+  public async getAttendantsEvent(promoter: string, event: string): Promise<Sale[]> {
+    const attendantsEvent = await this.eventModel.findOne({ _id: event, promoter }).populate({
+      path: 'orders',
+      model: 'Orders',
+      select: { sales: 1 },
+      populate: {
+        path: 'sales',
+        model: 'Sales',
+        select: {
+          client: 1,
+          type: 1,
+          price: 1,
+          status: 1,
         },
-      });
+        match: {
+          $or: [
+            {
+              status: TicketStatus.OPEN,
+            },
+            {
+              status: TicketStatus.CLOSED,
+            },
+          ],
+        },
+        populate: {
+          path: 'client',
+          model: 'Account',
+          select: { name: 1, lastName: 1, email: 1, birthdate: 1 },
+        },
+      },
+    });
 
-    if (attendantsEvent)
-      return attendantsEvent.orders.flatMap(
-        (order: any) => order.sales as unknown as Sale[],
-      );
+    if (attendantsEvent) return attendantsEvent.orders.flatMap((order: any) => order.sales as unknown as Sale[]);
     return [];
   }
 
@@ -1137,8 +980,7 @@ export class AdminEventService {
     const promoter = accessAccount.promoter!;
 
     const saleFound = await this.salesService.checkTicketStatus(promoter, sale);
-    if (!saleFound)
-      return { access: 'ACCESS DENIED', reason: 'TICKET NOT FOUND' };
+    if (!saleFound) return { access: 'ACCESS DENIED', reason: 'TICKET NOT FOUND' };
 
     const client = saleFound.client as unknown as Account;
     const accessDate = new Date();

@@ -34,11 +34,7 @@ export class StorageService {
    * @param contentType - MIME type
    * @returns Public URL of the uploaded file
    */
-  async uploadFile(
-    file: Buffer | NodeJS.ReadableStream,
-    filename: string,
-    contentType: string,
-  ): Promise<string> {
+  async uploadFile(file: Buffer | NodeJS.ReadableStream, filename: string, contentType: string): Promise<string> {
     const bucket = this.storage.bucket(this.bucketName);
     const blob = bucket.file(filename);
 
@@ -87,10 +83,7 @@ export class StorageService {
    * @param expiresIn - Expiration time in seconds (default 15 min)
    * @returns Signed URL
    */
-  async getSignedUrl(
-    filename: string,
-    expiresIn: number = 900,
-  ): Promise<string> {
+  async getSignedUrl(filename: string, expiresIn: number = 900): Promise<string> {
     const bucket = this.storage.bucket(this.bucketName);
     const file = bucket.file(filename);
 

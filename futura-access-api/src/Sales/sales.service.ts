@@ -12,21 +12,13 @@ import { Sale, UpdateSale } from './sales.interface';
 
 @Injectable()
 export class SalesService {
-  constructor(
-    @InjectModel(SalesSchema.name) private salesModel: Model<SalesDocument>,
-  ) {}
+  constructor(@InjectModel(SalesSchema.name) private salesModel: Model<SalesDocument>) {}
 
-  public async updateSale(
-    saleId: string,
-    updateSale: UpdateSale,
-  ): Promise<Sale | null> {
+  public async updateSale(saleId: string, updateSale: UpdateSale): Promise<Sale | null> {
     return this.salesModel.findByIdAndUpdate({ _id: saleId }, updateSale);
   }
 
-  public async checkTicketStatus(
-    promoter: string,
-    sale: string,
-  ): Promise<Sale | null> {
+  public async checkTicketStatus(promoter: string, sale: string): Promise<Sale | null> {
     return this.salesModel.findOne({ _id: sale, promoter }).populate({
       path: 'client',
       model: 'Account',

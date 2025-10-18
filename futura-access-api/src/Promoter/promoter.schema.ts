@@ -30,9 +30,7 @@ export class Promoter {
   @Prop([{ type: mongoose.SchemaTypes.ObjectId, ref: 'Event', default: [] }])
   events: string[];
 
-  @Prop([
-    { type: mongoose.SchemaTypes.ObjectId, ref: 'PromoterClient', default: [] },
-  ])
+  @Prop([{ type: mongoose.SchemaTypes.ObjectId, ref: 'PromoterClient', default: [] }])
   clients: string[];
 
   @Prop()
@@ -61,5 +59,4 @@ export class PromoterClient {
 }
 
 export type PromoterClientDocument = PromoterClient & mongoose.Document;
-export const PromoterClientSchema =
-  SchemaFactory.createForClass(PromoterClient);
+export const PromoterClientSchema = SchemaFactory.createForClass(PromoterClient);

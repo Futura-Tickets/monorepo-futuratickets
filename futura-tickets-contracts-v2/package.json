@@ -10,6 +10,7 @@
   "scripts": {
     "setup": "./start-blockchain.sh",
     "verify": "./verify-setup.sh",
+    "pre-deploy": "./scripts/pre-deployment-check.sh",
     "chain": "hardhat node",
     "compile": "hardhat compile",
     "build": "npm run clean && npm run compile && npm run export-abis && npm run sync-abis",

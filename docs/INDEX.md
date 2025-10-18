@@ -140,6 +140,11 @@ Preocupaciones que afectan a todas las capas: logging, monitoring, auditoría.
 #### [Observability](./05-cross-cutting/observability/)
 - [Observability Plan](./05-cross-cutting/observability/OBSERVABILITY_PLAN.md)
 
+#### [Quality Assurance](./05-cross-cutting/quality/)
+- [Codecov Complete Package](./CODECOV_COMPLETE.md) - Complete Codecov integration overview
+- [Codecov Activation Guide](./CODECOV_ACTIVATION_GUIDE.md) - Step-by-step activation (30 min)
+- [Codecov Dashboard Guide](./CODECOV_DASHBOARD_GUIDE.md) - Dashboard usage and best practices
+
 #### [Reports](./05-cross-cutting/reports/)
 - [Documentation Summary](./05-cross-cutting/reports/DOCUMENTATION_SUMMARY.md)
 - [Analysis and Deployment Report](./05-cross-cutting/reports/INFORME_ANALISIS_Y_DESPLIEGUE.md)

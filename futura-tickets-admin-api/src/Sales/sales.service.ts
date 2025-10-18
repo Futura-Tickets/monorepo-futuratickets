@@ -13,10 +13,7 @@ import { Model, UpdateWriteOpResult } from 'mongoose';
 import { Sales as SalesSchema, SalesDocument } from './sales.schema';
 
 // SERVICES
-import {
-  AbstractionService,
-  FuturaAccountClient,
-} from '../Abstraction/abstraction.service'; // Temporarily using stub
+import { AbstractionService, FuturaAccountClient } from '../Abstraction/abstraction.service'; // Temporarily using stub
 import { ProviderService } from '../Provider/provider.service';
 
 // INTERFACES
@@ -66,11 +63,7 @@ export class SalesService {
     return await this.salesModel.find({ _id: sales });
   }
 
-  public async findSale(
-    sale: string,
-    client: string,
-    status: TicketStatus,
-  ): Promise<Sale | null> {
+  public async findSale(sale: string, client: string, status: TicketStatus): Promise<Sale | null> {
     return await this.salesModel
       .findOne({ _id: sale, client, status })
       .populate({
@@ -113,10 +106,7 @@ export class SalesService {
       .sort({ createdAt: 'desc' });
   }
 
-  public async getAccessEvent(
-    promoter: string,
-    event: string,
-  ): Promise<Sale[]> {
+  public async getAccessEvent(promoter: string, event: string): Promise<Sale[]> {
     return this.salesModel.find({
       promoter,
       event,
@@ -124,10 +114,7 @@ export class SalesService {
     });
   }
 
-  public async updateSale(
-    saleId: string,
-    updateSale: UpdateSale,
-  ): Promise<Sale | null> {
+  public async updateSale(saleId: string, updateSale: UpdateSale): Promise<Sale | null> {
     return this.salesModel.findByIdAndUpdate({ _id: saleId }, updateSale);
   }
 
@@ -153,21 +140,11 @@ export class SalesService {
     return this.salesModel.create(createSale);
   }
 
-  public async accessEvent(
-    promoter: string,
-    sale: string,
-  ): Promise<Sale | null> {
-    return this.salesModel.findOneAndUpdate(
-      { _id: sale, promoter },
-      { status: TicketStatus.CLOSED },
-      { new: true },
-    );
+  public async accessEvent(promoter: string, sale: string): Promise<Sale | null> {
+    return this.salesModel.findOneAndUpdate({ _id: sale, promoter }, { status: TicketStatus.CLOSED }, { new: true });
   }
 
-  public async checkTicketStatus(
-    promoter: string,
-    sale: string,
-  ): Promise<Sale | null> {
+  public async checkTicketStatus(promoter: string, sale: string): Promise<Sale | null> {
     return this.salesModel.findOne({ _id: sale, promoter }).populate({
       path: 'client',
       model: 'Account',
@@ -193,23 +170,14 @@ export class SalesService {
   }> {
     console.log('Resaling transaction started!');
 
-    const smartAcountClient =
-      await this.abstractionService.getSmartAccountClient(accountPrivateKey);
+    const smartAcountClient = await this.abstractionService.getSmartAccountClient(accountPrivateKey);
 
     console.log('Smart account client found!');
-    const nftTicketPriceTx = await this.setNftTicketPrice(
-      smartAcountClient,
-      eventAddress,
-      tokenId,
-      price,
-    );
+    const nftTicketPriceTx = await this.setNftTicketPrice(smartAcountClient, eventAddress, tokenId, price);
 
     console.log('Set resaling transaction done!');
     const provider = this.providerService.getProvider();
-    const nftTicketPriceReceipt = await provider.waitForTransaction(
-      nftTicketPriceTx,
-      1,
-    );
+    const nftTicketPriceReceipt = await provider.waitForTransaction(nftTicketPriceTx, 1);
 
     return {
       blockNumber: nftTicketPriceReceipt!.blockNumber,
@@ -226,20 +194,12 @@ export class SalesService {
   ): Promise<{ blockNumber: number; hash: string; tokenId: number }> {
     console.log('Cancel resale ticket transaction started!');
 
-    const smartAcountClient =
-      await this.abstractionService.getSmartAccountClient(accountPrivateKey);
-    const nftTicketTransferTx = await this.cancelNftTicket(
-      smartAcountClient,
-      eventAddress,
-      tokenId,
-    );
+    const smartAcountClient = await this.abstractionService.getSmartAccountClient(accountPrivateKey);
+    const nftTicketTransferTx = await this.cancelNftTicket(smartAcountClient, eventAddress, tokenId);
 
     console.log('Cancel resale ticket transaction done!');
     const provider = this.providerService.getProvider();
-    const cancelResaleTransferReceipt = await provider.waitForTransaction(
-      nftTicketTransferTx,
-      1,
-    );
+    const cancelResaleTransferReceipt = await provider.waitForTransaction(nftTicketTransferTx, 1);
 
     return {
       blockNumber: cancelResaleTransferReceipt!.blockNumber,
@@ -260,11 +220,7 @@ export class SalesService {
       args: [tokenId, price],
     });
 
-    return this.abstractionService.sendTransaction(
-      smartAccountClient,
-      eventAddress,
-      callData,
-    );
+    return this.abstractionService.sendTransaction(smartAccountClient, eventAddress, callData);
   }
 
   private async cancelNftTicket(
@@ -278,17 +234,10 @@ export class SalesService {
       args: [tokenId],
     });
 
-    return this.abstractionService.sendTransaction(
-      smartAccountClient,
-      eventAddress,
-      callData,
-    );
+    return this.abstractionService.sendTransaction(smartAccountClient, eventAddress, callData);
   }
 
-  public async getInvitationsByEventId(
-    event: string,
-    promoter: string,
-  ): Promise<Sale[]> {
+  public async getInvitationsByEventId(event: string, promoter: string): Promise<Sale[]> {
     return await this.salesModel
       .find({ event, promoter, isInvitation: true })
       .populate({
@@ -299,10 +248,7 @@ export class SalesService {
       .sort({ createdAt: 'desc' });
   }
 
-  public async generateEventSalesInfo(
-    eventId: string,
-    promoter: Account,
-  ): Promise<Readable> {
+  public async generateEventSalesInfo(eventId: string, promoter: Account): Promise<Readable> {
     const sales = await this.salesModel
       .find({ event: eventId, promoter: promoter._id })
       .populate({

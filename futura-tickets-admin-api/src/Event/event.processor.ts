@@ -1,9 +1,4 @@
-import {
-  Processor,
-  OnQueueActive,
-  OnQueueCompleted,
-  Process,
-} from '@nestjs/bull';
+import { Processor, OnQueueActive, OnQueueCompleted, Process } from '@nestjs/bull';
 import { Job } from 'bull';
 
 // SERVICES
@@ -12,12 +7,7 @@ import { UserEventService } from './user-event.service';
 
 // INTERFACES
 import { EmitOrder } from '../Sales/sales.interface';
-import {
-  ConfirmTransferTicket,
-  MintTicket,
-  TransferResaleTicket,
-  TransferTicket,
-} from '../shared/interface';
+import { ConfirmTransferTicket, MintTicket, TransferResaleTicket, TransferTicket } from '../shared/interface';
 
 @Processor('create-order')
 export class CreateTicketProcessor {
@@ -45,10 +35,7 @@ export class TicketMintProcessor {
   constructor(private adminEventService: AdminEventService) {}
 
   @Process({ concurrency: 10 })
-  async transcode(
-    job: Job<{ mintTicket: MintTicket }>,
-    done: any,
-  ): Promise<void> {
+  async transcode(job: Job<{ mintTicket: MintTicket }>, done: any): Promise<void> {
     await this.adminEventService.mintTicket(job.data.mintTicket);
     done(null);
   }
@@ -69,13 +56,8 @@ export class TicketTransferProcessor {
   constructor(private userEventService: UserEventService) {}
 
   @Process({ concurrency: 10 })
-  async transcode(
-    job: Job<{ transferTicket: TransferTicket }>,
-    done: any,
-  ): Promise<void> {
-    const transferedTicket = await this.userEventService.processTicketTransfer(
-      job.data.transferTicket,
-    );
+  async transcode(job: Job<{ transferTicket: TransferTicket }>, done: any): Promise<void> {
+    const transferedTicket = await this.userEventService.processTicketTransfer(job.data.transferTicket);
     done(null, transferedTicket);
   }
 
@@ -95,10 +77,7 @@ export class TicketInvitationProcessor {
   constructor(private adminEventService: AdminEventService) {}
 
   @Process({ concurrency: 10 })
-  async transcode(
-    job: Job<{ mintInvitationTicket: MintTicket }>,
-    done: any,
-  ): Promise<void> {
+  async transcode(job: Job<{ mintInvitationTicket: MintTicket }>, done: any): Promise<void> {
     await this.adminEventService.mintTicket(job.data.mintInvitationTicket);
     done(null);
   }
@@ -119,13 +98,8 @@ export class TicketResaleTransferProcessor {
   constructor(private adminEventService: AdminEventService) {}
 
   @Process({ concurrency: 10 })
-  async transcode(
-    job: Job<{ transferResaleTicket: TransferResaleTicket }>,
-    done: any,
-  ): Promise<void> {
-    await this.adminEventService.transferResaleTicket(
-      job.data.transferResaleTicket,
-    );
+  async transcode(job: Job<{ transferResaleTicket: TransferResaleTicket }>, done: any): Promise<void> {
+    await this.adminEventService.transferResaleTicket(job.data.transferResaleTicket);
     done(null);
   }
 

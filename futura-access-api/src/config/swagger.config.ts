@@ -118,10 +118,7 @@ This API manages ticket validation, access control, and check-in operations for 
   exportPath: './swagger-spec.json',
 };
 
-export function setupSwagger(
-  app: INestApplication,
-  config: Partial<SwaggerConfig> = {},
-): void {
+export function setupSwagger(app: INestApplication, config: Partial<SwaggerConfig> = {}): void {
   const finalConfig: Required<SwaggerConfig> = {
     ...defaultConfig,
     ...config,
@@ -131,11 +128,7 @@ export function setupSwagger(
     .setTitle(finalConfig.title)
     .setDescription(finalConfig.description)
     .setVersion(finalConfig.version)
-    .setContact(
-      finalConfig.contactName,
-      finalConfig.contactUrl,
-      finalConfig.contactEmail,
-    )
+    .setContact(finalConfig.contactName, finalConfig.contactUrl, finalConfig.contactEmail)
     .setLicense(finalConfig.license, finalConfig.licenseUrl)
     .setExternalDoc('API Changelog', 'https://docs.futuratickets.com/changelog')
     .setTermsOfService('https://futuratickets.com/terms');
@@ -229,9 +222,7 @@ export function setupSwagger(
   }
 
   console.log(
-    `📚 Swagger documentation available at: http://localhost:${
-      process.env.PORT || 3000
-    }/${finalConfig.path}`,
+    `📚 Swagger documentation available at: http://localhost:${process.env.PORT || 3000}/${finalConfig.path}`,
   );
 }
 

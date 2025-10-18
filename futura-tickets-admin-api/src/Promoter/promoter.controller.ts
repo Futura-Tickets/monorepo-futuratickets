@@ -16,9 +16,7 @@ export class PromoterController {
   constructor(private promoterService: PromoterService) {}
 
   @Get('/clients')
-  async getPromoterUsers(
-    @Auth(PromoterPipeService) promoter: Account,
-  ): Promise<Account[] | []> {
+  async getPromoterUsers(@Auth(PromoterPipeService) promoter: Account): Promise<Account[] | []> {
     return this.promoterService.getPromoterClients(promoter.promoter!);
   }
 
@@ -36,12 +34,8 @@ export class PromoterController {
   // };
 
   @Get('/api')
-  async getPromoterApi(
-    @Auth(PromoterPipeService) promoter: Account,
-  ): Promise<APISettings | void> {
-    return await this.promoterService.getPromoterApiSettings(
-      promoter.promoter!,
-    );
+  async getPromoterApi(@Auth(PromoterPipeService) promoter: Account): Promise<APISettings | void> {
+    return await this.promoterService.getPromoterApiSettings(promoter.promoter!);
   }
 
   @Patch('/api')
@@ -49,9 +43,6 @@ export class PromoterController {
     @Auth(PromoterPipeService) promoter: Account,
     @Body('apiEnabled') apiEnabled: boolean,
   ): Promise<APISettings> {
-    return await this.promoterService.updatePromoterApiSettings(
-      promoter.promoter!,
-      apiEnabled,
-    );
+    return await this.promoterService.updatePromoterApiSettings(promoter.promoter!, apiEnabled);
   }
 }

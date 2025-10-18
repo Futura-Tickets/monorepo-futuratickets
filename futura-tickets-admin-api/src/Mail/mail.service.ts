@@ -256,10 +256,7 @@ export class MailService {
       });
   }
 
-  public async sendResaleConfirmation(
-    sale: Sale,
-    price: number,
-  ): Promise<void> {
+  public async sendResaleConfirmation(sale: Sale, price: number): Promise<void> {
     const account = sale.client as unknown as Account;
 
     const registerToken = await this.authService.registerToken({
@@ -629,10 +626,7 @@ export class MailService {
       });
   }
 
-  public async sendTicketSoldConfirmation(
-    createdTicket: CreatedTicket,
-    account: Account,
-  ): Promise<void> {
+  public async sendTicketSoldConfirmation(createdTicket: CreatedTicket, account: Account): Promise<void> {
     const registerToken = await this.authService.registerToken({
       account: account._id,
       name: account.name,
@@ -815,9 +809,7 @@ export class MailService {
       });
   }
 
-  public async sendTransferFromConfirmation(
-    transferFromEmail: TransferFromEmail,
-  ): Promise<void> {
+  public async sendTransferFromConfirmation(transferFromEmail: TransferFromEmail): Promise<void> {
     const registerToken = await this.authService.registerToken({
       account: transferFromEmail.account._id,
       name: transferFromEmail.account.name,
@@ -1000,9 +992,7 @@ export class MailService {
       });
   }
 
-  public async sendTransferToConfirmation(
-    transferToEmail: TransferToEmail,
-  ): Promise<void> {
+  public async sendTransferToConfirmation(transferToEmail: TransferToEmail): Promise<void> {
     const registerToken = await this.authService.registerToken({
       account: transferToEmail.account._id,
       name: transferToEmail.account.name,
@@ -1401,10 +1391,7 @@ export class MailService {
       });
   }
 
-  public async sendAccountConfirmation(
-    accountConfirmation: Account,
-    password: string,
-  ): Promise<void> {
+  public async sendAccountConfirmation(accountConfirmation: Account, password: string): Promise<void> {
     const registerToken = await this.authService.registerToken({
       account: accountConfirmation._id,
       name: accountConfirmation.name,

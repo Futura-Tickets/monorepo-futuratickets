@@ -81,10 +81,7 @@ export class DateTimeDto {
     description: 'Launch date for ticket sales',
     example: '2024-07-01T00:00:00Z',
   })
-  @IsDateString(
-    {},
-    { message: 'Please provide a valid ISO 8601 date string for launch date' },
-  )
+  @IsDateString({}, { message: 'Please provide a valid ISO 8601 date string for launch date' })
   @IsNotEmpty({ message: 'Launch date is required' })
   launchDate: Date;
 
@@ -92,10 +89,7 @@ export class DateTimeDto {
     description: 'Event start date',
     example: '2024-07-15T00:00:00Z',
   })
-  @IsDateString(
-    {},
-    { message: 'Please provide a valid ISO 8601 date string for start date' },
-  )
+  @IsDateString({}, { message: 'Please provide a valid ISO 8601 date string for start date' })
   @IsNotEmpty({ message: 'Start date is required' })
   startDate: Date;
 
@@ -103,10 +97,7 @@ export class DateTimeDto {
     description: 'Event end date',
     example: '2024-07-15T23:00:00Z',
   })
-  @IsDateString(
-    {},
-    { message: 'Please provide a valid ISO 8601 date string for end date' },
-  )
+  @IsDateString({}, { message: 'Please provide a valid ISO 8601 date string for end date' })
   @IsNotEmpty({ message: 'End date is required' })
   endDate: Date;
 
@@ -114,10 +105,7 @@ export class DateTimeDto {
     description: 'Event start time',
     example: '2024-07-15T18:00:00Z',
   })
-  @IsDateString(
-    {},
-    { message: 'Please provide a valid ISO 8601 date string for start time' },
-  )
+  @IsDateString({}, { message: 'Please provide a valid ISO 8601 date string for start time' })
   @IsNotEmpty({ message: 'Start time is required' })
   startTime: Date;
 
@@ -125,10 +113,7 @@ export class DateTimeDto {
     description: 'Event end time',
     example: '2024-07-15T23:00:00Z',
   })
-  @IsDateString(
-    {},
-    { message: 'Please provide a valid ISO 8601 date string for end time' },
-  )
+  @IsDateString({}, { message: 'Please provide a valid ISO 8601 date string for end time' })
   @IsNotEmpty({ message: 'End time is required' })
   endTime: Date;
 }

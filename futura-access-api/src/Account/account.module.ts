@@ -18,9 +18,7 @@ import { AccountService } from './account.service';
   imports: [
     AuthModule,
     ConfigModule,
-    MongooseModule.forFeature([
-      { name: Account.name, schema: AccountSchema, collection: 'accounts' },
-    ]),
+    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema, collection: 'accounts' }]),
   ],
   controllers: [AccountController],
   providers: [AccountService],

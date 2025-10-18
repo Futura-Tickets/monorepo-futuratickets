@@ -2,12 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
 // INTERFACES
-import {
-  Item,
-  ContactDetails,
-  OrderStatus,
-  BlockchainInfo,
-} from './orders.interface';
+import { Item, ContactDetails, OrderStatus, BlockchainInfo } from './orders.interface';
 
 @Schema({
   timestamps: true,

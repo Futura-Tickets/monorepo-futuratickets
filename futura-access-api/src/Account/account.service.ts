@@ -1,9 +1,4 @@
-import {
-  ArgumentMetadata,
-  Injectable,
-  PipeTransform,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ArgumentMetadata, Injectable, PipeTransform, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 // MONGOOSE
@@ -19,12 +14,7 @@ import { AuthService } from 'src/Auth/services/auth.service';
 import { comparePassword } from '../utils/password';
 
 // INTERFACES
-import {
-  Account,
-  DecodedToken,
-  LoginAccount,
-  Roles,
-} from './account.interface';
+import { Account, DecodedToken, LoginAccount, Roles } from './account.interface';
 
 @Injectable()
 export class AccountService {
@@ -38,10 +28,7 @@ export class AccountService {
     return await this.authService.decodeToken(token);
   }
 
-  public async getEventAccessAccounts(
-    promoter: string,
-    accessEvent: string,
-  ): Promise<Account[]> {
+  public async getEventAccessAccounts(promoter: string, accessEvent: string): Promise<Account[]> {
     return await this.accountModel
       .find({ promoter, accessEvent })
       .select({
@@ -65,14 +52,10 @@ export class AccountService {
   }
 
   public async getAccessAccount(accountId: string): Promise<Account | null> {
-    return await this.accountModel
-      .findOne({ _id: accountId, role: 'ACCESS' })
-      .select({ _id: 1, promoter: 1 });
+    return await this.accountModel.findOne({ _id: accountId, role: 'ACCESS' }).select({ _id: 1, promoter: 1 });
   }
 
-  public async getAccessAccountByEmail(
-    accountEmail: string,
-  ): Promise<Account | null> {
+  public async getAccessAccountByEmail(accountEmail: string): Promise<Account | null> {
     return await this.accountModel
       .findOne<Account>({ email: accountEmail, role: Roles.ACCESS })
       .populate({
@@ -91,10 +74,7 @@ export class AccountService {
     const account = await this.getAccessAccountByEmail(loginAccount.email);
     if (account && account.registered) {
       // CHECK IF PASSWORD MATCH
-      const passwordMatch = await comparePassword(
-        loginAccount.password,
-        account.password,
-      );
+      const passwordMatch = await comparePassword(loginAccount.password, account.password);
       if (passwordMatch) {
         return {
           _id: account._id,
@@ -133,9 +113,7 @@ export class PromoterPipeService implements PipeTransform {
   public async transform(token: string, _metadata: ArgumentMetadata) {
     try {
       const payload = await this.authService.decodeToken(token);
-      const account = await this.accountService.getPromoterAccount(
-        payload.account,
-      );
+      const account = await this.accountService.getPromoterAccount(payload.account);
 
       if (!account) throw new UnauthorizedException('Invalid account');
 
@@ -160,9 +138,7 @@ export class AccessPipeService implements PipeTransform {
   public async transform(token: string, _metadata: ArgumentMetadata) {
     try {
       const payload = await this.authService.decodeToken(token);
-      const account = await this.accountService.getAccessAccount(
-        payload.account,
-      );
+      const account = await this.accountService.getAccessAccount(payload.account);
 
       if (!account) throw new UnauthorizedException('Invalid account');
 

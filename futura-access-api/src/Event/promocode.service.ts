@@ -5,10 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // SCHEMA
-import {
-  Promocode as PromocodeSchema,
-  PromocodeDocument,
-} from './event.schema';
+import { Promocode as PromocodeSchema, PromocodeDocument } from './event.schema';
 
 // INTERFACES
 import { Promocode } from 'src/shared/interface';
@@ -33,10 +30,7 @@ export class PromocodesService {
     return await this.promocodeModel.find({ eventId });
   }
 
-  public async deletePromocode(
-    eventId: string,
-    code: string,
-  ): Promise<boolean> {
+  public async deletePromocode(eventId: string, code: string): Promise<boolean> {
     const result = await this.promocodeModel.deleteOne({ eventId, code });
     return result.deletedCount > 0;
   }

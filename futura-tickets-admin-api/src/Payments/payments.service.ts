@@ -5,12 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // SCHEMA
-import {
-  Payment,
-  PaymentDocument,
-  PaymentMethod,
-  PaymentMethodDocument,
-} from './payments.schema';
+import { Payment, PaymentDocument, PaymentMethod, PaymentMethodDocument } from './payments.schema';
 
 // INTERFACES
 import { CreatePayment, Payment as IPayment } from './payments.interface';
@@ -24,11 +19,7 @@ export class PaymentsService {
     @InjectModel('Account') private accountModel: Model<any>,
   ) {}
 
-  public async createPayment(
-    createPaymentData: CreatePayment,
-    promoter: string,
-    account: string,
-  ): Promise<IPayment> {
+  public async createPayment(createPaymentData: CreatePayment, promoter: string, account: string): Promise<IPayment> {
     const createPayment = { ...createPaymentData };
 
     const newPayment = new this.paymentModel({
@@ -57,10 +48,7 @@ export class PaymentsService {
       .sort({ date: -1 });
   }
 
-  public async getPayment(
-    paymentId: string,
-    promoter: string,
-  ): Promise<IPayment | null> {
+  public async getPayment(paymentId: string, promoter: string): Promise<IPayment | null> {
     try {
       return await this.paymentModel
         .findOne({ _id: paymentId, promoter })
@@ -79,10 +67,7 @@ export class PaymentsService {
     }
   }
 
-  public async deletePayment(
-    paymentId: string,
-    promoter: string,
-  ): Promise<boolean> {
+  public async deletePayment(paymentId: string, promoter: string): Promise<boolean> {
     try {
       const result = await this.paymentModel.deleteOne({
         _id: paymentId,

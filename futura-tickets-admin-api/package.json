@@ -111,17 +111,22 @@
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": ["ts-jest", {
-        "tsconfig": {
-          "noUnusedLocals": false,
-          "noUnusedParameters": false
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "noUnusedLocals": false,
+            "noUnusedParameters": false
+          }
         }
-      }]
+      ]
     },
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
     },
-    "setupFiles": ["<rootDir>/../jest.setup.ts"],
+    "setupFiles": [
+      "<rootDir>/../jest.setup.ts"
+    ],
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!**/*.interface.ts",

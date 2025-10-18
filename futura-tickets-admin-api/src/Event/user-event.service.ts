@@ -22,10 +22,7 @@ import QRCode from 'qrcode';
 import * as EventAbi from '../abis/Event.json';
 
 // SERVICES
-import {
-  AbstractionService,
-  FuturaAccountClient,
-} from '../Abstraction/abstraction.service';
+import { AbstractionService, FuturaAccountClient } from '../Abstraction/abstraction.service';
 import { AccountService } from '../Account/account.service';
 import { OrdersService } from '../Orders/orders.service';
 import { MailService } from '../Mail/mail.service';
@@ -51,12 +48,7 @@ import {
 } from '../shared/interface';
 import { TransferFromEmail, TransferToEmail } from '../Mail/mail.interface';
 import { CreateOrder, Item, OrderStatus } from '../Orders/orders.interface';
-import {
-  CreateSale,
-  Sale,
-  SaleHistory,
-  TransferAccount,
-} from '../Sales/sales.interface';
+import { CreateSale, Sale, SaleHistory, TransferAccount } from '../Sales/sales.interface';
 
 @Injectable()
 export class UserEventService {
@@ -94,9 +86,7 @@ export class UserEventService {
     return await this.eventModel.findOne({ _id: event });
   }
 
-  public async createOrder(
-    createOrder: CreateOrder,
-  ): Promise<{ paymentId: string; clientSecret: string } | undefined> {
+  public async createOrder(createOrder: CreateOrder): Promise<{ paymentId: string; clientSecret: string } | undefined> {
     try {
       const event = await this.getEventById(createOrder.event);
       if (!event) {
@@ -134,8 +124,7 @@ export class UserEventService {
         });
       });
 
-      const resalesIds =
-        createOrder.resaleItems?.map((resale: Item) => resale.sale!) || [];
+      const resalesIds = createOrder.resaleItems?.map((resale: Item) => resale.sale!) || [];
       const resales = await this.salesService.getResales(resalesIds);
 
       resales.forEach((resale: Sale) => {
@@ -150,13 +139,8 @@ export class UserEventService {
 
       totalAmount += totalAmount * (event.commission / 100);
 
-      await this.promoterService.addUserToPromoter(
-        createOrder.promoter,
-        account._id,
-      );
-      const paymentIntent = await this.stripeService.createPaymentIntent(
-        Number((totalAmount * 100).toFixed(0)),
-      );
+      await this.promoterService.addUserToPromoter(createOrder.promoter, account._id);
+      const paymentIntent = await this.stripeService.createPaymentIntent(Number((totalAmount * 100).toFixed(0)));
 
       const createdOrder = await this.ordersService.createOrder({
         ...createOrder,
@@ -218,10 +202,7 @@ export class UserEventService {
       await this.ordersService.updateOrderPaymentId(createdOrder.paymentId, {
         sales: createdSales.map((createdSale: Sale) => createdSale._id),
       });
-      await this.accountService.addOrderToAccount(
-        account._id,
-        createdOrder._id,
-      );
+      await this.accountService.addOrderToAccount(account._id, createdOrder._id);
       await this.addOrderToEvent(event?._id!, createdOrder._id);
 
       const emitOrder: string = createdOrder._id;
@@ -245,16 +226,8 @@ export class UserEventService {
     } catch (error) {}
   }
 
-  public async resale(
-    sale: string,
-    client: string,
-    price: number,
-  ): Promise<void> {
-    const ticket = await this.salesService.findSale(
-      sale,
-      client,
-      TicketStatus.OPEN,
-    );
+  public async resale(sale: string, client: string, price: number): Promise<void> {
+    const ticket = await this.salesService.findSale(sale, client, TicketStatus.OPEN);
     if (!ticket) {
       console.log('Ticket resale not found!');
       return;
@@ -315,11 +288,7 @@ export class UserEventService {
   }
 
   public async cancelResale(sale: string, client: string): Promise<void> {
-    const ticketResale = await this.salesService.findSale(
-      sale,
-      client,
-      TicketStatus.SALE,
-    );
+    const ticketResale = await this.salesService.findSale(sale, client, TicketStatus.SALE);
     if (!ticketResale) {
       console.log('Ticket cancel resale not found!');
       return;
@@ -338,24 +307,13 @@ export class UserEventService {
       ],
     });
 
-    this.socketService.emitCancelResale(
-      ticketResale.promoter,
-      ticketResale.order,
-    );
+    this.socketService.emitCancelResale(ticketResale.promoter, ticketResale.order);
 
     await this.mailService.sendCancelResaleConfirmation(ticketResale);
   }
 
-  public async transferTicket(
-    sale: string,
-    client: string,
-    transferToTicket: TransferToTicket,
-  ): Promise<void> {
-    const ticket = await this.salesService.findSale(
-      sale,
-      client,
-      TicketStatus.OPEN,
-    );
+  public async transferTicket(sale: string, client: string, transferToTicket: TransferToTicket): Promise<void> {
+    const ticket = await this.salesService.findSale(sale, client, TicketStatus.OPEN);
     if (!ticket) return;
 
     const account = await this.accountService.accountExistOrCreate(
@@ -417,10 +375,7 @@ export class UserEventService {
 
     await this.addOrderToEvent(ticketEvent._id, createdOrder._id);
     await this.accountService.addOrderToAccount(account._id, createdOrder._id);
-    await this.promoterService.addUserToPromoter(
-      createdOrder.promoter,
-      account._id,
-    );
+    await this.promoterService.addUserToPromoter(createdOrder.promoter, account._id);
 
     const history: SaleHistory[] = [
       {
@@ -452,10 +407,7 @@ export class UserEventService {
       history,
       status: TicketStatus.PROCESSING,
     });
-    await this.ordersService.updateOrderSales(
-      createdOrder?._id!,
-      createdSale._id!,
-    );
+    await this.ordersService.updateOrderSales(createdOrder?._id!, createdSale._id!);
 
     this.socketService.emitTicketMinted(ticket.promoter, ticket.order);
     this.socketService.emitOrderCreated(ticket.promoter, createdOrder._id);
@@ -521,9 +473,7 @@ export class UserEventService {
     }
 
     // DONT FORGET TO GENERATE NEW QR CODE
-    const qrCode = await QRCode.toDataURL(
-      `${ticketEvent.url}/verify/${createdSale._id.toString()}`,
-    );
+    const qrCode = await QRCode.toDataURL(`${ticketEvent.url}/verify/${createdSale._id.toString()}`);
 
     await this.salesService.updateSale(createdSale._id, {
       history: [
@@ -561,23 +511,15 @@ export class UserEventService {
     await this.mailService.sendTransferToConfirmation(transferToEmail);
   }
 
-  public async processTicketTransfer(
-    transferTicket: TransferTicket,
-  ): Promise<void> {
+  public async processTicketTransfer(transferTicket: TransferTicket): Promise<void> {
     console.log('Transfer ticket transaction started!');
 
-    const smartAcountClient =
-      await this.abstractionService.getSmartAccountClient(
-        transferTicket.ticketClient.key as `0x${string}`,
-      );
-
-    const ownerKey = await this.accountService.getAccountPrivateKeyByAddress(
-      transferTicket.account.address as string,
+    const smartAcountClient = await this.abstractionService.getSmartAccountClient(
+      transferTicket.ticketClient.key as `0x${string}`,
     );
-    const ownerSmartAcountClient =
-      await this.abstractionService.getSmartAccountClient(
-        ownerKey!.key as `0x${string}`,
-      );
+
+    const ownerKey = await this.accountService.getAccountPrivateKeyByAddress(transferTicket.account.address as string);
+    const ownerSmartAcountClient = await this.abstractionService.getSmartAccountClient(ownerKey!.key as `0x${string}`);
 
     const nftTicketTransferTx = await this.transferNftTicket(
       smartAcountClient,
@@ -588,10 +530,7 @@ export class UserEventService {
 
     console.log('Transfer ticket transaction done!');
     const provider = this.providerService.getProvider();
-    const nftTicketTransferReceipt = await provider.waitForTransaction(
-      nftTicketTransferTx,
-      1,
-    );
+    const nftTicketTransferReceipt = await provider.waitForTransaction(nftTicketTransferTx, 1);
 
     const contract = new ethers.Contract(
       transferTicket.ticketEvent.address as `0x${string}`,
@@ -600,30 +539,24 @@ export class UserEventService {
     );
 
     const transferToUpdate: TransferToUpdate = await new Promise((resolve) => {
-      contract
-        .queryFilter('Transfer', nftTicketTransferReceipt?.blockNumber)
-        .then((data) => {
-          data.filter((log: ethers.Log | ethers.EventLog) => {
-            const iface = new Interface([
-              'event Transfer(address indexed from, address indexed to, uint256 indexed value)',
-            ]);
-            const decodeResult = iface.decodeEventLog(
-              'Transfer',
-              log.data,
-              log.topics,
-            );
+      contract.queryFilter('Transfer', nftTicketTransferReceipt?.blockNumber).then((data) => {
+        data.filter((log: ethers.Log | ethers.EventLog) => {
+          const iface = new Interface([
+            'event Transfer(address indexed from, address indexed to, uint256 indexed value)',
+          ]);
+          const decodeResult = iface.decodeEventLog('Transfer', log.data, log.topics);
 
-            if (Number(decodeResult[2]) == transferTicket.tokenId) {
-              resolve({
-                blockNumber: nftTicketTransferReceipt!.blockNumber,
-                hash: nftTicketTransferReceipt!.hash,
-                from: decodeResult[0],
-                to: decodeResult[1],
-                tokenId: Number(decodeResult[2]),
-              });
-            }
-          });
+          if (Number(decodeResult[2]) == transferTicket.tokenId) {
+            resolve({
+              blockNumber: nftTicketTransferReceipt!.blockNumber,
+              hash: nftTicketTransferReceipt!.hash,
+              from: decodeResult[0],
+              to: decodeResult[1],
+              tokenId: Number(decodeResult[2]),
+            });
+          }
         });
+      });
     });
 
     // DONT FORGET TO GENERATE NEW QR CODE
@@ -675,22 +608,12 @@ export class UserEventService {
       promoter: transferTicket.createdOrder.promoter,
     });
 
-    this.socketService.emitTicketTransfer(
-      transferTicket.createdOrder.promoter,
-      transferTicket.ticket.order,
-    );
-    this.socketService.emitTicketTransfer(
-      transferTicket.createdOrder.promoter,
-      transferTicket.createdOrder._id,
-    );
+    this.socketService.emitTicketTransfer(transferTicket.createdOrder.promoter, transferTicket.ticket.order);
+    this.socketService.emitTicketTransfer(transferTicket.createdOrder.promoter, transferTicket.createdOrder._id);
 
     // Temporarily using direct email send instead of queue
-    await this.mailService.sendTransferFromConfirmation(
-      transferTicket.transferFromEmail,
-    );
-    await this.mailService.sendTransferToConfirmation(
-      transferTicket.transferToEmail,
-    );
+    await this.mailService.sendTransferFromConfirmation(transferTicket.transferFromEmail);
+    await this.mailService.sendTransferToConfirmation(transferTicket.transferToEmail);
   }
 
   private async transferNftTicket(
@@ -705,21 +628,10 @@ export class UserEventService {
       args: [tokenId, owner],
     });
 
-    return this.abstractionService.sendTransaction(
-      smartAccountClient,
-      eventAddress,
-      callData,
-    );
+    return this.abstractionService.sendTransaction(smartAccountClient, eventAddress, callData);
   }
 
-  public async updateEvent(
-    eventId: string,
-    promoter: string,
-    event: UpdateEvent,
-  ): Promise<void | null> {
-    return await this.eventModel.findOneAndUpdate(
-      { _id: eventId, promoter },
-      event,
-    );
+  public async updateEvent(eventId: string, promoter: string, event: UpdateEvent): Promise<void | null> {
+    return await this.eventModel.findOneAndUpdate({ _id: eventId, promoter }, event);
   }
 }

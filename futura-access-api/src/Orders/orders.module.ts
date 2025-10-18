@@ -19,9 +19,7 @@ import { SalesModule } from 'src/Sales/sales.module';
     AccountModule,
 
     ConfigModule,
-    MongooseModule.forFeature([
-      { name: Orders.name, schema: OrdersSchema, collection: 'orders' },
-    ]),
+    MongooseModule.forFeature([{ name: Orders.name, schema: OrdersSchema, collection: 'orders' }]),
     SalesModule,
     SocketModule,
   ],

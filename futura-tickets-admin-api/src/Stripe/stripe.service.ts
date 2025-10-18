@@ -14,8 +14,7 @@ export class StripeService {
   constructor(private configService: ConfigService) {
     this.stripePublicKey = configService.get('STRIPE_PUBLIC_KEY') || '';
     this.stripeSecretKey = configService.get('STRIPE_PRIVATE_KEY') || '';
-    this.stripeEndpointSecret =
-      configService.get('STRIPE_ENDPOINT_SECRET') || '';
+    this.stripeEndpointSecret = configService.get('STRIPE_ENDPOINT_SECRET') || '';
 
     // Only initialize Stripe if secret key is provided
     if (this.stripeSecretKey) {
@@ -23,9 +22,7 @@ export class StripeService {
         apiVersion: '2024-11-20.acacia',
       });
     } else {
-      console.warn(
-        '⚠️  STRIPE_PRIVATE_KEY not configured. Payment processing will be disabled.',
-      );
+      console.warn('⚠️  STRIPE_PRIVATE_KEY not configured. Payment processing will be disabled.');
     }
   }
 
@@ -33,9 +30,7 @@ export class StripeService {
     return this.stripePublicKey;
   }
 
-  public async createPaymentIntent(
-    amount: number,
-  ): Promise<Stripe.Response<Stripe.PaymentIntent>> {
+  public async createPaymentIntent(amount: number): Promise<Stripe.Response<Stripe.PaymentIntent>> {
     return await this.stripe.paymentIntents.create({
       currency: 'eur',
       amount,
@@ -47,10 +42,6 @@ export class StripeService {
   }
 
   public registerEvents(payload: Buffer, signature: string): Stripe.Event {
-    return this.stripe.webhooks.constructEvent(
-      payload,
-      signature,
-      this.stripeEndpointSecret,
-    );
+    return this.stripe.webhooks.constructEvent(payload, signature, this.stripeEndpointSecret);
   }
 }

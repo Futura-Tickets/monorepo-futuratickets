@@ -7,17 +7,11 @@ export class ProviderService {
   constructor(private configService: ConfigService) {}
 
   public getProvider(): JsonRpcProvider {
-    return new JsonRpcProvider(
-      this.configService.get('HTTP_BASE_SEPOLIA_RPC')!,
-      84532,
-    );
+    return new JsonRpcProvider(this.configService.get('HTTP_BASE_SEPOLIA_RPC')!, 84532);
   }
 
   public getWssProvider(): WebSocketProvider {
-    return new WebSocketProvider(
-      this.configService.get('WSS_BASE_SEPOLIA_RPC')!,
-      84532,
-    );
+    return new WebSocketProvider(this.configService.get('WSS_BASE_SEPOLIA_RPC')!, 84532);
   }
 }
 

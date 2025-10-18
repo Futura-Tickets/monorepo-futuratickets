@@ -5,10 +5,7 @@ import { WalletService } from './wallet.service';
 import { Account, AccountSchema } from '../Account/account.schema';
 
 @Module({
-  imports: [
-    ConfigModule,
-    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
-  ],
+  imports: [ConfigModule, MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }])],
   providers: [WalletService],
   exports: [WalletService],
 })

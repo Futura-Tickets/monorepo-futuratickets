@@ -102,47 +102,29 @@ This API provides comprehensive endpoints for managing events, tickets, orders, 
   exportPath: './swagger-spec.json',
 };
 
-export function setupSwagger(
-  app: INestApplication,
-  config: Partial<SwaggerConfig> = {},
-): void {
+export function setupSwagger(app: INestApplication, config: Partial<SwaggerConfig> = {}): void {
   const finalConfig: Required<SwaggerConfig> = {
     ...defaultConfig,
     ...config,
     title: config.title ?? defaultConfig.title ?? 'FuturaTickets Admin API',
-    description:
-      config.description ?? defaultConfig.description ?? 'API Documentation',
+    description: config.description ?? defaultConfig.description ?? 'API Documentation',
     version: config.version ?? defaultConfig.version ?? '1.0.0',
     path: config.path ?? defaultConfig.path ?? 'api/docs',
     contactName: config.contactName ?? defaultConfig.contactName ?? 'Support',
-    contactEmail:
-      config.contactEmail ??
-      defaultConfig.contactEmail ??
-      'support@futuratickets.com',
-    contactUrl:
-      config.contactUrl ??
-      defaultConfig.contactUrl ??
-      'https://futuratickets.com',
+    contactEmail: config.contactEmail ?? defaultConfig.contactEmail ?? 'support@futuratickets.com',
+    contactUrl: config.contactUrl ?? defaultConfig.contactUrl ?? 'https://futuratickets.com',
     license: config.license ?? defaultConfig.license ?? 'MIT',
-    licenseUrl:
-      config.licenseUrl ??
-      defaultConfig.licenseUrl ??
-      'https://opensource.org/licenses/MIT',
+    licenseUrl: config.licenseUrl ?? defaultConfig.licenseUrl ?? 'https://opensource.org/licenses/MIT',
     servers: config.servers ?? defaultConfig.servers ?? [],
     exportJson: config.exportJson ?? defaultConfig.exportJson ?? false,
-    exportPath:
-      config.exportPath ?? defaultConfig.exportPath ?? './swagger-spec.json',
+    exportPath: config.exportPath ?? defaultConfig.exportPath ?? './swagger-spec.json',
   };
 
   const documentConfig = new DocumentBuilder()
     .setTitle(finalConfig.title)
     .setDescription(finalConfig.description)
     .setVersion(finalConfig.version)
-    .setContact(
-      finalConfig.contactName,
-      finalConfig.contactUrl,
-      finalConfig.contactEmail,
-    )
+    .setContact(finalConfig.contactName, finalConfig.contactUrl, finalConfig.contactEmail)
     .setLicense(finalConfig.license, finalConfig.licenseUrl)
     .setExternalDoc('API Changelog', 'https://docs.futuratickets.com/changelog')
     .setTermsOfService('https://futuratickets.com/terms');
@@ -237,9 +219,7 @@ export function setupSwagger(
   }
 
   console.log(
-    `📚 Swagger documentation available at: http://localhost:${
-      process.env.PORT || 3000
-    }/${finalConfig.path}`,
+    `📚 Swagger documentation available at: http://localhost:${process.env.PORT || 3000}/${finalConfig.path}`,
   );
 }
 

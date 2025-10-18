@@ -39,25 +39,17 @@ export class SocketService {
         connectionString: this.socketAccessEndpoint,
       });
     } else {
-      console.warn(
-        '⚠️  SOCKET_ACCESS not configured. WebSocket functionality will be limited.',
-      );
+      console.warn('⚠️  SOCKET_ACCESS not configured. WebSocket functionality will be limited.');
     }
 
     this.socket.on('connection', async (client: Socket) => {
-      const isAuth = await this.authService.decodeToken(
-        client.handshake.query.token as string,
-      );
-      if (isAuth && isAuth.exp > Date.now() / 1000)
-        this.handleConnection(isAuth.promoter, client);
+      const isAuth = await this.authService.decodeToken(client.handshake.query.token as string);
+      if (isAuth && isAuth.exp > Date.now() / 1000) this.handleConnection(isAuth.promoter, client);
     });
   }
 
   public handleConnection(promoter: string, client: Socket): void {
-    this.connectedPromoter.set(promoter, [
-      ...(this.connectedPromoter.get(promoter) || []),
-      client.id,
-    ]);
+    this.connectedPromoter.set(promoter, [...(this.connectedPromoter.get(promoter) || []), client.id]);
     client.on('disconnect', async (reason) => {
       this.handleDisconnection(promoter, client);
     });
@@ -66,16 +58,12 @@ export class SocketService {
   public handleDisconnection(promoter: string, client: Socket) {
     this.connectedPromoter.set(
       promoter,
-      this.connectedPromoter
-        .get(promoter)
-        ?.filter((promoterClientId: string) => promoterClientId != client.id)!,
+      this.connectedPromoter.get(promoter)?.filter((promoterClientId: string) => promoterClientId != client.id)!,
     );
     client.disconnect();
   }
 
   public emitTicketAccess(promoter: string, access: EmitAccess): void {
-    this.socket
-      .to(this.connectedPromoter.get(promoter.toString()))
-      .emit('access', access);
+    this.socket.to(this.connectedPromoter.get(promoter.toString())).emit('access', access);
   }
 }

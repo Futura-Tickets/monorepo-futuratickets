@@ -25,9 +25,7 @@ export class WalletService {
 
     // Validate key length (must be 32 bytes = 64 hex chars)
     if (key.length !== 64) {
-      throw new Error(
-        'WALLET_ENCRYPTION_KEY must be 32 bytes (64 hex characters)',
-      );
+      throw new Error('WALLET_ENCRYPTION_KEY must be 32 bytes (64 hex characters)');
     }
 
     this.encryptionKey = Buffer.from(key, 'hex');
@@ -56,11 +54,7 @@ export class WalletService {
   encryptPrivateKey(privateKey: string): string {
     try {
       const iv = crypto.randomBytes(16);
-      const cipher = crypto.createCipheriv(
-        'aes-256-cbc',
-        this.encryptionKey,
-        iv,
-      );
+      const cipher = crypto.createCipheriv('aes-256-cbc', this.encryptionKey, iv);
 
       let encrypted = cipher.update(privateKey, 'utf8', 'hex');
       encrypted += cipher.final('hex');
@@ -86,11 +80,7 @@ export class WalletService {
       const iv = Buffer.from(parts[0], 'hex');
       const encrypted = parts[1];
 
-      const decipher = crypto.createDecipheriv(
-        'aes-256-cbc',
-        this.encryptionKey,
-        iv,
-      );
+      const decipher = crypto.createDecipheriv('aes-256-cbc', this.encryptionKey, iv);
 
       let decrypted = decipher.update(encrypted, 'hex', 'utf8');
       decrypted += decipher.final('utf8');
@@ -120,9 +110,7 @@ export class WalletService {
 
       // Si ya tiene wallet, desencriptar y retornar
       if (account.walletAddress && account.key) {
-        console.log(
-          `📝 Using existing wallet for user ${userId}: ${account.walletAddress}`,
-        );
+        console.log(`📝 Using existing wallet for user ${userId}: ${account.walletAddress}`);
 
         return {
           address: account.walletAddress,
@@ -157,17 +145,12 @@ export class WalletService {
   /**
    * Actualiza el Smart Account address de un usuario
    */
-  async updateSmartAddress(
-    userId: string,
-    smartAddress: string,
-  ): Promise<void> {
+  async updateSmartAddress(userId: string, smartAddress: string): Promise<void> {
     try {
       await this.accountModel.findByIdAndUpdate(userId, {
         smartAddress,
       });
-      console.log(
-        `✅ Updated smart address for user ${userId}: ${smartAddress}`,
-      );
+      console.log(`✅ Updated smart address for user ${userId}: ${smartAddress}`);
     } catch (error) {
       console.error('Error updating smart address:', error);
       throw error;

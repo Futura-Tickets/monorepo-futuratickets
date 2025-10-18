@@ -1,0 +1,154 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: futuratickets
+  labels:
+    app: alertmanager
+data:
+  alertmanager.yml: |
+    global:
+      resolve_timeout: 5m
+      slack_api_url: '${SLACK_WEBHOOK_URL}'
+
+    # Templates for alert formatting
+    templates:
+      - '/etc/alertmanager/templates/*.tmpl'
+
+    # Route alerts to different receivers based on labels
+    route:
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 10s
+      group_interval: 10s
+      repeat_interval: 12h
+      receiver: 'default'
+
+      routes:
+        # Critical alerts - immediate notification
+        - match:
+            severity: critical
+          receiver: 'slack-critical'
+          group_wait: 10s
+          repeat_interval: 4h
+
+        # Warning alerts - less frequent
+        - match:
+            severity: warning
+          receiver: 'slack-warnings'
+          group_wait: 5m
+          repeat_interval: 12h
+
+        # Business alerts - specific channel
+        - match:
+            component: business
+          receiver: 'slack-business'
+          group_wait: 5m
+          repeat_interval: 24h
+
+        # Payment-specific alerts
+        - match:
+            component: payments
+          receiver: 'slack-payments'
+          group_wait: 30s
+          repeat_interval: 2h
+
+    # Inhibit rules to prevent alert spam
+    inhibit_rules:
+      # Inhibit warning alerts if critical alert is firing
+      - source_match:
+          severity: 'critical'
+        target_match:
+          severity: 'warning'
+        equal: ['alertname', 'service']
+
+      # If pod is down, don't alert on high CPU/memory
+      - source_match:
+          alertname: 'PodDown'
+        target_match_re:
+          alertname: '^(HighCPUUsage|HighMemoryUsage)$'
+        equal: ['pod']
+
+    # Receivers configuration
+    receivers:
+      - name: 'default'
+        slack_configs:
+          - channel: '#alerts'
+            title: '{{ template "slack.default.title" . }}'
+            text: '{{ template "slack.default.text" . }}'
+            send_resolved: true
+
+      - name: 'slack-critical'
+        slack_configs:
+          - channel: '#alerts-critical'
+            title: '🚨 CRITICAL ALERT 🚨'
+            text: |
+              *Alert:* {{ .CommonAnnotations.summary }}
+              *Description:* {{ .CommonAnnotations.description }}
+              *Severity:* {{ .CommonLabels.severity }}
+              *Component:* {{ .CommonLabels.component }}
+              {{ if .CommonAnnotations.dashboard }}*Dashboard:* {{ .CommonAnnotations.dashboard }}{{ end }}
+              {{ if .CommonAnnotations.runbook }}*Runbook:* {{ .CommonAnnotations.runbook }}{{ end }}
+              {{ if .CommonAnnotations.action }}*Action Required:* {{ .CommonAnnotations.action }}{{ end }}
+            color: 'danger'
+            send_resolved: true
+
+      - name: 'slack-warnings'
+        slack_configs:
+          - channel: '#alerts-warnings'
+            title: '⚠️ Warning Alert'
+            text: |
+              *Alert:* {{ .CommonAnnotations.summary }}
+              *Description:* {{ .CommonAnnotations.description }}
+              *Component:* {{ .CommonLabels.component }}
+              {{ if .CommonAnnotations.dashboard }}*Dashboard:* {{ .CommonAnnotations.dashboard }}{{ end }}
+            color: 'warning'
+            send_resolved: true
+
+      - name: 'slack-business'
+        slack_configs:
+          - channel: '#business-alerts'
+            title: '📊 Business Alert'
+            text: |
+              *Alert:* {{ .CommonAnnotations.summary }}
+              *Description:* {{ .CommonAnnotations.description }}
+              {{ if .CommonAnnotations.action }}*Suggested Action:* {{ .CommonAnnotations.action }}{{ end }}
+            color: '#439FE0'
+            send_resolved: true
+
+      - name: 'slack-payments'
+        slack_configs:
+          - channel: '#payments-alerts'
+            title: '💳 Payment System Alert'
+            text: |
+              *Alert:* {{ .CommonAnnotations.summary }}
+              *Description:* {{ .CommonAnnotations.description }}
+              *Severity:* {{ .CommonLabels.severity }}
+              {{ if .CommonAnnotations.runbook }}*Runbook:* {{ .CommonAnnotations.runbook }}{{ end }}
+            color: '{{ if eq .CommonLabels.severity "critical" }}danger{{ else }}warning{{ end }}'
+            send_resolved: true
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-templates
+  namespace: futuratickets
+  labels:
+    app: alertmanager
+data:
+  slack.tmpl: |
+    {{ define "slack.default.title" }}
+    [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.alertname }}
+    {{ end }}
+
+    {{ define "slack.default.text" }}
+    {{ range .Alerts }}
+    *Alert:* {{ .Annotations.summary }}
+    *Description:* {{ .Annotations.description }}
+    *Severity:* {{ .Labels.severity }}
+    *Component:* {{ .Labels.component }}
+    *Started:* {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+    {{ if .Annotations.dashboard }}*Dashboard:* {{ .Annotations.dashboard }}{{ end }}
+    {{ if .Annotations.runbook }}*Runbook:* {{ .Annotations.runbook }}{{ end }}
+    {{ end }}
+    {{ end }}

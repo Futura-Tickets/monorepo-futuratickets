@@ -41,10 +41,7 @@ export class InvitationsService {
     return await this.couponModel.find({ eventId });
   }
 
-  public async deleteCoupon(
-    eventId: string,
-    code: string,
-  ): Promise<DeleteResult> {
+  public async deleteCoupon(eventId: string, code: string): Promise<DeleteResult> {
     return await this.couponModel.deleteOne({ eventId, code });
   }
   // PROMOCODE METHODS
@@ -61,10 +58,7 @@ export class InvitationsService {
     return await newPromocode.save();
   }
 
-  public async deletePromocode(
-    eventId: string,
-    code: string,
-  ): Promise<boolean> {
+  public async deletePromocode(eventId: string, code: string): Promise<boolean> {
     const result = await this.promocodeModel.deleteOne({ eventId, code });
     return result.deletedCount > 0;
   }

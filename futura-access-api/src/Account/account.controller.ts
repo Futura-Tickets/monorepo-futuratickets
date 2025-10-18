@@ -24,24 +24,20 @@ export class AccountController {
   @ApiBody({ type: LoginDto })
   @ApiResponse({
     status: HttpStatus.OK,
-    description:
-      'Login successful. Returns account data with JWT token and event assignment.',
+    description: 'Login successful. Returns account data with JWT token and event assignment.',
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'Invalid credentials or not an ACCESS role user.',
   })
   async accessLogin(@Body() loginDto: LoginDto): Promise<Account> {
-    return await this.accountService.accessLogin(
-      loginDto as unknown as LoginAccount,
-    );
+    return await this.accountService.accessLogin(loginDto as unknown as LoginAccount);
   }
 
   @Post('/validate')
   @ApiOperation({
     summary: 'Validate JWT token',
-    description:
-      'Verify if a JWT token is valid and not expired. Returns decoded token payload if valid.',
+    description: 'Verify if a JWT token is valid and not expired. Returns decoded token payload if valid.',
   })
   @ApiBody({ type: ValidateTokenDto })
   @ApiResponse({
@@ -52,9 +48,7 @@ export class AccountController {
     status: HttpStatus.OK,
     description: 'Token is invalid or expired. Returns null.',
   })
-  async validate(
-    @Body() validateTokenDto: ValidateTokenDto,
-  ): Promise<DecodedToken | null> {
+  async validate(@Body() validateTokenDto: ValidateTokenDto): Promise<DecodedToken | null> {
     const decoded = await this.accountService.validate(validateTokenDto.token);
     if (decoded && decoded.exp > Date.now() / 1000) return decoded;
     return null;

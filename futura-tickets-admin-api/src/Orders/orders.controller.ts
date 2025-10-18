@@ -21,9 +21,7 @@ export class OrdersController {
   }
 
   @Get('/')
-  async getOrdersByAccount(
-    @Auth(UserPipeService) user: Account,
-  ): Promise<Order[] | undefined> {
+  async getOrdersByAccount(@Auth(UserPipeService) user: Account): Promise<Order[] | undefined> {
     try {
       return await this.ordersService.getOrdersByAccount(user._id!);
     } catch (error) {

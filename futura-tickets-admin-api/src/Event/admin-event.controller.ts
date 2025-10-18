@@ -28,23 +28,13 @@ import { Auth } from '../Auth/auth.decorator';
 
 // SERVICES
 import { AdminEventService } from './admin-event.service';
-import {
-  AccessPipeService,
-  PromoterPipeService,
-} from '../Account/account.service';
+import { AccessPipeService, PromoterPipeService } from '../Account/account.service';
 import { InvitationsService } from './invitations.service';
 
 // INTERFACES
 import { Account } from '../Account/account.interface';
 import { Sale } from '../Sales/sales.interface';
-import {
-  Event,
-  CreateEvent,
-  UpdateEvent,
-  Coupon,
-  EditEvent,
-  Promocode,
-} from '../shared/interface';
+import { Event, CreateEvent, UpdateEvent, Coupon, EditEvent, Promocode } from '../shared/interface';
 import { CreateInvitation, Order } from '../Orders/orders.interface';
 
 interface RequestWithRawBody extends Request {
@@ -80,10 +70,7 @@ export class AdminEventController {
     @Body('createEvent') createEvent: CreateEvent,
   ): Promise<Event | undefined> {
     try {
-      return await this.adminEventService.createEvent(
-        createEvent,
-        promoter.promoter!,
-      );
+      return await this.adminEventService.createEvent(createEvent, promoter.promoter!);
     } catch (error) {
       console.log(error);
       throw error;
@@ -97,11 +84,7 @@ export class AdminEventController {
     @Body('updateEvent') updateEvent: UpdateEvent,
   ): Promise<void | undefined> {
     try {
-      await this.adminEventService.updateEvent(
-        event,
-        promoter.promoter!,
-        updateEvent,
-      );
+      await this.adminEventService.updateEvent(event, promoter.promoter!, updateEvent);
     } catch (error) {
       console.log(error);
     }
@@ -113,10 +96,7 @@ export class AdminEventController {
     @Param('event') event: string,
   ): Promise<Event | null> {
     try {
-      return await this.adminEventService.getAccessEvent(
-        promoter.promoter!,
-        event,
-      );
+      return await this.adminEventService.getAccessEvent(promoter.promoter!, event);
     } catch (error) {
       console.log(error);
       throw error;
@@ -141,10 +121,7 @@ export class AdminEventController {
     @Param('event') event: string,
   ): Promise<Event | null> {
     try {
-      return await this.adminEventService.getResaleEvent(
-        promoter.promoter!,
-        event,
-      );
+      return await this.adminEventService.getResaleEvent(promoter.promoter!, event);
     } catch (error) {
       console.log(error);
       throw error;
@@ -152,15 +129,9 @@ export class AdminEventController {
   }
 
   @Get('/attendants/:event')
-  async getAttendantsEvent(
-    @Auth(AccessPipeService) promoter: Account,
-    @Param('event') event: string,
-  ): Promise<Sale[]> {
+  async getAttendantsEvent(@Auth(AccessPipeService) promoter: Account, @Param('event') event: string): Promise<Sale[]> {
     try {
-      return await this.adminEventService.getAttendantsEvent(
-        promoter.promoter!,
-        event,
-      );
+      return await this.adminEventService.getAttendantsEvent(promoter.promoter!, event);
     } catch (error) {
       console.log(error);
       throw error;
@@ -174,18 +145,12 @@ export class AdminEventController {
     @Body('status') status: boolean,
   ): Promise<void> {
     try {
-      await this.adminEventService.updateResaleEvent(
-        promoter.promoter!,
-        event,
-        status,
-      );
+      await this.adminEventService.updateResaleEvent(promoter.promoter!, event, status);
     } catch (error) {}
   }
 
   @Get('/')
-  async getEvents(
-    @Auth(PromoterPipeService) promoter: Account,
-  ): Promise<Event[]> {
+  async getEvents(@Auth(PromoterPipeService) promoter: Account): Promise<Event[]> {
     return this.adminEventService.getEvents(promoter.promoter!);
   }
 
@@ -203,11 +168,7 @@ export class AdminEventController {
     @Param('eventId') eventId: string,
     @Body('editEvent') editEvent: EditEvent,
   ): Promise<Event | null> {
-    return await this.adminEventService.editEvent(
-      promoter.promoter!,
-      eventId,
-      editEvent,
-    );
+    return await this.adminEventService.editEvent(promoter.promoter!, eventId, editEvent);
   }
 
   @Delete('/:eventId')
@@ -227,10 +188,7 @@ export class AdminEventController {
   }
 
   @Post('/coupons/create')
-  async createCoupon(
-    @Auth(PromoterPipeService) promoter: Account,
-    @Body() coupon: Coupon,
-  ): Promise<Coupon> {
+  async createCoupon(@Auth(PromoterPipeService) promoter: Account, @Body() coupon: Coupon): Promise<Coupon> {
     return await this.invitationsService.createCoupon(coupon);
   }
 
@@ -239,10 +197,7 @@ export class AdminEventController {
     @Auth(PromoterPipeService) promoter: Account,
     @Param('eventId') eventId: string,
   ): Promise<Sale[]> {
-    return await this.adminEventService.getInvitationsByEventId(
-      eventId,
-      promoter.promoter!,
-    );
+    return await this.adminEventService.getInvitationsByEventId(eventId, promoter.promoter!);
   }
 
   @Post('/invitations/create')
@@ -250,10 +205,7 @@ export class AdminEventController {
     @Auth(PromoterPipeService) promoter: Account,
     @Body() invitation: CreateInvitation,
   ): Promise<Order | void> {
-    return await this.adminEventService.createInvitation(
-      promoter.promoter!,
-      invitation,
-    );
+    return await this.adminEventService.createInvitation(promoter.promoter!, invitation);
   }
 
   @Delete('/coupons/:eventId/:code')

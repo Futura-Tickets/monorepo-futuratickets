@@ -24,10 +24,7 @@ export class AdminOrdersController {
   }
 
   @Post('/resend')
-  async resendOrder(
-    @Auth(PromoterPipeService) promoter: Account,
-    @Body('orderId') orderId: string,
-  ): Promise<boolean> {
+  async resendOrder(@Auth(PromoterPipeService) promoter: Account, @Body('orderId') orderId: string): Promise<boolean> {
     return await this.ordersService.resendOrder(orderId, promoter.promoter!);
   }
 }

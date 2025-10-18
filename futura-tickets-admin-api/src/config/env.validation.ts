@@ -9,29 +9,19 @@ import { z } from 'zod';
 
 const envSchema = z.object({
   // Node Environment
-  NODE_ENV: z
-    .enum(['development', 'staging', 'production'])
-    .default('development'),
+  NODE_ENV: z.enum(['development', 'staging', 'production']).default('development'),
   PORT: z.string().default('3000'),
 
   // MongoDB
-  MONGO_URL: z
-    .string()
-    .url('MONGO_URL must be a valid MongoDB connection string'),
+  MONGO_URL: z.string().url('MONGO_URL must be a valid MongoDB connection string'),
 
   // JWT Authentication
-  JWT_SECRET: z
-    .string()
-    .min(32, 'JWT_SECRET must be at least 32 characters for security'),
+  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters for security'),
   JWT_EXPIRES_IN: z.string().default('7d'),
 
   // Stripe
-  STRIPE_SECRET_KEY: z
-    .string()
-    .startsWith('sk_', 'STRIPE_SECRET_KEY must start with sk_'),
-  STRIPE_PUBLIC_KEY: z
-    .string()
-    .startsWith('pk_', 'STRIPE_PUBLIC_KEY must start with pk_'),
+  STRIPE_SECRET_KEY: z.string().startsWith('sk_', 'STRIPE_SECRET_KEY must start with sk_'),
+  STRIPE_PUBLIC_KEY: z.string().startsWith('pk_', 'STRIPE_PUBLIC_KEY must start with pk_'),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
 
   // Google Cloud Storage
@@ -82,9 +72,7 @@ export function validateEnv(): EnvConfig {
       error.issues.forEach((err) => {
         console.error(`  - ${err.path.join('.')}: ${err.message}`);
       });
-      throw new Error(
-        'Invalid environment configuration. Please check your .env file.',
-      );
+      throw new Error('Invalid environment configuration. Please check your .env file.');
     }
     throw error;
   }

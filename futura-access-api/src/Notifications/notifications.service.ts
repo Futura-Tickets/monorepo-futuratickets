@@ -8,10 +8,7 @@ import { DeleteResult, Model } from 'mongoose';
 import { Notification, NotificationDocument } from './notifications.schema';
 
 // INTERFACES
-import {
-  Notification as INotification,
-  CreateNotification,
-} from './notifications.interface';
+import { Notification as INotification, CreateNotification } from './notifications.interface';
 
 @Injectable()
 export class NotificationService {
@@ -20,10 +17,7 @@ export class NotificationService {
     private notificationModel: Model<NotificationDocument>,
   ) {}
 
-  public async createNotification(
-    createNotification: CreateNotification,
-    promoter: string,
-  ): Promise<INotification> {
+  public async createNotification(createNotification: CreateNotification, promoter: string): Promise<INotification> {
     return await this.notificationModel.create({
       ...createNotification,
       promoter,
@@ -63,10 +57,7 @@ export class NotificationService {
     return notifications;
   }
 
-  public async getNotification(
-    notificationId: string,
-    promoter: string,
-  ): Promise<INotification | null> {
+  public async getNotification(notificationId: string, promoter: string): Promise<INotification | null> {
     try {
       return await this.notificationModel.findOne({
         _id: notificationId,
@@ -77,11 +68,7 @@ export class NotificationService {
     }
   }
 
-  public async markAsRead(
-    notificationId: string,
-    promoter: string,
-    userId: string,
-  ): Promise<INotification | null> {
+  public async markAsRead(notificationId: string, promoter: string, userId: string): Promise<INotification | null> {
     try {
       return await this.notificationModel.findOneAndUpdate(
         { _id: notificationId, promoter, readBy: { $ne: userId } },
@@ -93,10 +80,7 @@ export class NotificationService {
     }
   }
 
-  public async markAllAsRead(
-    promoter: string,
-    userId: string,
-  ): Promise<boolean> {
+  public async markAllAsRead(promoter: string, userId: string): Promise<boolean> {
     try {
       const result = await this.notificationModel.updateMany(
         { promoter, readBy: { $ne: userId } },
@@ -108,10 +92,7 @@ export class NotificationService {
     }
   }
 
-  public async deleteNotification(
-    notificationId: string,
-    promoter: string,
-  ): Promise<DeleteResult | undefined> {
+  public async deleteNotification(notificationId: string, promoter: string): Promise<DeleteResult | undefined> {
     try {
       return await this.notificationModel.deleteOne({
         _id: notificationId,
@@ -128,20 +109,13 @@ export class NotificationService {
     promoter: string,
   ): Promise<INotification | null> {
     try {
-      return await this.notificationModel.findOneAndUpdate(
-        { _id: notificationId, promoter },
-        status,
-        { new: true },
-      );
+      return await this.notificationModel.findOneAndUpdate({ _id: notificationId, promoter }, status, { new: true });
     } catch (error) {
       return null;
     }
   }
 
-  public async countUnreadNotifications(
-    userId: string,
-    promoter: string,
-  ): Promise<number> {
+  public async countUnreadNotifications(userId: string, promoter: string): Promise<number> {
     try {
       return await this.notificationModel.countDocuments({
         account: userId,

@@ -10,30 +10,24 @@ import * as path from 'path';
 const { combine, timestamp, printf, colorize, errors, json } = winston.format;
 
 // Custom format for console output (readable)
-const consoleFormat = printf(
-  ({ level, message, timestamp, context, trace, ...metadata }) => {
-    let msg = `${timestamp} [${context || 'Application'}] ${level}: ${message}`;
+const consoleFormat = printf(({ level, message, timestamp, context, trace, ...metadata }) => {
+  let msg = `${timestamp} [${context || 'Application'}] ${level}: ${message}`;
 
-    // Add metadata if exists
-    if (Object.keys(metadata).length > 0) {
-      msg += ` ${JSON.stringify(metadata)}`;
-    }
+  // Add metadata if exists
+  if (Object.keys(metadata).length > 0) {
+    msg += ` ${JSON.stringify(metadata)}`;
+  }
 
-    // Add stack trace if exists
-    if (trace) {
-      msg += `\n${trace}`;
-    }
+  // Add stack trace if exists
+  if (trace) {
+    msg += `\n${trace}`;
+  }
 
-    return msg;
-  },
-);
+  return msg;
+});
 
 // Custom format for file output (JSON)
-const fileFormat = combine(
-  timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-  errors({ stack: true }),
-  json(),
-);
+const fileFormat = combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), errors({ stack: true }), json());
 
 // Log levels based on environment
 const getLogLevel = (): string => {
@@ -54,18 +48,11 @@ const logsDir = path.join(process.cwd(), 'logs');
 
 export const winstonConfig: WinstonModuleOptions = {
   level: getLogLevel(),
-  format: combine(
-    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    errors({ stack: true }),
-  ),
+  format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), errors({ stack: true })),
   transports: [
     // Console transport (for development)
     new winston.transports.Console({
-      format: combine(
-        colorize({ all: true }),
-        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        consoleFormat,
-      ),
+      format: combine(colorize({ all: true }), timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), consoleFormat),
     }),
 
     // File transport for errors

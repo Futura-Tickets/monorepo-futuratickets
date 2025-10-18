@@ -3,16 +3,7 @@
  * Validation for account creation
  */
 
-import {
-  IsEmail,
-  IsString,
-  IsOptional,
-  MinLength,
-  MaxLength,
-  Matches,
-  IsEnum,
-  IsBoolean,
-} from 'class-validator';
+import { IsEmail, IsString, IsOptional, MinLength, MaxLength, Matches, IsEnum, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum AccountRole {

@@ -3,15 +3,7 @@
  * Validation for payment request creation (withdrawal)
  */
 
-import {
-  IsNumber,
-  IsString,
-  IsOptional,
-  Min,
-  Max,
-  MaxLength,
-  IsMongoId,
-} from 'class-validator';
+import { IsNumber, IsString, IsOptional, Min, Max, MaxLength, IsMongoId } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreatePaymentRequestDto {

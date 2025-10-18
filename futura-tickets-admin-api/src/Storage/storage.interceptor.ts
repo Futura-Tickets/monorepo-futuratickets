@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, BadRequestException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
 
@@ -12,10 +6,7 @@ import { StorageService } from './storage.service';
 export class StorageFileInterceptor implements NestInterceptor {
   constructor(private readonly storageService: StorageService) {}
 
-  async intercept(
-    context: ExecutionContext,
-    next: CallHandler,
-  ): Promise<Observable<any>> {
+  async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
     const file = request.file;
 
@@ -31,17 +22,14 @@ export class StorageFileInterceptor implements NestInterceptor {
       const filename = `${timestamp}-${randomString}.${fileExtension}`;
 
       // Upload to Google Cloud Storage
-      const publicUrl = await this.storageService.uploadFile(
-        file.buffer,
-        filename,
-        file.mimetype,
-      );
+      const publicUrl = await this.storageService.uploadFile(file.buffer, filename, file.mimetype);
 
       // Attach the public URL to the request object
       request.fileUrl = publicUrl;
       request.fileName = filename;
 
-      return next.handle();
+      // Type assertion to handle RxJS version mismatch in monorepo
+      return next.handle() as Observable<any>;
     } catch (error) {
       throw new BadRequestException(`File upload failed: ${error.message}`);
     }

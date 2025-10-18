@@ -2,19 +2,19 @@
 
 > Sistema completo de venta y gestión de tickets con blockchain, pagos Stripe y control de acceso.
 
-[![Test & Coverage](https://github.com/OWNER/REPO/actions/workflows/test-coverage.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/test-coverage.yml)
-[![codecov](https://codecov.io/gh/OWNER/REPO/branch/main/graph/badge.svg)](https://codecov.io/gh/OWNER/REPO)
+[![Test & Coverage](https://github.com/Futura-Tickets/monorepo-futuratickets/actions/workflows/test-coverage.yml/badge.svg)](https://github.com/Futura-Tickets/monorepo-futuratickets/actions/workflows/test-coverage.yml)
+[![codecov](https://codecov.io/gh/Futura-Tickets/monorepo-futuratickets/branch/main/graph/badge.svg)](https://codecov.io/gh/Futura-Tickets/monorepo-futuratickets)
 
 ## 📊 Test Coverage
 
 | API | Tests | Coverage | Status |
 |-----|-------|----------|--------|
-| **Admin API** | 58 | ~25% | [![codecov](https://codecov.io/gh/OWNER/REPO/branch/main/graph/badge.svg?flag=admin-api)](https://codecov.io/gh/OWNER/REPO?flags[]=admin-api) |
-| **Marketplace API** | 100 | ~55% | [![codecov](https://codecov.io/gh/OWNER/REPO/branch/main/graph/badge.svg?flag=marketplace-api)](https://codecov.io/gh/OWNER/REPO?flags[]=marketplace-api) |
-| **Access API** | 24 | ~40% | [![codecov](https://codecov.io/gh/OWNER/REPO/branch/main/graph/badge.svg?flag=access-api)](https://codecov.io/gh/OWNER/REPO?flags[]=access-api) |
+| **Admin API** | 58 | ~25% | [![codecov](https://codecov.io/gh/Futura-Tickets/monorepo-futuratickets/branch/main/graph/badge.svg?flag=admin-api)](https://codecov.io/gh/Futura-Tickets/monorepo-futuratickets?flags[]=admin-api) |
+| **Marketplace API** | 100 | ~55% | [![codecov](https://codecov.io/gh/Futura-Tickets/monorepo-futuratickets/branch/main/graph/badge.svg?flag=marketplace-api)](https://codecov.io/gh/Futura-Tickets/monorepo-futuratickets?flags[]=marketplace-api) |
+| **Access API** | 24 | ~40% | [![codecov](https://codecov.io/gh/Futura-Tickets/monorepo-futuratickets/branch/main/graph/badge.svg?flag=access-api)](https://codecov.io/gh/Futura-Tickets/monorepo-futuratickets?flags[]=access-api) |
 | **TOTAL** | **182** | **~40%** | 🎯 Target: 70% |
 
-> **Nota**: Reemplaza `OWNER/REPO` con tu usuario/organización y nombre del repositorio después de configurar Codecov.
+> **Próximo paso**: Sigue la [Guía de Activación de Codecov](./docs/CODECOV_ACTIVATION_GUIDE.md) para completar la configuración (30 min).
 
 ## 🚀 Quick Start
 
@@ -75,7 +75,8 @@
 ### Testing & Quality
 - [Testing Audit](./TESTING_AUDIT.md) - Análisis completo de testing (800+ líneas)
 - [Testing Summary](./PHASE_4_TESTING_SUMMARY.md) - Resumen de Phase 4 (182 tests)
-- [Codecov Setup](./CODECOV_SETUP.md) - Guía de configuración de coverage
+- [Codecov Setup](./CODECOV_SETUP.md) - Referencia técnica de Codecov
+- [Codecov Activation](./docs/CODECOV_ACTIVATION_GUIDE.md) - Guía paso a paso de activación (30 min)
 
 ## 🧪 Testing
 
@@ -121,7 +122,7 @@ open coverage/lcov-report/index.html
 - **GitHub Actions**: Ejecución automática de tests
 
 Ver [TESTING_AUDIT.md](./TESTING_AUDIT.md) para detalles completos del testing strategy.
-Ver [CODECOV_SETUP.md](./CODECOV_SETUP.md) para configurar Codecov.
+Ver [CODECOV_ACTIVATION_GUIDE.md](./docs/CODECOV_ACTIVATION_GUIDE.md) para activar Codecov paso a paso.
 
 ## 🔒 Seguridad
 

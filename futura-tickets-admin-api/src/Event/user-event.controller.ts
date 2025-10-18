@@ -29,10 +29,7 @@ export class UserEventController {
   }
 
   @Patch('/cancel-resale')
-  async cancelResale(
-    @Auth(UserPipeService) user: Account,
-    @Body('sale') sale: string,
-  ): Promise<void> {
+  async cancelResale(@Auth(UserPipeService) user: Account, @Body('sale') sale: string): Promise<void> {
     try {
       await this.userEventService.cancelResale(sale, user._id);
     } catch (error) {
@@ -47,11 +44,7 @@ export class UserEventController {
     @Body('transferToTicket') transferToTicket: TransferToTicket,
   ): Promise<void> {
     try {
-      await this.userEventService.transferTicket(
-        sale,
-        user._id,
-        transferToTicket,
-      );
+      await this.userEventService.transferTicket(sale, user._id, transferToTicket);
     } catch (error) {
       console.log(error);
     }

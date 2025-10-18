@@ -85,11 +85,7 @@ export interface UserNotification extends BaseNotification {
   userId: string;
 }
 
-export type Notification =
-  | OrderNotification
-  | ResaleNotification
-  | UserNotification
-  | TransferNotification;
+export type Notification = OrderNotification | ResaleNotification | UserNotification | TransferNotification;
 
 export type CreateNotification =
   | CreateOrderNotification

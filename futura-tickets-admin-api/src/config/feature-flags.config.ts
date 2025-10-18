@@ -34,47 +34,30 @@ export interface FeatureFlags {
 export const featureFlagsConfig = (): FeatureFlags => ({
   // Sales Module
   USE_HEXAGONAL_SALES: process.env.USE_HEXAGONAL_SALES === 'true',
-  HEXAGONAL_SALES_PERCENTAGE: parseInt(
-    process.env.HEXAGONAL_SALES_PERCENTAGE || '0',
-    10,
-  ),
+  HEXAGONAL_SALES_PERCENTAGE: parseInt(process.env.HEXAGONAL_SALES_PERCENTAGE || '0', 10),
 
   // Orders Module
   USE_HEXAGONAL_ORDERS: process.env.USE_HEXAGONAL_ORDERS === 'true',
-  HEXAGONAL_ORDERS_PERCENTAGE: parseInt(
-    process.env.HEXAGONAL_ORDERS_PERCENTAGE || '0',
-    10,
-  ),
+  HEXAGONAL_ORDERS_PERCENTAGE: parseInt(process.env.HEXAGONAL_ORDERS_PERCENTAGE || '0', 10),
 
   // Payments Module
   USE_HEXAGONAL_PAYMENTS: process.env.USE_HEXAGONAL_PAYMENTS === 'true',
-  HEXAGONAL_PAYMENTS_PERCENTAGE: parseInt(
-    process.env.HEXAGONAL_PAYMENTS_PERCENTAGE || '0',
-    10,
-  ),
+  HEXAGONAL_PAYMENTS_PERCENTAGE: parseInt(process.env.HEXAGONAL_PAYMENTS_PERCENTAGE || '0', 10),
 
   // Events Module
   USE_HEXAGONAL_EVENTS: process.env.USE_HEXAGONAL_EVENTS === 'true',
-  HEXAGONAL_EVENTS_PERCENTAGE: parseInt(
-    process.env.HEXAGONAL_EVENTS_PERCENTAGE || '0',
-    10,
-  ),
+  HEXAGONAL_EVENTS_PERCENTAGE: parseInt(process.env.HEXAGONAL_EVENTS_PERCENTAGE || '0', 10),
 
   // Global
-  ENABLE_MIGRATION_LOGGING:
-    process.env.ENABLE_MIGRATION_LOGGING === 'true' || false,
-  ENABLE_COMPARISON_MODE:
-    process.env.ENABLE_COMPARISON_MODE === 'true' || false,
+  ENABLE_MIGRATION_LOGGING: process.env.ENABLE_MIGRATION_LOGGING === 'true' || false,
+  ENABLE_COMPARISON_MODE: process.env.ENABLE_COMPARISON_MODE === 'true' || false,
 });
 
 /**
  * Helper para determinar si un request debe usar hexagonal
  * basado en un hash del user ID (distribución uniforme)
  */
-export function shouldUseHexagonal(
-  userId: string,
-  percentage: number,
-): boolean {
+export function shouldUseHexagonal(userId: string, percentage: number): boolean {
   if (percentage === 0) return false;
   if (percentage === 100) return true;
 

@@ -1,9 +1,4 @@
-import {
-  ArgumentMetadata,
-  Injectable,
-  PipeTransform,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ArgumentMetadata, Injectable, PipeTransform, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as fastcsv from 'fast-csv';
 import { Readable } from 'stream';
@@ -23,11 +18,7 @@ import { AuthService } from '../Auth/services/auth.service';
 import { MailService } from '../Mail/mail.service';
 
 // UTILS
-import {
-  comparePassword,
-  generateRandomPassword,
-  hashPassword,
-} from '../utils/password';
+import { comparePassword, generateRandomPassword, hashPassword } from '../utils/password';
 
 // INTERFACES
 import {
@@ -95,17 +86,11 @@ export class AccountService {
     };
   }
 
-  public async deleteAdminAccount(
-    promoter: string,
-    account: string,
-  ): Promise<DeleteResult> {
+  public async deleteAdminAccount(promoter: string, account: string): Promise<DeleteResult> {
     return await this.accountModel.deleteOne({ _id: account, promoter });
   }
 
-  public async createPromoterAccount(
-    createPromoterAccount: CreateAccount,
-    promoter: string,
-  ): Promise<Account> {
+  public async createPromoterAccount(createPromoterAccount: CreateAccount, promoter: string): Promise<Account> {
     const account = await this.accountModel.create({
       name: createPromoterAccount.name,
       lastName: createPromoterAccount.lastName,
@@ -151,10 +136,7 @@ export class AccountService {
     };
   }
 
-  public async createAccessAccount(
-    createAccessAccount: CreateAccess,
-    promoter: string,
-  ): Promise<Account> {
+  public async createAccessAccount(createAccessAccount: CreateAccess, promoter: string): Promise<Account> {
     const account = await this.accountModel.create({
       name: createAccessAccount.name,
       lastName: createAccessAccount.lastName,
@@ -216,9 +198,7 @@ export class AccountService {
 
   public async loginGoogle(googleCode: string): Promise<Account | void> {
     try {
-      const googleAccountRes = await fetch(
-        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleCode}`,
-      );
+      const googleAccountRes = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleCode}`);
       const googleAccount = (await googleAccountRes.json()) as GoogleAccount;
 
       const account = await this.getAccountByEmail(googleAccount.email);
@@ -255,10 +235,7 @@ export class AccountService {
     } catch (error) {}
   }
 
-  public async addOrderToAccount(
-    account: string,
-    order: string,
-  ): Promise<void> {
+  public async addOrderToAccount(account: string, order: string): Promise<void> {
     try {
       await this.accountModel.findByIdAndUpdate(account, {
         $push: { orders: order },
@@ -270,30 +247,20 @@ export class AccountService {
     return await this.authService.decodeToken(token);
   }
 
-  public async editAccount(
-    accountId: string,
-    updateAccount: UpdateAccount,
-  ): Promise<any> {
+  public async editAccount(accountId: string, updateAccount: UpdateAccount): Promise<any> {
     return await this.accountModel.updateOne({ _id: accountId }, updateAccount);
   }
 
-  public async editAdminAccount(
-    accountId: string,
-    updateAccount: UpdateAdminAccount,
-  ): Promise<any> {
+  public async editAdminAccount(accountId: string, updateAccount: UpdateAdminAccount): Promise<any> {
     return await this.accountModel.updateOne({ _id: accountId }, updateAccount);
   }
 
   public async getUserAccount(accountId: string): Promise<Account | null> {
-    return await this.accountModel
-      .findById({ _id: accountId, role: 'USER' })
-      .select({ _id: 1 });
+    return await this.accountModel.findById({ _id: accountId, role: 'USER' }).select({ _id: 1 });
   }
 
   public async getAdminAccount(accountId: string): Promise<Account | null> {
-    return await this.accountModel
-      .findById({ _id: accountId, role: 'ADMIN' })
-      .select({ _id: 1, promoter: 1 });
+    return await this.accountModel.findById({ _id: accountId, role: 'ADMIN' }).select({ _id: 1, promoter: 1 });
   }
 
   public async getPromoterAccount(accountId: string): Promise<Account | null> {
@@ -315,10 +282,7 @@ export class AccountService {
       .sort({ createdAt: 'asc' });
   }
 
-  public async getEventAccessAccounts(
-    promoter: string,
-    accessEvent: string,
-  ): Promise<Account[]> {
+  public async getEventAccessAccounts(promoter: string, accessEvent: string): Promise<Account[]> {
     return await this.accountModel
       .find({ promoter, accessEvent })
       .select({
@@ -332,49 +296,31 @@ export class AccountService {
       .sort({ createdAt: 'asc' });
   }
 
-  public async getAccountPrivateKeyById(
-    account: string,
-  ): Promise<Account | null> {
-    return await this.accountModel
-      .findById(account)
-      .select({ _id: 1, name: 1, lastName: 1, address: 1, key: 1 });
+  public async getAccountPrivateKeyById(account: string): Promise<Account | null> {
+    return await this.accountModel.findById(account).select({ _id: 1, name: 1, lastName: 1, address: 1, key: 1 });
   }
 
   public async getAccountPrivateKey(email: string): Promise<Account | null> {
-    return await this.accountModel
-      .findOne({ email })
-      .select({ address: 1, key: 1 });
+    return await this.accountModel.findOne({ email }).select({ address: 1, key: 1 });
   }
 
-  public async getAccountPrivateKeyByAddress(
-    address: string,
-  ): Promise<Account | null> {
-    return await this.accountModel
-      .findOne({ address })
-      .select({ address: 1, key: 1 });
+  public async getAccountPrivateKeyByAddress(address: string): Promise<Account | null> {
+    return await this.accountModel.findOne({ address }).select({ address: 1, key: 1 });
   }
 
-  public async getAccountByEmail(
-    accountEmail: string,
-  ): Promise<Account | null> {
-    return await this.accountModel
-      .findOne<Account>({ email: accountEmail })
-      .populate({
-        path: 'promoter',
-        model: 'Promoter',
-        select: { name: 1, image: 1, icon: 1, createdAt: 1, api: 1 },
-      });
+  public async getAccountByEmail(accountEmail: string): Promise<Account | null> {
+    return await this.accountModel.findOne<Account>({ email: accountEmail }).populate({
+      path: 'promoter',
+      model: 'Promoter',
+      select: { name: 1, image: 1, icon: 1, createdAt: 1, api: 1 },
+    });
   }
 
   public async getAccessAccount(accountId: string): Promise<Account | null> {
-    return await this.accountModel
-      .findOne({ _id: accountId, role: 'ACCESS' })
-      .select({ _id: 1, promoter: 1 });
+    return await this.accountModel.findOne({ _id: accountId, role: 'ACCESS' }).select({ _id: 1, promoter: 1 });
   }
 
-  public async getAccessAccountByEmail(
-    accountEmail: string,
-  ): Promise<Account | null> {
+  public async getAccessAccountByEmail(accountEmail: string): Promise<Account | null> {
     return await this.accountModel
       .findOne<Account>({ email: accountEmail, role: Roles.ACCESS })
       .populate({
@@ -393,10 +339,7 @@ export class AccountService {
     const account = await this.getAccountByEmail(loginAccount.email);
     if (account && account.registered) {
       // CHECK IF PASSWORD MATCH
-      const passwordMatch = await comparePassword(
-        loginAccount.password,
-        account.password,
-      );
+      const passwordMatch = await comparePassword(loginAccount.password, account.password);
       if (passwordMatch) {
         return {
           _id: account._id,
@@ -436,10 +379,7 @@ export class AccountService {
     const account = await this.getAccessAccountByEmail(loginAccount.email);
     if (account && account.registered) {
       // CHECK IF PASSWORD MATCH
-      const passwordMatch = await comparePassword(
-        loginAccount.password,
-        account.password,
-      );
+      const passwordMatch = await comparePassword(loginAccount.password, account.password);
       if (passwordMatch) {
         return {
           _id: account._id,
@@ -468,9 +408,7 @@ export class AccountService {
   }
 
   public async getAccountByAddress(address: string): Promise<Account | null> {
-    return this.accountModel
-      .findOne({ address })
-      .select({ _id: 1, name: 1, lastName: 1, address: 1 });
+    return this.accountModel.findOne({ address }).select({ _id: 1, name: 1, lastName: 1, address: 1 });
   }
 
   public async generateAllClientsCsv() {
@@ -504,16 +442,14 @@ export class AccountService {
   }
 
   public async generateAllClientsCsvWithPromoter(promoter: Account) {
-    const users = await this.accountModel
-      .find({ promoter: promoter._id })
-      .populate({
-        path: 'promoter',
-        model: 'Promoter',
-        select: {
-          _id: 0,
-          name: 1,
-        },
-      });
+    const users = await this.accountModel.find({ promoter: promoter._id }).populate({
+      path: 'promoter',
+      model: 'Promoter',
+      select: {
+        _id: 0,
+        name: 1,
+      },
+    });
 
     const csvStream = fastcsv.format({ headers: true });
 
@@ -527,9 +463,7 @@ export class AccountService {
       dataStream.push({
         name: user.name,
         lastName: user.lastName,
-        promoter: user.promoter
-          ? (user.promoter as unknown as { name: string }).name
-          : ' ',
+        promoter: user.promoter ? (user.promoter as unknown as { name: string }).name : ' ',
         role: user.role,
         email: user.email,
         phone: user.phone,
@@ -547,16 +481,14 @@ export class AccountService {
   }
 
   public async generateAllClientsCsvByPromoter(promoterId: string) {
-    const users = await this.accountModel
-      .find({ promoter: promoterId })
-      .populate({
-        path: 'promoter',
-        model: 'Promoter',
-        select: {
-          _id: 0,
-          name: 1,
-        },
-      });
+    const users = await this.accountModel.find({ promoter: promoterId }).populate({
+      path: 'promoter',
+      model: 'Promoter',
+      select: {
+        _id: 0,
+        name: 1,
+      },
+    });
 
     const csvStream = fastcsv.format({ headers: true });
 
@@ -570,9 +502,7 @@ export class AccountService {
       dataStream.push({
         name: user.name,
         lastName: user.lastName,
-        promoter: user.promoter
-          ? (user.promoter as unknown as { name: string }).name
-          : ' ',
+        promoter: user.promoter ? (user.promoter as unknown as { name: string }).name : ' ',
         role: user.role,
         email: user.email,
         phone: user.phone,
@@ -600,9 +530,7 @@ export class AccessPipeService implements PipeTransform {
   public async transform(token: string, _metadata: ArgumentMetadata) {
     try {
       const payload = await this.authService.decodeToken(token);
-      const account = await this.accountService.getAccessAccount(
-        payload.account,
-      );
+      const account = await this.accountService.getAccessAccount(payload.account);
 
       if (!account) throw new UnauthorizedException('Invalid account');
 
@@ -627,9 +555,7 @@ export class AdminPipeService implements PipeTransform {
   public async transform(token: string, _metadata: ArgumentMetadata) {
     try {
       const payload = await this.authService.decodeToken(token);
-      const account = await this.accountService.getAdminAccount(
-        payload.account,
-      );
+      const account = await this.accountService.getAdminAccount(payload.account);
       if (!account) throw new UnauthorizedException('Invalid account');
 
       return account;
@@ -653,9 +579,7 @@ export class PromoterPipeService implements PipeTransform {
   public async transform(token: string, _metadata: ArgumentMetadata) {
     try {
       const payload = await this.authService.decodeToken(token);
-      const account = await this.accountService.getPromoterAccount(
-        payload.account,
-      );
+      const account = await this.accountService.getPromoterAccount(payload.account);
 
       if (!account) throw new UnauthorizedException('Invalid account');
 

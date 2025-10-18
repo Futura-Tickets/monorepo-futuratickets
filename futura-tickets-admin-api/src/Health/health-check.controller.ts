@@ -148,8 +148,7 @@ export class HealthCheckController {
   @Get()
   @ApiOperation({
     summary: 'Health check (liveness)',
-    description:
-      'Basic health check to verify the application is running. Returns service info, uptime, and version.',
+    description: 'Basic health check to verify the application is running. Returns service info, uptime, and version.',
   })
   @ApiResponse({
     status: HttpStatus.OK,

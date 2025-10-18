@@ -7,12 +7,7 @@ import { PaymentsController } from './payments.controller';
 import { PaymentMethodsController } from './payment-methods.controller';
 
 // MONGOOSE
-import {
-  Payment,
-  PaymentSchema,
-  PaymentMethod,
-  PaymentMethodSchema,
-} from './payments.schema';
+import { Payment, PaymentSchema, PaymentMethod, PaymentMethodSchema } from './payments.schema';
 import { AccountSchema } from '../Account/account.schema';
 
 // MODULES

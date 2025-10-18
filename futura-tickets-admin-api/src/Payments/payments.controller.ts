@@ -16,17 +16,12 @@ export class PaymentsController {
   constructor(private paymentsService: PaymentsService) {}
 
   @Get()
-  async getPayments(
-    @Auth(PromoterPipeService) promoter: Account,
-  ): Promise<Payment[]> {
+  async getPayments(@Auth(PromoterPipeService) promoter: Account): Promise<Payment[]> {
     return await this.paymentsService.getPayments(promoter.promoter!);
   }
 
   @Get(':id')
-  async getPayment(
-    @Auth(PromoterPipeService) promoter: Account,
-    @Param('id') id: string,
-  ): Promise<Payment | null> {
+  async getPayment(@Auth(PromoterPipeService) promoter: Account, @Param('id') id: string): Promise<Payment | null> {
     return await this.paymentsService.getPayment(id, promoter.promoter!);
   }
 
@@ -35,18 +30,11 @@ export class PaymentsController {
     @Auth(PromoterPipeService) promoter: Account,
     @Body() createPayment: CreatePayment,
   ): Promise<Payment> {
-    return await this.paymentsService.createPayment(
-      createPayment,
-      promoter.promoter!,
-      promoter._id,
-    );
+    return await this.paymentsService.createPayment(createPayment, promoter.promoter!, promoter._id);
   }
 
   @Delete(':id')
-  async deletePayment(
-    @Auth(PromoterPipeService) promoter: Account,
-    @Param('id') id: string,
-  ): Promise<boolean> {
+  async deletePayment(@Auth(PromoterPipeService) promoter: Account, @Param('id') id: string): Promise<boolean> {
     return await this.paymentsService.deletePayment(id, promoter.promoter!);
   }
 }

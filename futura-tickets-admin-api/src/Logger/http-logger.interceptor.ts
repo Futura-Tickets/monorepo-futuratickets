@@ -3,12 +3,7 @@
  * Automatically logs all HTTP requests with timing information
  */
 
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-} from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoggerService } from './logger.service';
@@ -26,6 +21,7 @@ export class HttpLoggerInterceptor implements NestInterceptor {
     // Extract user ID from request if available
     const userId = request.user?.id || request.user?._id;
 
+    // Type assertion to handle RxJS version mismatch in monorepo
     return next.handle().pipe(
       tap({
         next: () => {
@@ -36,30 +32,21 @@ export class HttpLoggerInterceptor implements NestInterceptor {
 
           // Log slow requests as warnings
           if (duration > 3000) {
-            this.logger.warn(
-              `Slow request detected: ${method} ${url}`,
-              'HttpLoggerInterceptor',
-              { duration, userId },
-            );
+            this.logger.warn(`Slow request detected: ${method} ${url}`, 'HttpLoggerInterceptor', { duration, userId });
           }
         },
         error: (error) => {
           const duration = Date.now() - startTime;
           const statusCode = error.status || 500;
 
-          this.logger.error(
-            `Request failed: ${method} ${url}`,
-            error.stack,
-            'HttpLoggerInterceptor',
-            {
-              statusCode,
-              duration,
-              userId,
-              errorMessage: error.message,
-            },
-          );
+          this.logger.error(`Request failed: ${method} ${url}`, error.stack, 'HttpLoggerInterceptor', {
+            statusCode,
+            duration,
+            userId,
+            errorMessage: error.message,
+          });
         },
       }),
-    );
+    ) as Observable<any>;
   }
 }

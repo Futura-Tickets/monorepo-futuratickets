@@ -1,0 +1,350 @@
+{
+  "dashboard": {
+    "title": "FuturaTickets - Production Overview",
+    "tags": ["futuratickets", "production", "overview"],
+    "timezone": "UTC",
+    "schemaVersion": 27,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "HTTP Requests Rate",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{namespace=\"futuratickets\"}[5m])) by (service)",
+            "legendFormat": "{{service}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "reqps",
+            "label": "Requests per second"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "HTTP Response Time (p95)",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"futuratickets\"}[5m])) by (service, le))",
+            "legendFormat": "{{service}} p95",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "s",
+            "label": "Response Time"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Pod CPU Usage",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 8,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"futuratickets\",container!=\"\"}[5m])) by (pod)",
+            "legendFormat": "{{pod}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "percentunit",
+            "label": "CPU Usage"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Pod Memory Usage",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 8,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "sum(container_memory_working_set_bytes{namespace=\"futuratickets\",container!=\"\"}) by (pod)",
+            "legendFormat": "{{pod}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "bytes",
+            "label": "Memory"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "HTTP Error Rate (5xx)",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 16,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{namespace=\"futuratickets\",status=~\"5..\"}[5m])) by (service)",
+            "legendFormat": "{{service}} - 5xx errors",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "reqps",
+            "label": "Errors per second"
+          }
+        ],
+        "alert": {
+          "name": "High 5xx Error Rate",
+          "message": "5xx error rate is above threshold",
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [10],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": ["A", "5m", "now"]
+              },
+              "reducer": {
+                "params": [],
+                "type": "avg"
+              },
+              "type": "query"
+            }
+          ]
+        }
+      },
+      {
+        "id": 6,
+        "title": "Active Orders (Last 5 min)",
+        "type": "stat",
+        "gridPos": {
+          "x": 12,
+          "y": 16,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "sum(increase(orders_created_total{namespace=\"futuratickets\"}[5m]))",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 100
+                },
+                {
+                  "color": "red",
+                  "value": 500
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "Payment Success Rate",
+        "type": "gauge",
+        "gridPos": {
+          "x": 18,
+          "y": 16,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(payment_success_total{namespace=\"futuratickets\"}[5m])) / sum(rate(payment_total{namespace=\"futuratickets\"}[5m])) * 100",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 90
+                },
+                {
+                  "color": "green",
+                  "value": 95
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "Database Connections",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 24,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "sum(mongodb_connections{namespace=\"futuratickets\"}) by (state)",
+            "legendFormat": "{{state}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "short",
+            "label": "Connections"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Redis Operations/sec",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 24,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(redis_commands_total{namespace=\"futuratickets\"}[5m])) by (cmd)",
+            "legendFormat": "{{cmd}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "ops",
+            "label": "Operations/sec"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Active Tickets",
+        "type": "stat",
+        "gridPos": {
+          "x": 12,
+          "y": 20,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "sum(tickets_active_total{namespace=\"futuratickets\"})",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        }
+      },
+      {
+        "id": 11,
+        "title": "Sentry Errors (Last Hour)",
+        "type": "stat",
+        "gridPos": {
+          "x": 18,
+          "y": 20,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "sum(increase(sentry_errors_total{namespace=\"futuratickets\"}[1h]))",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 10
+                },
+                {
+                  "color": "red",
+                  "value": 50
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}

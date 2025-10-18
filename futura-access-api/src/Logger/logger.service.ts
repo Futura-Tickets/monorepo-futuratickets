@@ -3,19 +3,13 @@
  * Wrapper around Winston logger for structured logging
  */
 
-import {
-  Injectable,
-  Inject,
-  LoggerService as NestLoggerService,
-} from '@nestjs/common';
+import { Injectable, Inject, LoggerService as NestLoggerService } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 
 @Injectable()
 export class LoggerService implements NestLoggerService {
-  constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-  ) {}
+  constructor(@Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger) {}
 
   /**
    * Log info level message
@@ -27,58 +21,35 @@ export class LoggerService implements NestLoggerService {
   /**
    * Log error level message
    */
-  error(
-    message: string,
-    trace?: string,
-    context?: string,
-    metadata?: Record<string, any>,
-  ): void {
+  error(message: string, trace?: string, context?: string, metadata?: Record<string, any>): void {
     this.logger.error(message, { context, trace, ...metadata });
   }
 
   /**
    * Log warning level message
    */
-  warn(
-    message: string,
-    context?: string,
-    metadata?: Record<string, any>,
-  ): void {
+  warn(message: string, context?: string, metadata?: Record<string, any>): void {
     this.logger.warn(message, { context, ...metadata });
   }
 
   /**
    * Log debug level message
    */
-  debug(
-    message: string,
-    context?: string,
-    metadata?: Record<string, any>,
-  ): void {
+  debug(message: string, context?: string, metadata?: Record<string, any>): void {
     this.logger.debug(message, { context, ...metadata });
   }
 
   /**
    * Log verbose level message
    */
-  verbose(
-    message: string,
-    context?: string,
-    metadata?: Record<string, any>,
-  ): void {
+  verbose(message: string, context?: string, metadata?: Record<string, any>): void {
     this.logger.verbose(message, { context, ...metadata });
   }
 
   /**
    * Log API request
    */
-  logRequest(
-    method: string,
-    url: string,
-    statusCode: number,
-    duration: number,
-    userId?: string,
-  ): void {
+  logRequest(method: string, url: string, statusCode: number, duration: number, userId?: string): void {
     this.logger.info('HTTP Request', {
       context: 'HTTPRequest',
       method,
@@ -92,12 +63,7 @@ export class LoggerService implements NestLoggerService {
   /**
    * Log database query
    */
-  logQuery(
-    operation: string,
-    collection: string,
-    duration: number,
-    metadata?: Record<string, any>,
-  ): void {
+  logQuery(operation: string, collection: string, duration: number, metadata?: Record<string, any>): void {
     this.logger.debug('Database Query', {
       context: 'DatabaseQuery',
       operation,
@@ -146,12 +112,7 @@ export class LoggerService implements NestLoggerService {
   /**
    * Log business event (order created, payment processed, etc.)
    */
-  logBusinessEvent(
-    event: string,
-    entityType: string,
-    entityId: string,
-    metadata?: Record<string, any>,
-  ): void {
+  logBusinessEvent(event: string, entityType: string, entityId: string, metadata?: Record<string, any>): void {
     this.logger.info(`Business Event: ${event}`, {
       context: 'BusinessEvent',
       event,
@@ -164,13 +125,8 @@ export class LoggerService implements NestLoggerService {
   /**
    * Log security event
    */
-  logSecurity(
-    event: string,
-    severity: 'low' | 'medium' | 'high' | 'critical',
-    metadata?: Record<string, any>,
-  ): void {
-    const logLevel =
-      severity === 'critical' || severity === 'high' ? 'error' : 'warn';
+  logSecurity(event: string, severity: 'low' | 'medium' | 'high' | 'critical', metadata?: Record<string, any>): void {
+    const logLevel = severity === 'critical' || severity === 'high' ? 'error' : 'warn';
 
     this.logger[logLevel](`Security Event: ${event}`, {
       context: 'Security',
@@ -183,11 +139,7 @@ export class LoggerService implements NestLoggerService {
   /**
    * Log performance metric
    */
-  logPerformance(
-    operation: string,
-    duration: number,
-    metadata?: Record<string, any>,
-  ): void {
+  logPerformance(operation: string, duration: number, metadata?: Record<string, any>): void {
     const level = duration > 5000 ? 'warn' : duration > 1000 ? 'info' : 'debug';
 
     this.logger[level](`Performance: ${operation}`, {

@@ -7,11 +7,7 @@ import { SaleHistory } from '../Sales/sales.interface';
 import { SalesService } from '../Sales/sales.service';
 
 // INTERFACES
-import {
-  EventStatus,
-  TicketActivity,
-  TicketStatus,
-} from '../shared/interface';
+import { EventStatus, TicketActivity, TicketStatus } from '../shared/interface';
 
 @Injectable()
 export class CronJobsService {
@@ -33,10 +29,7 @@ export class CronJobsService {
     }
   }
 
-  private async checkEventStartDate(
-    event: string,
-    startDate: Date,
-  ): Promise<void> {
+  private async checkEventStartDate(event: string, startDate: Date): Promise<void> {
     const newStartDate = new Date(startDate);
 
     const eventStartDate = new Date(
@@ -51,10 +44,7 @@ export class CronJobsService {
       await this.eventService.updateEventStatus(event, EventStatus.LIVE);
   }
 
-  private async checkEventExpireDate(
-    event: string,
-    endDate: Date,
-  ): Promise<void> {
+  private async checkEventExpireDate(event: string, endDate: Date): Promise<void> {
     const newEndDate = new Date(endDate);
 
     const eventEndDate = new Date(
@@ -74,11 +64,7 @@ export class CronJobsService {
       };
 
       await this.eventService.updateEventStatus(event, EventStatus.CLOSED);
-      await this.salesService.updateSalesStatus(
-        event,
-        saleHistory,
-        TicketStatus.EXPIRED,
-      );
+      await this.salesService.updateSalesStatus(event, saleHistory, TicketStatus.EXPIRED);
     }
   }
 }

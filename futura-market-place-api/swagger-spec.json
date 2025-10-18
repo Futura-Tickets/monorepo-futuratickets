@@ -170,7 +170,7 @@
     },
     "/health": {
       "get": {
-        "operationId": "HealthCheckController_getHealth",
+        "operationId": "HealthController_healthCheck",
         "parameters": [],
         "responses": {
           "200": {
@@ -178,181 +178,13 @@
           }
         },
         "tags": [
-          "HealthCheck"
+          "Health"
         ]
       }
     },
     "/health/ready": {
       "get": {
-        "operationId": "HealthCheckController_checkReadiness",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The Health Check is successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "ok"
-                    },
-                    "info": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": true
-                      },
-                      "nullable": true
-                    },
-                    "error": {
-                      "type": "object",
-                      "example": {},
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": true
-                      },
-                      "nullable": true
-                    },
-                    "details": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "The Health Check is not successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "error"
-                    },
-                    "info": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": true
-                      },
-                      "nullable": true
-                    },
-                    "error": {
-                      "type": "object",
-                      "example": {
-                        "redis": {
-                          "status": "down",
-                          "message": "Could not connect"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": true
-                      },
-                      "nullable": true
-                    },
-                    "details": {
-                      "type": "object",
-                      "example": {
-                        "database": {
-                          "status": "up"
-                        },
-                        "redis": {
-                          "status": "down",
-                          "message": "Could not connect"
-                        }
-                      },
-                      "additionalProperties": {
-                        "type": "object",
-                        "required": [
-                          "status"
-                        ],
-                        "properties": {
-                          "status": {
-                            "type": "string"
-                          }
-                        },
-                        "additionalProperties": true
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "HealthCheck"
-        ]
-      }
-    },
-    "/health/info": {
-      "get": {
-        "operationId": "HealthCheckController_getSystemInfo",
+        "operationId": "HealthController_readinessCheck",
         "parameters": [],
         "responses": {
           "200": {
@@ -360,7 +192,21 @@
           }
         },
         "tags": [
-          "HealthCheck"
+          "Health"
+        ]
+      }
+    },
+    "/health/live": {
+      "get": {
+        "operationId": "HealthController_livenessCheck",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Health"
         ]
       }
     },

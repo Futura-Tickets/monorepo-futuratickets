@@ -26,9 +26,7 @@ import { SalesService } from './sales.service';
     AccountModule,
     ConfigModule,
     MailModule,
-    MongooseModule.forFeature([
-      { name: Sales.name, schema: SalesSchema, collection: 'sales' },
-    ]),
+    MongooseModule.forFeature([{ name: Sales.name, schema: SalesSchema, collection: 'sales' }]),
     ProviderModule,
     QrCodeModule,
   ],

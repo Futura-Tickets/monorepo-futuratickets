@@ -18,15 +18,11 @@ export class AbstractionService {
     private readonly providerService: ProviderService,
     private readonly configService: ConfigService,
   ) {
-    const configuredLimit = this.configService.get<string>(
-      'BLOCKCHAIN_DEFAULT_GAS_LIMIT',
-    );
+    const configuredLimit = this.configService.get<string>('BLOCKCHAIN_DEFAULT_GAS_LIMIT');
     this.gasLimit = configuredLimit ? BigInt(configuredLimit) : 600000n;
   }
 
-  public async getSmartAccountClient(
-    privateKey: `0x${string}`,
-  ): Promise<FuturaAccountClient> {
+  public async getSmartAccountClient(privateKey: `0x${string}`): Promise<FuturaAccountClient> {
     this.ensureProviderConfigured();
 
     try {
@@ -63,9 +59,7 @@ export class AbstractionService {
         gasLimit: overrides.gasLimit ?? this.gasLimit,
       });
 
-      this.logger.debug(
-        `Transaction sent by ${smartAccountClient.wallet.address} -> ${to}`,
-      );
+      this.logger.debug(`Transaction sent by ${smartAccountClient.wallet.address} -> ${to}`);
       return txResponse.hash as `0x${string}`;
     } catch (error) {
       this.logger.error('Failed to send blockchain transaction', error.stack);
@@ -76,9 +70,7 @@ export class AbstractionService {
   private ensureProviderConfigured(): void {
     const rpcUrl = this.configService.get<string>('BLOCKCHAIN_RPC_URL');
     if (!rpcUrl) {
-      throw new Error(
-        'Blockchain provider is not configured. Set BLOCKCHAIN_RPC_URL in the environment variables.',
-      );
+      throw new Error('Blockchain provider is not configured. Set BLOCKCHAIN_RPC_URL in the environment variables.');
     }
   }
 }

@@ -12,9 +12,7 @@ import { Event, EventStatus } from '../shared/interface';
 
 @Injectable()
 export class EventService {
-  constructor(
-    @InjectModel(EventSchema.name) private eventModel: Model<EventDocument>,
-  ) {}
+  constructor(@InjectModel(EventSchema.name) private eventModel: Model<EventDocument>) {}
 
   public getActiveEvents(): Promise<Event[]> {
     return this.eventModel.find({
@@ -22,10 +20,7 @@ export class EventService {
     });
   }
 
-  public async updateEventStatus(
-    eventId: string,
-    status: EventStatus,
-  ): Promise<void | null> {
+  public async updateEventStatus(eventId: string, status: EventStatus): Promise<void | null> {
     return await this.eventModel.findOneAndUpdate({ _id: eventId }, { status });
   }
 }

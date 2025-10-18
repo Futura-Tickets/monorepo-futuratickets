@@ -11,22 +11,15 @@ import { PromoterMsg } from './qrcode.interface';
 export class QrCodeService {
   constructor(private promoterService: PromoterService) {}
 
-  private async signCode(
-    promoter: string,
-    msgSignature: PromoterMsg,
-  ): Promise<string> {
-    const promoterKey =
-      await this.promoterService.getPromoterPrivateKeyById(promoter);
+  private async signCode(promoter: string, msgSignature: PromoterMsg): Promise<string> {
+    const promoterKey = await this.promoterService.getPromoterPrivateKeyById(promoter);
     const signer = new ethers.Wallet(promoterKey?.key as `0x${string}`);
 
     const message = JSON.stringify(msgSignature);
     return signer.signMessage(message);
   }
 
-  public verifyCode(
-    msgSignature: PromoterMsg,
-    authenticitySignature: string,
-  ): string {
+  public verifyCode(msgSignature: PromoterMsg, authenticitySignature: string): string {
     const message = JSON.stringify(msgSignature);
     return ethers.verifyMessage(message, authenticitySignature);
   }

@@ -12,12 +12,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  LocationDto,
-  DateTimeDto,
-  TicketDto,
-  ArtistDto,
-} from './create-event.dto';
+import { LocationDto, DateTimeDto, TicketDto, ArtistDto } from './create-event.dto';
 
 /**
  * DTO for updating an existing event

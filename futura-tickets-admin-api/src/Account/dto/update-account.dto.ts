@@ -3,14 +3,7 @@
  * Validation for account updates
  */
 
-import {
-  IsEmail,
-  IsString,
-  IsOptional,
-  MinLength,
-  MaxLength,
-  Matches,
-} from 'class-validator';
+import { IsEmail, IsString, IsOptional, MinLength, MaxLength, Matches } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateAccountDto {

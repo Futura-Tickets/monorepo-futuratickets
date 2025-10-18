@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Header,
-  StreamableFile,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Header, StreamableFile } from '@nestjs/common';
 
 // DECORATOR
 import { Auth } from '../Auth/auth.decorator';
@@ -52,9 +45,7 @@ export class SalesController {
   }
 
   @Get('/resale/:event')
-  async getEventResales(
-    @Param('event') event: string,
-  ): Promise<Sale[] | undefined> {
+  async getEventResales(@Param('event') event: string): Promise<Sale[] | undefined> {
     try {
       return await this.salesService.getEventResales(event);
     } catch (error) {
@@ -63,9 +54,7 @@ export class SalesController {
   }
 
   @Get('/')
-  async getSales(
-    @Auth(PromoterPipeService) promoter: Account,
-  ): Promise<Sale[] | undefined> {
+  async getSales(@Auth(PromoterPipeService) promoter: Account): Promise<Sale[] | undefined> {
     try {
       return await this.salesService.getSales(promoter.promoter!);
     } catch (error) {
@@ -75,19 +64,10 @@ export class SalesController {
 
   @Get('/export/:eventId')
   @Header('Content-Type', 'text/csv')
-  @Header(
-    'Content-Disposition',
-    `attachment; filename=event-sales-${new Date().toISOString()}.csv`,
-  )
-  async exportEventSales(
-    @Auth(PromoterPipeService) promoter: Account,
-    @Param('eventId') eventId: string,
-  ) {
+  @Header('Content-Disposition', `attachment; filename=event-sales-${new Date().toISOString()}.csv`)
+  async exportEventSales(@Auth(PromoterPipeService) promoter: Account, @Param('eventId') eventId: string) {
     try {
-      const csvStream = await this.salesService.generateEventSalesInfo(
-        eventId,
-        promoter,
-      );
+      const csvStream = await this.salesService.generateEventSalesInfo(eventId, promoter);
       return new StreamableFile(csvStream);
     } catch (err) {
       console.log('Error exporting event info');

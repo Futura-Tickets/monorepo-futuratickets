@@ -1,22 +1,11 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 
 // SERVICES
 import { EventService } from './event.service';
 import { PromocodesService } from './promocode.service';
 
 // INTERFACES
-import {
-  AccessPipeService,
-  PromoterPipeService,
-} from 'src/Account/account.service';
+import { AccessPipeService, PromoterPipeService } from 'src/Account/account.service';
 import { Account, Promocode } from 'src/shared/interface';
 import { Auth } from 'src/Auth/auth.decorator';
 import { Sale } from 'src/Sales/sales.interface';
@@ -37,10 +26,7 @@ export class EventController {
     @Param('event') event: string,
   ): Promise<Sale[] | undefined> {
     try {
-      return await this.eventService.getAttendantsEvent(
-        promoter.promoter!,
-        event,
-      );
+      return await this.eventService.getAttendantsEvent(promoter.promoter!, event);
     } catch (error) {}
   }
 
@@ -50,10 +36,7 @@ export class EventController {
     @Body() validateAccessDto: ValidateAccessDto,
   ): Promise<{ access: string; reason: string }> {
     try {
-      return await this.eventService.checkAccessEvent(
-        promoter.promoter!,
-        validateAccessDto.sale,
-      );
+      return await this.eventService.checkAccessEvent(promoter.promoter!, validateAccessDto.sale);
     } catch (error) {
       return { access: 'DENIED', reason: 'ERROR CHECKING YOUR TICKET' };
     }

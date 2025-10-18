@@ -27,11 +27,7 @@ export class AuthService {
 
   // Encrypting text
   public encrypt(text: string): string {
-    const cipher = crypto.createCipheriv(
-      this.algorithm,
-      Buffer.from(this.key),
-      this.iv,
-    );
+    const cipher = crypto.createCipheriv(this.algorithm, Buffer.from(this.key), this.iv);
     let encrypted = cipher.update(text);
     encrypted = Buffer.concat([encrypted, cipher.final()]);
     return encrypted.toString('hex');

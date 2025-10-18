@@ -26,10 +26,7 @@ export class OrdersService {
     return this.ordersModel.findOne({ _id: order });
   }
 
-  public async getAdminOrder(
-    promoter: string,
-    order: string,
-  ): Promise<Order | null> {
+  public async getAdminOrder(promoter: string, order: string): Promise<Order | null> {
     return this.ordersModel
       .findOne({ _id: order, promoter })
       .populate({
@@ -114,9 +111,7 @@ export class OrdersService {
     return this.stripeService.publishableKey();
   }
 
-  public async getOrdersByAccount(
-    account: string,
-  ): Promise<Order[] | undefined> {
+  public async getOrdersByAccount(account: string): Promise<Order[] | undefined> {
     try {
       return this.ordersModel
         .find({ account })
@@ -146,10 +141,7 @@ export class OrdersService {
     } catch (error) {}
   }
 
-  public async resendOrder(
-    orderId: string,
-    promoter: string,
-  ): Promise<boolean> {
+  public async resendOrder(orderId: string, promoter: string): Promise<boolean> {
     const order = await this.ordersModel
       .findOne({ _id: orderId, promoter })
       .populate({
@@ -182,27 +174,19 @@ export class OrdersService {
     return true;
   }
 
-  public async createOrder(
-    createOrder: CreateOrder,
-  ): Promise<Order | undefined> {
+  public async createOrder(createOrder: CreateOrder): Promise<Order | undefined> {
     try {
       return this.ordersModel.create(createOrder);
     } catch (error) {}
   }
 
-  public async updateOrderPaymentId(
-    paymentId: string,
-    updateOrder: UpdateOrder,
-  ): Promise<void> {
+  public async updateOrderPaymentId(paymentId: string, updateOrder: UpdateOrder): Promise<void> {
     try {
       await this.ordersModel.findOneAndUpdate({ paymentId }, updateOrder);
     } catch (error) {}
   }
 
-  public async updateOrderById(
-    order: string,
-    updateOrder: UpdateOrder,
-  ): Promise<void> {
+  public async updateOrderById(order: string, updateOrder: UpdateOrder): Promise<void> {
     try {
       await this.ordersModel.findOneAndUpdate({ _id: order }, updateOrder);
     } catch (error) {}

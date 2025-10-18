@@ -2,15 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
 // INTERFACES
-import {
-  Artist,
-  Condition,
-  DateTime,
-  EventStatus,
-  Location,
-  Resale,
-  Ticket,
-} from '../shared/interface';
+import { Artist, Condition, DateTime, EventStatus, Location, Resale, Ticket } from '../shared/interface';
 
 @Schema({
   timestamps: true,
